@@ -17,6 +17,7 @@ in
 
     ./preservation.nix
     ./secureboot.nix
+    ./boot.nix
   ];
 
   services.sunshine.enable = lib.mkForce true;
