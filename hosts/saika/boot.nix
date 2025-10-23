@@ -21,5 +21,14 @@
     # It's still possible to open the bootloader list by pressing any key
     # It will just not appear on screen unless a key is pressed
     loader.timeout = 0;
+
+    loader.systemd-boot = {
+      enable = true;
+      # See man loader.conf.5
+      rebootForBitlocker = true;
+
+      edk2-uefi-shell.enable = true;
+      edk2-uefi-shell.sortKey = "z_edk2";
+    };
   };
 }
