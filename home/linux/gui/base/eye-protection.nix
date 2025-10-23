@@ -40,9 +40,9 @@
         # dusk-time = "18:35-20:15";
       };
       manual = {
-        # China, Shenzhen
-        lat = "22.5"; # latitude
-        lon = "114.1"; # longitude
+        # China, Beijing
+        lat = "39.9"; # latitude
+        lon = "116.3"; # longitude
       };
     };
   };
