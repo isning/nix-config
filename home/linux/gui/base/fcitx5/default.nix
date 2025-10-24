@@ -14,7 +14,7 @@
     type = "fcitx5";
     fcitx5.waylandFrontend = true;
     fcitx5.addons = with pkgs; [
-      # for flypy chinese input method
+      # for chinese input method
       fcitx5-rime
       # needed enable rime using configtool after installed
       fcitx5-configtool
