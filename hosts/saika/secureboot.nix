@@ -31,5 +31,12 @@
   boot.lanzaboote = {
     enable = true;
     pkiBundle = "/var/lib/sbctl";
+
+    # TODO: Seems currently there's no easy way adding
+    # extra entries(in case windows here) for lanzaboote
+    # See: https://github.com/nix-community/lanzaboote/issues/427
+    settings = {
+      reboot-for-bitlocker = true;
+    };
   };
 }
