@@ -76,6 +76,9 @@ in
       "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
       "/var/lib/iwd"
+
+      # fprintd
+      "/var/lib/fprint"
     ];
     files = [
       # auto-generated machine ID
