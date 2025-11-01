@@ -1,8 +1,6 @@
 {
   pkgs,
   pkgs-x64,
-  pkgs-unstable,
-  nur-ryan4yin,
   ...
 }:
 # media - control and enjoy audio/video
