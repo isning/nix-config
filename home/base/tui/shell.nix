@@ -14,8 +14,6 @@ in
     # currently, nushell does not support conditional sourcing of files
     # https://github.com/nushell/nushell/issues/8214
     extraConfig = ''
-      source /etc/agenix/alias-for-work.nushell
-
       # using claude-code with kimi k2
       $env.ANTHROPIC_BASE_URL = "https://api.moonshot.cn/anthropic/"
       $env.ANTHROPIC_API_KEY = $env.MOONSHOT_API_KEY

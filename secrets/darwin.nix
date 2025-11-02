@@ -81,12 +81,6 @@
         file = "${mysecrets}/ssh-key-romantic.age";
       }
       // user_readable;
-
-      # alias-for-work
-      "alias-for-work.nushell" = {
-        file = "${mysecrets}/alias-for-work.nushell.age";
-      }
-      // user_readable;
     };
 
   # place secrets in /etc/
