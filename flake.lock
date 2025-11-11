@@ -910,15 +910,15 @@
     "nu_scripts": {
       "flake": false,
       "locked": {
-        "lastModified": 1760525235,
-        "narHash": "sha256-tKMLaSNniylbo9f0wdUzUZm059RPqyFQlxMtiTPIkWQ=",
-        "owner": "nushell",
+        "lastModified": 1762835849,
+        "narHash": "sha256-oxnXzxQkNccCs36j+aMzg4QGHDcX7niJruqxCkeg0LM=",
+        "owner": "ryan4yin",
         "repo": "nu_scripts",
-        "rev": "0b97c5e1444b13db7c263bee646dea1e1ffe4ddb",
+        "rev": "4ec4c2ac3a0ce6eb82ca1b7ddb2d386e24530000",
         "type": "github"
       },
       "original": {
-        "owner": "nushell",
+        "owner": "ryan4yin",
         "repo": "nu_scripts",
         "type": "github"
       }
