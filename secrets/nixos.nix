@@ -90,19 +90,20 @@ in
 
     (mkIf cfg.host.saika.enable {
       age.secrets = {
-        "saika-bitlk-crypt-key" = {
-          file = "${mysecrets}/saika-bitlk-crypt-key.age";
+        "saika-bitlk-crypt-keys/YMTC-3-2E9FEE63-8BBA-4CCA-89E4-CB8D0E7EB084.BEK" = {
+          file = "${mysecrets}/saika-bitlk-crypt-keys/YMTC-3-2E9FEE63-8BBA-4CCA-89E4-CB8D0E7EB084.BEK.age";
           mode = "0400";
           owner = "root";
         };
-      };
-
-      # place secrets in /etc/
-      environment.etc = {
-        "agenix/saika-bitlk-crypt-key" = {
-          source = config.age.secrets."saika-bitlk-crypt-key".path;
+        "saika-bitlk-crypt-keys/YMTC-5-F13C1B91-772E-499F-A014-4A7C8D8A1EE1.BEK" = {
+          file = "${mysecrets}/saika-bitlk-crypt-keys/YMTC-5-F13C1B91-772E-499F-A014-4A7C8D8A1EE1.BEK.age";
           mode = "0400";
-          user = "root";
+          owner = "root";
+        };
+        "saika-bitlk-crypt-keys/FANX-2-2945A11B-7C4E-415D-A27C-4416A856DD63.BEK" = {
+          file = "${mysecrets}/saika-bitlk-crypt-keys/FANX-2-2945A11B-7C4E-415D-A27C-4416A856DD63.BEK.age";
+          mode = "0400";
+          owner = "root";
         };
       };
     })

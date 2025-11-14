@@ -671,10 +671,10 @@
     "mysecrets": {
       "flake": false,
       "locked": {
-        "lastModified": 1762070971,
-        "narHash": "sha256-6yAIPgBXDs6u+Q+/owYAkuH8sO0CX5j+KLfUwAVkxUo=",
+        "lastModified": 1763096188,
+        "narHash": "sha256-PQ86DiTHTF4Gpi99MRXfHF5nV8COT0hl3oJd11VC+p0=",
         "ref": "refs/heads/main",
-        "rev": "c1d8908bc18cda1e15c32d2c718b7026b46c1d8a",
+        "rev": "b45015ae56047357913755d387795d96ab8289ad",
         "shallow": true,
         "type": "git",
         "url": "ssh://git@github.com/isning/nix-secrets.git"

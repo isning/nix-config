@@ -18,6 +18,7 @@ in
     ./preservation.nix
     ./secureboot.nix
     ./boot.nix
+    ./bitlk-decrypt.nix
   ];
 
   services.sunshine.enable = lib.mkForce true;
