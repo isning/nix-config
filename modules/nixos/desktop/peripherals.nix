@@ -6,6 +6,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     pulseaudio # provides `pactl`, which is required by some apps(e.g. sonic-pi)
+    #easyeffects
   ];
 
   # PipeWire is a new low-level multimedia framework.
@@ -53,7 +54,6 @@
 
     udev.packages = with pkgs; [
       gnome-settings-daemon
-      android-udev-rules # required by adb
       # platformio # udev rules for platformio
       # openocd # required by paltformio, see https://github.com/NixOS/nixpkgs/issues/224895
       # openfpgaloader
