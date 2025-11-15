@@ -6,7 +6,7 @@
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     pulseaudio # provides `pactl`, which is required by some apps(e.g. sonic-pi)
-    #easyeffects
+    easyeffects
   ];
 
   # PipeWire is a new low-level multimedia framework.
