@@ -304,6 +304,9 @@ in
         # Digital Painting
         ".local/share/krita"
 
+        # Password Manager
+        ".config/Bitwarden"
+
         ".config/nushell"
       ];
       files = [
