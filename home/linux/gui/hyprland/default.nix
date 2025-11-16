@@ -40,6 +40,7 @@ in
       }
       (import ./hyprland.nix args)
       (import ./xdg.nix args)
+      (import ./security.nix args)
     ]
   );
 }
