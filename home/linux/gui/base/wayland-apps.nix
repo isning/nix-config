@@ -43,9 +43,7 @@
           # make it use text-input-v1, which works for kwin 5.27 and weston
           "--enable-wayland-ime"
 
-          # TODO: fix https://github.com/microsoft/vscode/issues/187436
-          # still not works...
-          "--password-store=gnome" # use gnome-keyring as password store
+          "--password-store=gnome-libsecret" # use gnome-keyring as password store
         ];
       };
     };
