@@ -3,12 +3,12 @@
   ...
 }:
 {
-  home.packages = with pkgs; [
-    # firefox
-    nixpaks.firefox
-  ];
-
   programs = {
+    firefox = {
+      enable = true;
+      package = pkgs.firefox;
+    };
+
     # source code: https://github.com/nix-community/home-manager/blob/master/modules/programs/chromium.nix
     google-chrome = {
       enable = true;
