@@ -26,7 +26,10 @@ in
   networking = {
     inherit hostName;
 
+    wireless.iwd.enable = true;
+
     networkmanager.enable = true;
+    networkmanager.wifi.backend = "iwd";
   };
 
   # Enable CUPS to print documents.
