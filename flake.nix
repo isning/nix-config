@@ -181,6 +181,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nixos-hardware = {
+      url = "github:isning/nixos-hardware";
+    };
+
     # for waydroid
     # nur-ataraxiasjel.url = "github:AtaraxiaSjel/nur";
   };

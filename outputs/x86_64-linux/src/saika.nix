@@ -37,6 +37,9 @@ let
           modules.secrets.preservation.enable = true;
           modules.desktop.gaming.enable = true;
         }
+      ]
+      ++ [
+        inputs.nixos-hardware.nixosModules.lenovo-thinkbook-16pg5irx
       ];
     home-modules =
       (map mylib.relativeToRoot [

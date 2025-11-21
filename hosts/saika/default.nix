@@ -32,6 +32,18 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
+  # TLP is enabled by default with the nixos-hardware module.
+  # It is disabling my bluetooth on boot by blocking it via rfkill, so disable it.
+  # TODO: remove this when nixos-hardware replaces TLP with tuned.
+  # See https://github.com/NixOS/nixos-hardware/pull/1474
+  services.tlp.enable = false;
+  services.tuned.enable = true;
+
+  systemd.oomd = {
+    enableSystemSlice = true;
+    enableUserSlices = true;
+  };
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
