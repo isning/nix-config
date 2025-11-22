@@ -12,7 +12,7 @@ in
     ./netdev-mount.nix
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./nvidia.nix
+    ./graphics.nix
     ./saika
 
     ./preservation.nix

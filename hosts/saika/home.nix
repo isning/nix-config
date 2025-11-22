@@ -2,7 +2,7 @@
 {
   programs.ssh.matchBlocks."github.com".identityFile = "${config.home.homeDirectory}/.ssh/saika";
 
-  modules.desktop.nvidia.enable = true;
+  modules.desktop.nvidia.enable = false;
 
   modules.desktop.hyprland.settings.source = [
     "${config.home.homeDirectory}/nix-config/hosts/saika/hypr-hardware.conf"
