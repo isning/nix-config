@@ -11,6 +11,7 @@
   '';
 
   services.xserver.videoDrivers = [
+    "intel"
     "nvidia"
     "modesetting"
   ];
