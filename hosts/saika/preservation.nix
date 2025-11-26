@@ -130,6 +130,12 @@ in
         ".wakatime"
         ".config/github-copilot"
 
+        # JetBrains IDEs
+        ".local/share/JetBrains"
+        ".config/JetBrains"
+        ".java/.userPrefs"
+        ".cache/JetBrains"
+
         # vscode
         ".vscode"
         ".config/Code"
