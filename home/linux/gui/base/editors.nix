@@ -1,4 +1,4 @@
-{ lib, pkgs-master, ... }:
+{ lib, pkgs, ... }:
 
 let
   vscodeCliArgs = [
@@ -9,14 +9,14 @@ let
   ];
 
   code-cursor =
-    (pkgs-master.code-cursor.override {
+    (pkgs.code-cursor.override {
       commandLineArgs = lib.concatStringsSep " " vscodeCliArgs;
     }).overrideAttrs
       (oldAttrs: rec {
         pname = "cursor";
         version = "2.0.77";
         src =
-          with pkgs-master;
+          with pkgs;
           appimageTools.extract {
             inherit pname version;
             src =
@@ -40,14 +40,14 @@ let
       });
 in
 {
-  home.packages = with pkgs-master; [
+  home.packages = with pkgs; [
     zed-editor
     code-cursor
   ];
 
   programs.vscode = {
     enable = true;
-    package = pkgs-master.vscode.override {
+    package = pkgs.vscode.override {
       commandLineArgs = vscodeCliArgs;
     };
   };
