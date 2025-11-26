@@ -959,6 +959,26 @@
         "type": "github"
       }
     },
+    "nur-isning": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1764166556,
+        "narHash": "sha256-bf6fDgD1J5SMOfsYXC8+MREznvaiqQc9+2oIBNobR8c=",
+        "owner": "isning",
+        "repo": "nur-packages",
+        "rev": "e42add9ff912cfa7eeda81857f8a5f6996f11d75",
+        "type": "github"
+      },
+      "original": {
+        "owner": "isning",
+        "repo": "nur-packages",
+        "type": "github"
+      }
+    },
     "nur-ryan4yin": {
       "inputs": {
         "nixpkgs": [
@@ -1069,6 +1089,7 @@
         "nixpkgs-stable": "nixpkgs-stable_2",
         "nu_scripts": "nu_scripts",
         "nuenv": "nuenv",
+        "nur-isning": "nur-isning",
         "nur-ryan4yin": "nur-ryan4yin",
         "pre-commit-hooks": "pre-commit-hooks",
         "preservation": "preservation",

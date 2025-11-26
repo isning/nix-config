@@ -181,6 +181,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    nur-isning = {
+      url = "github:isning/nur-packages";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     nixos-hardware = {
       url = "github:isning/nixos-hardware";
     };
