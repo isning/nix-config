@@ -313,6 +313,15 @@ in
         # Password Manager
         ".config/Bitwarden"
 
+        # Feishu
+        ".config/LarkShell"
+        ".cache/LarkShell"
+
+        # Netease Cloud Music GTK
+        ".local/share/netease-cloud-music-gtk4"
+        ".config/netease-cloud-music-gtk4"
+        ".cache/netease-cloud-music-gtk4"
+
         ".config/nushell"
       ];
       files = [
