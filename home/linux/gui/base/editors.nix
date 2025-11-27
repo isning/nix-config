@@ -1,4 +1,9 @@
-{ lib, pkgs, ... }:
+{
+  lib,
+  pkgs,
+  pkgs-master,
+  ...
+}:
 
 let
   vscodeCliArgs = [
@@ -43,6 +48,7 @@ in
   home.packages = with pkgs; [
     zed-editor
     code-cursor
+    pkgs-master.antigravity
   ];
 
   programs.vscode = {
