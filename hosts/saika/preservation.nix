@@ -135,6 +135,7 @@ in
         ".config/JetBrains"
         ".java/.userPrefs"
         ".cache/JetBrains"
+        ".jdks" # JDKs installed by IntelliJ IDEA
 
         # vscode
         ".vscode"
