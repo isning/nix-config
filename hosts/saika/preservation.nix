@@ -322,6 +322,9 @@ in
         ".config/netease-cloud-music-gtk4"
         ".cache/netease-cloud-music-gtk4"
 
+        # Antigravity
+        ".config/Antigravity"
+
         ".config/nushell"
       ];
       files = [
