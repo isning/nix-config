@@ -324,6 +324,7 @@ in
         ".cache/netease-cloud-music-gtk4"
 
         # Antigravity
+        ".antigravity"
         ".config/Antigravity"
 
         ".config/nushell"
