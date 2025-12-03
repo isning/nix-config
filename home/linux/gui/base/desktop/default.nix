@@ -72,4 +72,8 @@
   # notification daemon, the same as dunst
   services.mako.enable = true;
   catppuccin.mako.enable = false;
+
+  # clipboard manager
+  services.wl-clip-persist.enable = true; # persist clipboard after app exits
+  services.clipse.enable = true; # clipboard history manager with GUI
 }
