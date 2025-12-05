@@ -23,7 +23,7 @@
     netease-cloud-music-gtk
 
     # qqmusic
-    # bwraps.wechat
+    bwraps.wechat
     # discord # update too frequently, use the web version instead
   ];
 
