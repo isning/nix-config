@@ -191,6 +191,6 @@
     };
 
     # for waydroid
-    # nur-ataraxiasjel.url = "github:AtaraxiaSjel/nur";
+    nur-ataraxiasjel.url = "github:AtaraxiaSjel/nur";
   };
 }
