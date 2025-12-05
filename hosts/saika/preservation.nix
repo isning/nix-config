@@ -63,6 +63,9 @@ in
       # other data
       "/var/lib/flatpak"
 
+      # Waydroid
+      "/var/lib/waydroid"
+
       # virtualisation
       "/var/lib/libvirt"
       "/var/lib/lxc"
@@ -295,6 +298,8 @@ in
         ".local/share/flatpak"
         # flatpak/nixpak app's data
         ".var"
+        # Waydroid data
+        ".local/share/waydroid"
 
         # ======================================
         # Misc
