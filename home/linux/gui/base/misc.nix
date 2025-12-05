@@ -20,8 +20,6 @@
     # TODO: Try harden this later
     feishu
 
-    netease-cloud-music-gtk
-
     # qqmusic
     bwraps.wechat
     # discord # update too frequently, use the web version instead
