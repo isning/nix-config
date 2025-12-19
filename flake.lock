@@ -1241,11 +1241,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1764166556,
-        "narHash": "sha256-bf6fDgD1J5SMOfsYXC8+MREznvaiqQc9+2oIBNobR8c=",
+        "lastModified": 1766149335,
+        "narHash": "sha256-Dv0gb0LPJDGBqoSr5PnigY9gjizXvTYmpnBcF2f7ee8=",
         "owner": "isning",
         "repo": "nur-packages",
-        "rev": "e42add9ff912cfa7eeda81857f8a5f6996f11d75",
+        "rev": "50df26f0bd1cd91823e2d6229d84386bcc2e0ca5",
         "type": "github"
       },
       "original": {
