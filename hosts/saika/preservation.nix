@@ -335,6 +335,9 @@ in
         ".antigravity"
         ".config/Antigravity"
 
+        # LibreOffice
+        ".config/libreoffice"
+
         ".config/nushell"
       ];
       files = [
