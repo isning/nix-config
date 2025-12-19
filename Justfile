@@ -188,6 +188,17 @@ upload-vm name mode="default":
   use {{utils_nu}} *;
   upload-vm {{name}} {{mode}}
 
+############################################################################
+#
+# Commands for DormLab (Dormitory Lab) devices
+#
+############################################################################
+
+[linux]
+[group('dormlab')]
+exusiai:
+  colmena apply --on '@exusiai' --verbose --show-trace
+
 # =================================================
 #
 # Other useful commands

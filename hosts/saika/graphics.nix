@@ -79,5 +79,6 @@
     # NVIDIA NVENC Encoder
     nvenc_preset = 3; # 1(fastest + worst quality) - 7(slowest + best quality)
     nvenc_twopass = "full_res"; # quarter_res / full_res.
+    adapter_name = "/dev/dri/renderD129";
   };
 }
