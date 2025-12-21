@@ -2,7 +2,7 @@
   "position": "top",
   "layer": "top",
   "modules-left": ["custom/launcher", "temperature", "backlight", "network"],
-  "modules-center": ["custom/playerctl"],
+  "modules-center": ["hyprland/workspaces", "custom/playerctl"],
   "modules-right": [
     "wireplumber",
     "wireplumber#source",
