@@ -48,7 +48,7 @@ in
   home.packages = with pkgs; [
     zed-editor
     code-cursor
-    pkgs-master.antigravity
+    pkgs-master.antigravity-fhs
   ];
 
   programs.vscode = {
