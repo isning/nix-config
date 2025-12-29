@@ -73,12 +73,7 @@
         # };
       };
 
-      # signing = {
-      #   key = "xxx";
-      #   signByDefault = true;
-      # };
-
-      aliases = {
+      alias = {
         # common aliases
         br = "branch";
         co = "checkout";
