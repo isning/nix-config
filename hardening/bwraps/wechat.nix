@@ -18,8 +18,8 @@ let
     aarch64-linux = {
       version = "4.1.0.13";
       src = fetchurl {
-        url = "https://web.archive.org/web/20250930121708if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
-        hash = "sha256-qkNLA8nILsIi2ciIzr9pb3PejhbEvZ5fe4GlmjyjrEI=";
+        url = "https://web.archive.org/web/20251226062330if_/https://dldir1v6.qq.com/weixin/Universal/Linux/WeChatLinux_arm64.AppImage";
+        hash = "sha256-/d5crM6IGd0k0fSlBSQx4TpIVX/8iib+an0VMkWMNdw=";
       };
     };
     x86_64-linux = {
