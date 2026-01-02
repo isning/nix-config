@@ -156,6 +156,7 @@ in
 
         # google ai editor (antigravity)
         ".config/Antigravity"
+        ".antigravity"
 
         # ai agents
         ".claude"
@@ -321,6 +322,9 @@ in
 
         # Digital Painting
         ".local/share/krita"
+
+        # Japanese IME
+        ".config/mozc" # used by fcitx5-mozc
 
         # Password Manager
         ".config/Bitwarden"
