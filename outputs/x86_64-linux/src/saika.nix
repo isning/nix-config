@@ -55,16 +55,6 @@ let
       ];
   };
 
-  modules-hyprland = {
-    nixos-modules = [
-    ]
-    ++ base-modules.nixos-modules;
-    home-modules = [
-      { modules.desktop.hyprland.enable = true; }
-    ]
-    ++ base-modules.home-modules;
-  };
-
   modules-niri = {
     nixos-modules = [
       { programs.niri.enable = true; }
@@ -88,15 +78,12 @@ let
 in
 {
   nixosConfigurations = {
-    # host with hyprland compositor
-    "${name}-hyprland" = mylib.nixosSystem (modules-hyprland // args);
     "${name}-niri" = mylib.nixosSystem (modules-niri // args);
     "${name}-plasma" = mylib.nixosSystem (modules-plasma // args);
   };
 
   # generate iso image for hosts with desktop environment
   packages = {
-    "${name}-hyprland" = inputs.self.nixosConfigurations."${name}-hyprland".config.formats.iso;
     "${name}-niri" = inputs.self.nixosConfigurations."${name}-niri".config.formats.iso;
     "${name}-plasma" = inputs.self.nixosConfigurations."${name}-plasma".config.formats.iso;
   };
