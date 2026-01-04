@@ -181,7 +181,7 @@
     }
   },
   "brightness": {
-    "brightnessStep": 5,
+    "brightnessStep": 3,
     "enableDdcSupport": false,
     "enforceMinimum": true
   },
@@ -299,7 +299,7 @@
     "allowPanelsOnScreenWithoutBar": true,
     "animationDisabled": false,
     "animationSpeed": 1,
-    "avatarImage": "/home/ryan/codes/thiscute.world/static/avatar/myself.jpg",
+    "avatarImage": "~/nix-config/_img/myself.jpg",
     "boxRadiusRatio": 1,
     "compactLockScreen": false,
     "dimmerOpacity": 0.2,
@@ -395,8 +395,7 @@
     "audioCodec": "opus",
     "audioSource": "default_output",
     "colorRange": "limited",
-    "copyToClipboard": false,
-    "directory": "/home/ryan/Videos",
+    "directory": "~/Videos",
     "frameRate": 30,
     "quality": "high",
     "showCursor": true,
@@ -514,7 +513,7 @@
     "tooltipsEnabled": true
   },
   "wallpaper": {
-    "directory": "/home/ryan/Pictures/Wallpapers",
+    "directory": "~/Pictures/Wallpapers",
     "enableMultiMonitorDirectories": false,
     "enabled": true,
     "fillColor": "#000000",
