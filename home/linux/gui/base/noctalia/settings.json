@@ -3,7 +3,7 @@
     "customLaunchPrefix": "",
     "customLaunchPrefixEnabled": false,
     "enableClipPreview": true,
-    "enableClipboardHistory": false,
+    "enableClipboardHistory": true,
     "iconMode": "native",
     "ignoreMouseInput": false,
     "pinnedExecs": [],
@@ -26,7 +26,7 @@
     "volumeStep": 1
   },
   "bar": {
-    "backgroundOpacity": 0,
+    "backgroundOpacity": 0.2,
     "capsuleOpacity": 1,
     "density": "comfortable",
     "exclusive": true,
@@ -242,7 +242,7 @@
         "id": "media-sysmon-card"
       }
     ],
-    "diskPath": "/",
+    "diskPath": "/persistent",
     "position": "close_to_bar_button",
     "shortcuts": {
       "left": [
@@ -386,7 +386,7 @@
     "autoHideMs": 2000,
     "backgroundOpacity": 1,
     "enabled": true,
-    "enabledTypes": [0, 1, 2, 4],
+    "enabledTypes": [0, 1, 2, 4, 3],
     "location": "top_right",
     "monitors": [],
     "overlayLayer": true
@@ -395,6 +395,7 @@
     "audioCodec": "opus",
     "audioSource": "default_output",
     "colorRange": "limited",
+    "copyToClipboard": false,
     "directory": "~/Videos",
     "frameRate": 30,
     "quality": "high",
