@@ -100,7 +100,7 @@
           "compactMode": true,
           "diskPath": "/persistent",
           "id": "SystemMonitor",
-          "showCpuTemp": true,
+          "showCpuTemp": false,
           "showCpuUsage": true,
           "showDiskUsage": true,
           "showGpuTemp": false,
