@@ -338,10 +338,6 @@ in
         ".config/netease-cloud-music-gtk4"
         ".cache/netease-cloud-music-gtk4"
 
-        # Antigravity
-        ".antigravity"
-        ".config/Antigravity"
-
         # LibreOffice
         ".config/libreoffice"
 
