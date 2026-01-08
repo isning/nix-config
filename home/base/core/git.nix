@@ -29,9 +29,9 @@
     hosts = {
       "github.com" = {
         "users" = {
-          "ryan4yin" = null;
+          "isning" = null;
         };
-        "user" = "ryan4yin";
+        "user" = "isning";
       };
     };
   };
@@ -62,8 +62,8 @@
 
       # replace https with ssh
       url = {
-        "ssh://git@github.com/ryan4yin" = {
-          insteadOf = "https://github.com/ryan4yin";
+        "ssh://git@github.com/isning" = {
+          insteadOf = "https://github.com/isning";
         };
         # "ssh://git@gitlab.com/" = {
         #   insteadOf = "https://gitlab.com/";
