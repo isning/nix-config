@@ -35,8 +35,6 @@ in
   # Enable CUPS to print documents.
   services.printing.enable = true;
 
-  # TLP is enabled by default with the nixos-hardware module, we use tuned instead.
-  services.tlp.enable = false;
   # Tuned is enabled at modules/nixos/desktop/power.nix
   services.tuned.ppdSettings.main.default = lib.mkForce "performance";
 
