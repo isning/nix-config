@@ -1295,11 +1295,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1768038530,
-        "narHash": "sha256-MgrduwPa/15Uvzq84CH36keWUjQkm0kGePTiNykFcY4=",
+        "lastModified": 1768039856,
+        "narHash": "sha256-Pqp0Dji3etI6tW4BqaRxx80v7hr91ud9afONAwK3Mws=",
         "owner": "isning",
         "repo": "nur-packages",
-        "rev": "9aa4c99cf16f45854a1c1c614474c49d1862564b",
+        "rev": "d924ebba37b8e9de1df5932766902d079bc6b9e2",
         "type": "github"
       },
       "original": {
