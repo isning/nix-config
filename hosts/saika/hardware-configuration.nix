@@ -56,6 +56,8 @@
     "fat"
     "vfat"
     "exfat"
+    "f2fs"
+    "erofs"
   ];
 
   boot.initrd = {
