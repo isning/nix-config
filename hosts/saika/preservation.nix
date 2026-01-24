@@ -342,6 +342,9 @@ in
         ".config/libreoffice"
 
         ".config/nushell"
+
+        # noctalia shell
+        ".cache/noctalia"
       ];
       files = [
         {
