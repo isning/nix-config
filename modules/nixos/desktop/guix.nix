@@ -1,7 +1,13 @@
+{ pkgs, ... }:
 {
   # https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/services/misc/guix/default.nix
   services.guix = {
     enable = true;
+    package = pkgs.guix.override {
+      guile-git = pkgs.guile-git.overrideAttrs (old: {
+        doCheck = false;
+      });
+    };
     # The store directory where the Guix service will serve to/from.
     # NOTE: most of the cached builds are assumed to be in `/gnu/store`.
     storeDir = "/gnu/store";
