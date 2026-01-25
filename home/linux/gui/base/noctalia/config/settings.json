@@ -90,7 +90,7 @@
           "colorizeIcons": false,
           "hideMode": "hidden",
           "id": "ActiveWindow",
-          "maxWidth": 145,
+          "maxWidth": 265,
           "scrollingMode": "hover",
           "showIcon": true,
           "useFixedWidth": false
@@ -185,7 +185,7 @@
     "generateTemplatesForPredefined": true,
     "manualSunrise": "06:30",
     "manualSunset": "18:30",
-    "matugenSchemeType": "scheme-rainbow",
+    "matugenSchemeType": "scheme-tonal-spot",
     "predefinedScheme": "Noctalia (default)",
     "schedulingMode": "off",
     "useWallpaperColors": true
@@ -300,7 +300,7 @@
     "colorizeIcons": false,
     "deadOpacity": 0.6,
     "displayMode": "auto_hide",
-    "enabled": false,
+    "enabled": true,
     "floatingRatio": 1,
     "inactiveIndicators": false,
     "monitors": [],
