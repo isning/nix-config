@@ -39,6 +39,7 @@ let
       ]
       ++ [
         inputs.nixos-hardware.nixosModules.lenovo-thinkbook-16pg5irx
+        inputs.nur-isning.nixosModules.memfd-ashmem-shim
       ];
     home-modules =
       (map mylib.relativeToRoot [
