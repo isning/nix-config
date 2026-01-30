@@ -20,22 +20,41 @@
 
   fileSystems."/mnt/windows" = {
     device = "/dev/mapper/crypted-windows";
-    # fsType = "ntfs";
-    options = [ "nofail" "ro"
-    "uid=0" "gid=0" "dmask=007" "fmask=117" ];
+    fsType = "ntfs3";
+    options = [
+      "nofail"
+      "ro"
+      "windows_names"
+      "uid=0"
+      "gid=0"
+      "dmask=007"
+      "fmask=117"
+    ];
   };
 
   fileSystems."/mnt/data" = {
     device = "/dev/mapper/crypted-data";
-    # fsType = "ntfs";
-    options = [ "nofail"
-    "uid=1000" "gid=100" "dmask=007" "fmask=007" ];
+    fsType = "ntfs3";
+    options = [
+      "nofail"
+      "windows_names"
+      "uid=1000"
+      "gid=100"
+      "dmask=007"
+      "fmask=007"
+    ];
   };
 
   fileSystems."/mnt/data_2" = {
     device = "/dev/mapper/crypted-data_2";
-    # fsType = "ntfs";
-    options = [ "nofail"
-    "uid=1000" "gid=100" "dmask=007" "fmask=007" ];
+    fsType = "ntfs3";
+    options = [
+      "nofail"
+      "windows_names"
+      "uid=1000"
+      "gid=100"
+      "dmask=007"
+      "fmask=007"
+    ];
   };
 }
