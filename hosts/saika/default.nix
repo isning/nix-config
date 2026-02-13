@@ -1,4 +1,9 @@
-{ myvars, lib, ... }:
+{
+  myvars,
+  lib,
+  pkgs,
+  ...
+}:
 #############################################################
 #
 #  Saika
@@ -42,6 +47,10 @@ in
     enableSystemSlice = true;
     enableUserSlices = true;
   };
+
+  boot.extraModprobeConfig = ''
+    options snd_sof ipc_type=1
+  '';
 
   services.memfd-ashmem-shim.enable = true;
 
