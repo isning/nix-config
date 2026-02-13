@@ -15,6 +15,15 @@
     ./disko.nix
   ];
 
+  # Use the EFI boot loader.
+  boot.loader.efi.canTouchEfiVariables = true;
+  # depending on how you configured your disk mounts, change this to /boot or /boot/efi.
+  boot.loader.efi.efiSysMountPoint = "/boot";
+  boot.loader.systemd-boot.enable = true;
+
+  # https://github.com/NixOS/nixpkgs/blob/nixos-unstable/pkgs/top-level/linux-kernels.nix
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   boot.initrd.availableKernelModules = [
     "nvme"
     "ahci"
@@ -28,12 +37,6 @@
   boot.extraModulePackages = [ ];
   # clear /tmp on boot to get a stateless /tmp directory.
   boot.tmp.cleanOnBoot = true;
-
-  # Use the EFI boot loader.
-  boot.loader.efi.canTouchEfiVariables = true;
-  # depending on how you configured your disk mounts, change this to /boot or /boot/efi.
-  boot.loader.efi.efiSysMountPoint = "/boot";
-  boot.loader.systemd-boot.enable = true;
 
   # NOTE: Filesystem configuration is handled by disko!
   # See: hosts/whitefox/disko.nix

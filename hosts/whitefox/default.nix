@@ -16,19 +16,16 @@ in
   imports = [
     # Include the results of the hardware scan.
     ./hardware-configuration.nix
-    ./disko.nix
+    ./graphics.nix
+    ./preservation.nix
+    ./secureboot.nix
   ];
 
   networking = {
     inherit hostName;
   };
 
-  boot.extraModprobeConfig = "options kvm_amd nested=1"; # for amd cpu
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
-  boot.kernelModules = [
-    "kvm-amd"
-    "vfio-pci"
-  ];
 
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
