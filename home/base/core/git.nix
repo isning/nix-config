@@ -65,6 +65,9 @@
         "ssh://git@github.com/isning" = {
           insteadOf = "https://github.com/isning";
         };
+        "ssh://git@github.com/ISNing" = {
+          insteadOf = "https://github.com/ISNing";
+        };
         # "ssh://git@gitlab.com/" = {
         #   insteadOf = "https://gitlab.com/";
         # };
