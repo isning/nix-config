@@ -70,22 +70,29 @@ nix-shell -p git vim
 
 # clone this repository
 git clone https://github.com/isning/nix-config.git
-cd nix-config
+cd nix-config/nixos-installer
 
-# Option 1: One-line install with disko-install (recommended)
+# Option 1: One-line install with disko-install
 # This will prompt for LUKS passphrase interactively
+#
+# NOTE: Using disko-install may cause 'no space left on device' errors on small RAM or tmpfs root systems.
+# This is because disko-install downloads all build outputs to /nix/store (in RAM/tmpfs),
+# while nixos-install downloads directly to /mnt/nix/store (the target disk).
+# See: https://github.com/nix-community/disko/issues/947
+# If you encounter space issues, use Option 2 below.
 sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/disko#disko-install' -- \
   --write-efi-boot-entries --disk main /dev/nvme0n1 --flake .#whitefox
 
 # if you want to use a cache mirror, run this command instead
-sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/disko#disko-install' -- \
+sudo nix run --experimental-features "nix-command flakes" 'github:nix-community/disko#disko-install' \
+  --option substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://cache.nixos.org/" -- \
   --write-efi-boot-entries --disk main /dev/nvme0n1 --flake .#whitefox \
   --option substituters "https://mirrors.tuna.tsinghua.edu.cn/nix-channels/store https://cache.nixos.org/"
 
 # Option 2: Step-by-step installation
 ## 2a. Partition & format disk via disko (will prompt for LUKS passphrase)
 sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko -- \
-  --mode disko hosts/whitefox/disko-config/disko-fs.nix
+  --mode disko --flake .#whitefox
 
 ## 2b. Install NixOS
 # NOTE: the root password you set here will be discarded when reboot
