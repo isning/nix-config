@@ -39,6 +39,28 @@
             ../hosts/saika/preservation.nix
           ];
         };
+
+        whitefox = nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = inputs // {
+            inherit mylib myvars;
+          };
+
+          modules = [
+            { networking.hostName = "whitefox"; }
+
+            ./configuration.nix
+
+            ../modules/base
+            ../modules/nixos/base/i18n.nix
+            ../modules/nixos/base/user-group.nix
+            ../modules/nixos/base/ssh.nix
+
+            ../hosts/whitefox/hardware-configuration.nix
+            ../hosts/whitefox/disko.nix
+            ../hosts/whitefox/preservation.nix
+          ];
+        };
       };
     };
 }
