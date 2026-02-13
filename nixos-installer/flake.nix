@@ -57,7 +57,6 @@
             ../modules/nixos/base/ssh.nix
 
             ../hosts/whitefox/hardware-configuration.nix
-            ../hosts/whitefox/disko.nix
             ../hosts/whitefox/preservation.nix
           ];
         };
