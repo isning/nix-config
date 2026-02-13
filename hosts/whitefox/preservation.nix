@@ -46,19 +46,15 @@ in
       "/etc/agenix/"
 
       "/var/log"
+      "/var/lib"
 
-      # system-core
-      "/var/lib/nixos"
-      "/var/lib/systemd"
-      {
-        directory = "/var/lib/private";
-        mode = "0700";
-      }
+      # k3s related
+      "/etc/iscsi"
+      "/etc/rancher"
 
       # network
       "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
-      "/var/lib/iwd"
     ];
     files = [
       # auto-generated machine ID
@@ -67,6 +63,8 @@ in
         inInitrd = true;
       }
     ];
+
+    # the following directories will be passed to /persistent/home/$USER
     users.${username} = {
       commonMountOptions = [ "x-gvfs-hide" ];
       directories = [
@@ -82,7 +80,6 @@ in
           mode = "0700";
         }
       ];
-      files = [ ];
     };
   };
 
@@ -109,10 +106,10 @@ in
     in
     {
       "/home/${username}/.config".d = permission;
-      "/home/${username}/.cache".d = permission;
       "/home/${username}/.local".d = permission;
       "/home/${username}/.local/share".d = permission;
       "/home/${username}/.local/state".d = permission;
+      "/home/${username}/.terraform.d".d = permission;
     };
 
   # systemd-machine-id-commit.service would fail but it is not relevant
