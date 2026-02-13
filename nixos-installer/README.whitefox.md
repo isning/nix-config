@@ -1,4 +1,4 @@
-# Nix Environment Setup for general disko used host
+# Nix Environment Setup for Host: Whitefox
 
 > :red_circle: **IMPORTANT**: **Once again, you should NOT deploy this flake directly on your
 > machine :exclamation: Please write your own configuration from scratch, and use my configuration
@@ -170,6 +170,11 @@ ssh-keygen -t ed25519 -a 256 -C "isning@whitefox" -f ~/.ssh/whitefox
 ssh-add ~/.ssh/whitefox
 ```
 
+Next, enable secure boot, follow the instructions in
+[lanzaboote - Quick Start](https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md)
+and
+[nix-config/hosts/whitefox/secureboot.nix](https://github.com/isning/nix-config/blob/main/hosts/whitefox/secureboot.nix)
+
 Then follow the instructions in [../secrets/README.md](../secrets/README.md) to rekey all my secrets
 with the new host's system-level SSH key(`/etc/ssh/ssh_host_ed25519_key`), so that agenix can
 decrypt them automatically on the new host when I deploy my NixOS configuration.
@@ -185,11 +190,6 @@ cd ~/nix-config
 # deploy the configuration via Justfile
 just local
 ```
-
-Finally, to enable secure boot, follow the instructions in
-[lanzaboote - Quick Start](https://github.com/nix-community/lanzaboote/blob/master/docs/QUICK_START.md)
-and
-[nix-config/ai/secure-boot.nix](https://github.com/ryan4yin/nix-config/blob/main/hosts/idols_ai/secureboot.nix)
 
 ## Change LUKS2's passphrase
 
