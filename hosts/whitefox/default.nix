@@ -58,14 +58,9 @@ in
     ./graphics.nix
     ./preservation.nix
     ./secureboot.nix
-    ./virtualization.nix
     coreModule
     k3sModule
   ];
-
-  networking = {
-    inherit hostName;
-  };
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
 }
