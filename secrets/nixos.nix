@@ -11,13 +11,7 @@ with lib;
 let
   cfg = config.modules.secrets;
 
-  enabledServerSecrets =
-    cfg.server.application.enable
-    || cfg.server.network.enable
-    || cfg.server.operation.enable
-    || cfg.server.kubernetes.enable
-    || cfg.server.webserver.enable
-    || cfg.server.storage.enable;
+  enabledServerSecrets = cfg.server.homelab.enable;
 
   noaccess = {
     mode = "0000";
@@ -41,12 +35,7 @@ in
     desktop.enable = mkEnableOption "NixOS Secrets for Desktops";
     host.saika.enable = mkEnableOption "NixOS Secrets for Saika";
 
-    server.network.enable = mkEnableOption "NixOS Secrets for Network Servers";
-    server.application.enable = mkEnableOption "NixOS Secrets for Application Servers";
-    server.operation.enable = mkEnableOption "NixOS Secrets for Operation Servers(Backup, Monitoring, etc)";
-    server.kubernetes.enable = mkEnableOption "NixOS Secrets for Kubernetes";
-    server.webserver.enable = mkEnableOption "NixOS Secrets for Web Servers(contains tls cert keys)";
-    server.storage.enable = mkEnableOption "NixOS Secrets for HDD Data's LUKS Encryption";
+    server.homelab.enable = mkEnableOption "NixOS Secrets for my homelab servers";
 
     preservation.enable = mkEnableOption "whether use preservation and ephemeral root file system";
   };
@@ -149,27 +138,7 @@ in
       };
     })
 
-    (mkIf cfg.server.network.enable {
-      age.secrets = {
-      };
-    })
-
-    (mkIf cfg.server.application.enable {
-      age.secrets = {
-      };
-    })
-
-    (mkIf cfg.server.operation.enable {
-      age.secrets = {
-      };
-    })
-
-    (mkIf cfg.server.kubernetes.enable {
-      age.secrets = {
-      };
-    })
-
-    (mkIf cfg.server.webserver.enable {
+    (mkIf cfg.server.homelab.enable {
       age.secrets = {
       };
     })
