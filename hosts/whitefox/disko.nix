@@ -29,6 +29,7 @@
     disk = {
       main = {
         type = "disk";
+        device = "/dev/disk/by-id/nvme-Fanxiang_S790_1TB_FXS790244362113";
         content = {
           type = "gpt";
           partitions = {
@@ -83,7 +84,7 @@
                   extraArgs = [ "-f" ];
                   subvolumes = {
                     # btrfs top-level subvolume (id=5) for accessing all subvolumes
-                    "@" = {
+                    "/" = {
                       mountpoint = "/btr_pool";
                       mountOptions = [ "subvolid=5" ];
                     };
