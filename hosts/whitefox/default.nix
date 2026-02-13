@@ -58,6 +58,7 @@ in
     ./graphics.nix
     ./preservation.nix
     ./secureboot.nix
+    ./tailscale.nix
     coreModule
     k3sModule
   ];

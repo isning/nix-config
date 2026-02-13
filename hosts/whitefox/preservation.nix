@@ -53,6 +53,7 @@ in
       "/etc/rancher"
 
       # network
+      "/var/lib/tailscale"
       "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
     ];
