@@ -39,8 +39,8 @@ let
       # IPv4 Private CIDR(full) - 172.16.0.0/12
       # IPv4 Pod     CIDR(full) - fdfd:cafe:00:0000::/64 ~ fdfd:cafe:00:7fff::/64
       # IPv4 Service CIDR(full) - fdfd:cafe:00:8000::/64 ~ fdfd:cafe:00:ffff::/64
-      # "--cluster-cidr=172.16.0.0/16,fdfd:cafe:00:0001::/64"
-      # "--service-cidr=172.17.0.0/16,fdfd:cafe:00:8001::/112"
+      "--cluster-cidr=172.16.0.0/16,fdfd:cafe:00:0001::/64"
+      "--service-cidr=172.17.0.0/16,fdfd:cafe:00:8001::/112"
     ];
     nodeLabels = [
       "node-purpose=kubevirt"
