@@ -11,8 +11,12 @@
   ...
 }@args:
 let
-  name = "k3s-test-1-master-2";
-  tags = [ name ];
+  name = "whitefox";
+  tags = [
+    name
+    "homelab"
+    "server"
+  ];
   ssh-user = "root";
 
   modules = {
@@ -21,12 +25,14 @@ let
         # common
         "secrets/nixos.nix"
         "modules/nixos/server/server.nix"
-        "modules/nixos/server/kubevirt-hardware-configuration.nix"
         # host specific
-        "hosts/k8s/${name}"
+        "hosts/${name}"
       ])
       ++ [
-        { modules.secrets.server.kubernetes.enable = true; }
+        {
+          modules.secrets.server.homelab.enable = true;
+          modules.secrets.preservation.enable = true;
+        }
       ];
   };
 
@@ -37,5 +43,6 @@ in
 
   colmena.${name} = mylib.colmenaSystem (systemArgs // { inherit tags ssh-user; });
 
-  packages.${name} = inputs.self.nixosConfigurations.${name}.config.formats.kubevirt;
+  # generate iso image for installation
+  packages.${name} = inputs.self.nixosConfigurations.${name}.config.formats.iso;
 }
