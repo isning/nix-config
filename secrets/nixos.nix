@@ -140,11 +140,11 @@ in
 
     (mkIf cfg.server.kubernetes.enable {
       age.secrets = {
-        "kubernetes/registries.yaml" = {
+        "k3s-registries.yaml" = {
           file = "${mysecrets}/kubernetes/registries.yaml.age";
         }
         // high_security;
-        "kubernetes/kubevirt-k3s-token" = {
+        "kubevirt-k3s-token" = {
           file = "${mysecrets}/kubernetes/kubevirt-k3s-token.age";
         }
         // high_security;
@@ -154,7 +154,7 @@ in
       environment.etc = {
         # use mirrors for container registries, so that we can pull images faster and more reliably
         "rancher/k3s/registries.yaml" = {
-          source = config.age.secrets."kubernetes/registries.yaml".path;
+          source = config.age.secrets."k3s-registries.yaml".path;
         };
       };
     })
