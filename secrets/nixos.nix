@@ -144,6 +144,10 @@ in
           file = "${mysecrets}/kubernetes/registries.yaml.age";
         }
         // high_security;
+        "kubernetes/kubevirt-k3s-token" = {
+          file = "${mysecrets}/kubernetes/kubevirt-k3s-token.age";
+        }
+        // high_security;
       };
 
       # place secrets in /etc/

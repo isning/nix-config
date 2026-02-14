@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   mylib,
@@ -21,7 +22,7 @@ let
   k3sModule = mylib.genK3sServerModule {
     inherit pkgs;
     kubeconfigFile = "/home/${myvars.username}/.kube/config";
-    tokenFile = "/run/media/nixos_k3s/kubevirt-k3s-token";
+    tokenFile = config.age.secrets."kubernetes/kubevirt-k3s-token".path;
     # the first node in the cluster should be the one to initialize the cluster
     clusterInit = true;
     # use my own domain & kube-vip's virtual IP for the API server
