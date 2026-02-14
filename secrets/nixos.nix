@@ -11,7 +11,7 @@ with lib;
 let
   cfg = config.modules.secrets;
 
-  enabledServerSecrets = cfg.server.homelab.enable;
+  enabledServerSecrets = cfg.server.kubernetes.enable;
 
   noaccess = {
     mode = "0000";
@@ -35,7 +35,7 @@ in
     desktop.enable = mkEnableOption "NixOS Secrets for Desktops";
     host.saika.enable = mkEnableOption "NixOS Secrets for Saika";
 
-    server.homelab.enable = mkEnableOption "NixOS Secrets for my homelab servers";
+    server.kubernetes.enable = mkEnableOption "NixOS Secrets for my homelab servers";
 
     preservation.enable = mkEnableOption "whether use preservation and ephemeral root file system";
   };
@@ -138,8 +138,24 @@ in
       };
     })
 
-    (mkIf cfg.server.homelab.enable {
+    (mkIf cfg.server.kubernetes.enable {
       age.secrets = {
+        "k3s-registries.yaml" = {
+          file = "${mysecrets}/kubernetes/registries.yaml.age";
+        }
+        // high_security;
+        "kubevirt-k3s-token" = {
+          file = "${mysecrets}/kubernetes/kubevirt-k3s-token.age";
+        }
+        // high_security;
+      };
+
+      # place secrets in /etc/
+      environment.etc = {
+        # use mirrors for container registries, so that we can pull images faster and more reliably
+        "rancher/k3s/registries.yaml" = {
+          source = config.age.secrets."k3s-registries.yaml".path;
+        };
       };
     })
   ]);

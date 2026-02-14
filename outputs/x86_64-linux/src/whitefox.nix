@@ -30,7 +30,7 @@ let
       ])
       ++ [
         {
-          modules.secrets.server.homelab.enable = true;
+          modules.secrets.server.kubernetes.enable = true;
           modules.secrets.preservation.enable = true;
         }
       ];
