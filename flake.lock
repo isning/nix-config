@@ -1147,7 +1147,7 @@
       },
       "original": {
         "owner": "ryan4yin",
-        "ref": "nixos-unstable-patched",
+        "ref": "nixos-unstable",
         "repo": "nixpkgs",
         "type": "github"
       }
