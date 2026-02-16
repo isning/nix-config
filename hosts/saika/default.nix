@@ -54,6 +54,9 @@ in
 
   services.memfd-ashmem-shim.enable = true;
 
+  # Zram consumes physical memory for compression, which can cause a deadlock and system hang if the model size approaches the physical memory limit.
+  zramSwap.enable = lib.mkForce false;
+
   # This value determines the NixOS release from which the default
   # settings for stateful data, like file locations and database versions
   # on your system were taken. It‘s perfectly fine and recommended to leave
