@@ -345,6 +345,10 @@ in
 
         # noctalia shell
         ".cache/noctalia"
+
+        # AI
+        ".cache/modelscope"
+        ".cache/huggingface"
       ];
       files = [
         {
