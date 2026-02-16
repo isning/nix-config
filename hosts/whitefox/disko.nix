@@ -151,4 +151,9 @@
       "rw"
     ];
   };
+
+  fileSystems."/persistent" = {
+    # preservation's data is required for booting.
+    neededForBoot = true;
+  };
 }
