@@ -46,10 +46,8 @@ let
     nodeLabels = [
       "node-purpose=kubevirt"
     ];
-    # kubevirt works well with k3s's flannel,
-    # but has issues with cilium(failed to configure vmi network: setup failed, err: pod link (pod6b4853bd4f2) is missing).
-    # so we should not disable flannel here.
-    disableFlannel = false;
+    # Use cilium instead of flannel
+    disableFlannel = true;
   };
 in
 {
