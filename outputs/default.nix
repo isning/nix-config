@@ -2,6 +2,7 @@
   self,
   nixpkgs,
   pre-commit-hooks,
+  colmena,
   ...
 }@inputs:
 let
@@ -98,6 +99,7 @@ in
   );
 
   # Colmena - remote deployment via SSH
+  colmenaHive = colmena.lib.makeHive self.outputs.colmena;
   colmena = {
     meta =
       (
