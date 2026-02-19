@@ -14,10 +14,10 @@ let
   ];
 in
 {
-  home.packages = with pkgs; [
-    zed-editor
-    code-cursor
-    pkgs-master.antigravity-fhs
+  home.packages = [
+    pkgs-master.code-cursor
+    # pkgs-master.zed-editor
+    # pkgs-master.antigravity-fhs
   ];
 
   programs.vscode = {
