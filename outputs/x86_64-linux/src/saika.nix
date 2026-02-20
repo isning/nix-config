@@ -65,26 +65,14 @@ let
     ]
     ++ base-modules.home-modules;
   };
-
-  modules-plasma = {
-    nixos-modules = [
-    ]
-    ++ base-modules.nixos-modules;
-    home-modules = [
-      { programs.desktop.plasma.enable = true; }
-    ]
-    ++ base-modules.home-modules;
-  };
 in
 {
   nixosConfigurations = {
     "${name}-niri" = mylib.nixosSystem (modules-niri // args);
-    "${name}-plasma" = mylib.nixosSystem (modules-plasma // args);
   };
 
   # generate iso image for hosts with desktop environment
   packages = {
     "${name}-niri" = inputs.self.nixosConfigurations."${name}-niri".config.formats.iso;
-    "${name}-plasma" = inputs.self.nixosConfigurations."${name}-plasma".config.formats.iso;
   };
 }
