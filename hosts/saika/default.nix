@@ -41,7 +41,6 @@ in
   services.printing.enable = true;
 
   # Tuned is enabled at modules/nixos/desktop/power.nix
-  services.tuned.ppdSettings.main.default = lib.mkForce "performance";
 
   systemd.oomd = {
     enableSystemSlice = true;
