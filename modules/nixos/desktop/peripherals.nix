@@ -22,6 +22,47 @@
     # If you want to use JACK applications, uncomment this
     jack.enable = true;
     wireplumber.enable = true;
+
+    extraConfig.pipewire = {
+      "99-deepfilter-stereo" = {
+        "context.modules" = [
+          {
+            name = "libpipewire-module-filter-chain";
+            args = {
+              "node.description" = "DeepFilter Noise Canceling Source (Stereo)";
+              "media.name" = "DeepFilter Noise Canceling Source (Stereo)";
+              "filter.graph" = {
+                nodes = [
+                  {
+                    type = "ladspa";
+                    name = "DeepFilter Stereo";
+                    plugin = "${pkgs.deepfilternet}/lib/ladspa/libdeep_filter_ladspa.so";
+                    label = "deep_filter_stereo";
+                    control = {
+                      "Attenuation Limit (dB)" = 100;
+                    };
+                  }
+                ];
+              };
+              "audio.rate" = 48000;
+              "audio.channels" = 2;
+              "audio.position" = [
+                "FL"
+                "FR"
+              ];
+              "capture.props" = {
+                "node.passive" = true;
+              };
+              "playback.props" = {
+                "media.class" = "Audio/Source";
+                "priority.session" = 3000;
+                "priority.driver" = 3000;
+              };
+            };
+          }
+        ];
+      };
+    };
   };
   # rtkit is optional but recommended
   security.rtkit.enable = true;
