@@ -28,7 +28,7 @@ input {
         }
 
         // Enable numlock on startup, omitting this setting disables it.
-        // numlock
+        numlock
 
         // You can set the keyboard repeat parameters. The defaults match wlroots and sway.
         // Delay is in milliseconds before the repeat starts. Rate is in characters per second.
