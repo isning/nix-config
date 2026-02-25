@@ -1,5 +1,6 @@
 {
   preservation,
+  lib,
   pkgs,
   myvars,
   ...
@@ -161,6 +162,7 @@ in
         # ai agents
         ".claude"
         ".gemini"
+        ".openclaw"
 
         # nvim
         ".local/share/nvim"
@@ -243,10 +245,15 @@ in
           directory = ".pki";
           mode = "0700";
         }
-
-        ".local/share/password-store"
-        # gnmome keyrings
-        ".local/share/keyrings"
+        {
+          directory = ".local/share/password-store";
+          mode = "0700";
+        }
+        {
+          # gnmome keyrings
+          directory = ".local/share/keyrings";
+          mode = "0700";
+        }
 
         # ======================================
         # Games / Media
@@ -304,7 +311,10 @@ in
         ".local/share/containers"
         ".local/share/flatpak"
         # flatpak/nixpak app's data
-        ".var"
+        {
+          directory = ".var";
+          mode = "0700";
+        }
         # Waydroid data
         ".local/share/waydroid"
 
@@ -388,8 +398,8 @@ in
     let
       permission = {
         user = username;
-        group = "users";
-        mode = "0755";
+        group = lib.mkForce username;
+        mode = lib.mkForce "0750";
       };
     in
     {
