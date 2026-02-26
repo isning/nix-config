@@ -71,6 +71,7 @@ in
           "--disable-helm-controller" # we use fluxcd instead
           "--disable=traefik" # deploy our own ingress controller instead
           "--disable=servicelb" # we use kube-vip instead
+          "--disable=local-storage" # we manage it by fluxcd
           "--disable-network-policy"
           "--tls-san=${masterHost}"
         ]
