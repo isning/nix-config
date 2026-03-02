@@ -10,6 +10,7 @@
   # this can be a domain name or an IP address(such as kube-vip's virtual IP)
   masterHost,
   clusterInit ? false,
+  kubeApiServerExtraArgs ? [ ],
   kubeletExtraArgs ? [ ],
   k3sExtraArgs ? [ ],
   nodeLabels ? [ ],
@@ -77,6 +78,7 @@ in
         ]
         ++ (map (label: "--node-label=${label}") nodeLabels)
         ++ (map (taint: "--node-taint=${taint}") nodeTaints)
+        ++ (map (arg: "--kube-apiserver-arg=${arg}") kubeApiServerExtraArgs)
         ++ (map (arg: "--kubelet-arg=${arg}") kubeletExtraArgs)
         ++ (lib.optionals disableFlannel [ "--flannel-backend=none" ])
         ++ k3sExtraArgs;
