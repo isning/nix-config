@@ -28,6 +28,9 @@ let
     # use my own domain & kube-vip's virtual IP for the API server
     # so that the API server can always be accessed even if some nodes are down
     masterHost = "kubevirt-cluster-1.isning.moe";
+    kubeApiServerExtraArgs = [
+      "--authentication-config=${./conf/apiserver-authn.yaml}"
+    ];
     kubeletExtraArgs = [
       "--cpu-manager-policy=static"
       # https://kubernetes.io/docs/tasks/administer-cluster/reserve-compute-resources/
