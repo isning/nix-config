@@ -153,6 +153,8 @@ in
         ".gemini"
         ".codex"
         ".config/opencode"
+        ".local/share/opencode"
+        ".context7" # up-to-date docs and code examples for for LLMs & agents
 
         # nvim
         ".local/share/nvim"
@@ -165,7 +167,8 @@ in
         ".config/joplin" # tui client
         ".config/Joplin" # joplin-desktop
 
-        # ".local/share/jupyter"
+        ".local/share/jupyter"
+        ".ipython"
 
         # ======================================
         # Cloud Native
@@ -356,10 +359,6 @@ in
         {
           file = ".config/zoom.conf";
           how = "symlink";
-        }
-        {
-          file = ".claude.json";
-          how = "bindmount";
         }
       ];
     };
