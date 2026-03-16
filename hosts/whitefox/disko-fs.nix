@@ -12,6 +12,9 @@
     disko.nixosModules.disko
   ];
 
+  # Ephemeral root; preservation mounts /persistent for state.
+  fileSystems."/persistent".neededForBoot = true;
+
   disko.devices = {
     # tmpfs root for stateless system
     nodev = {
@@ -150,10 +153,5 @@
       "bind"
       "rw"
     ];
-  };
-
-  fileSystems."/persistent" = {
-    # preservation's data is required for booting.
-    neededForBoot = true;
   };
 }

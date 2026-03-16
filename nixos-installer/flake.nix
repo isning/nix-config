@@ -5,12 +5,14 @@
     nixpkgs.url = "github:nixos/nixpkgs/nixos-25.11";
     preservation.url = "github:nix-community/preservation";
     disko.url = "github:nix-community/disko/v1.11.0";
+    disko.inputs.nixpkgs.follows = "nixpkgs";
     nuenv.url = "github:DeterminateSystems/nuenv";
   };
 
   outputs =
     inputs@{
       nixpkgs,
+      disko,
       ...
     }:
     let

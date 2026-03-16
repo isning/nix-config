@@ -12,7 +12,7 @@
 {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
-    ./disko.nix
+    ./disko-fs.nix
   ];
 
   # Use the EFI boot loader.
