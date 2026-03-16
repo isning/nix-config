@@ -73,7 +73,7 @@
     };
 
     lanzaboote = {
-      url = "github:nix-community/lanzaboote/v0.4.3";
+      url = "github:nix-community/lanzaboote/v1.0.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -101,7 +101,7 @@
     };
 
     disko = {
-      url = "github:nix-community/disko/v1.11.0";
+      url = "github:nix-community/disko/v1.13.0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
