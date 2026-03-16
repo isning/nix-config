@@ -151,6 +151,7 @@ in
         ".config/Cursor"
 
         # ai agents
+        ".agents" # skills for all agents
         ".gemini"
         ".codex"
         ".config/opencode"
