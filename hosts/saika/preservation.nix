@@ -152,10 +152,12 @@ in
 
         # ai agents
         ".agents" # skills for all agents
+        ".config/agents"
         ".gemini"
         ".codex"
         ".config/opencode"
         ".local/share/opencode"
+        ".local/state/opencode"
         ".context7" # up-to-date docs and code examples for for LLMs & agents
 
         # nvim
