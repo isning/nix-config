@@ -41,18 +41,9 @@ let
         inputs.nixos-hardware.nixosModules.lenovo-thinkbook-16pg5irx
         inputs.nur-isning.nixosModules.memfd-ashmem-shim
       ];
-    home-modules =
-      (map mylib.relativeToRoot [
-        # common
-        "home/linux/gui.nix"
-        # host specific
-        "home/linux/hosts/${name}.nix"
-      ])
-      ++ [
-        {
-          modules.desktop.gaming.enable = true;
-        }
-      ];
+    home-modules = map mylib.relativeToRoot [
+      "home/hosts/linux/${name}.nix"
+    ];
   };
 
   modules-niri = {
@@ -60,10 +51,7 @@ let
       { programs.niri.enable = true; }
     ]
     ++ base-modules.nixos-modules;
-    home-modules = [
-      { modules.desktop.niri.enable = true; }
-    ]
-    ++ base-modules.home-modules;
+    home-modules = base-modules.home-modules;
   };
 in
 {
