@@ -46,7 +46,7 @@ let
         # common
         "home/linux/gui.nix"
         # host specific
-        "hosts/${name}/home.nix"
+        "home/linux/hosts/${name}.nix"
       ])
       ++ [
         {
