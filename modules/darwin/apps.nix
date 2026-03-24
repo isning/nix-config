@@ -131,9 +131,6 @@ in
       "aria2" # download tool
       "wireguard-tools" # wireguard
 
-      # ai
-      "cursor-cli"
-
       # Usage:
       #  https://github.com/tailscale/tailscale/wiki/Tailscaled-on-macOS#run-the-tailscaled-daemon
       # 1. `sudo tailscaled install-system-daemon`
@@ -164,6 +161,8 @@ in
       "visual-studio-code"
       # "zed"
       "cursor" # cursor ai editor
+      "cursor-cli"
+      "claude-code"
 
       "aerospace" # an i3-like tiling window manager for macOS
       "ghostty" # terminal emulator
