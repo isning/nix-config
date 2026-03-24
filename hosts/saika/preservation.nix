@@ -154,6 +154,7 @@ in
         # ai agents
         ".agents" # skills for all agents
         ".config/agents"
+        ".claude"
         ".gemini"
         ".codex"
         ".config/opencode"
@@ -347,6 +348,10 @@ in
         {
           file = ".config/zoom.conf";
           how = "symlink";
+        }
+        {
+          file = ".claude.json";
+          how = "bindmount";
         }
       ];
     };
