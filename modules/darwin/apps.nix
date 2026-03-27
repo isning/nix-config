@@ -159,8 +159,6 @@ in
 
       # code editor
       "visual-studio-code"
-      # "zed"
-      "cursor" # cursor ai editor
       "cursor-cli"
       "claude-code"
 
