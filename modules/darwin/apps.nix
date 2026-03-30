@@ -159,8 +159,6 @@ in
 
       # code editor
       "visual-studio-code"
-      "cursor-cli"
-      "claude-code"
 
       "aerospace" # an i3-like tiling window manager for macOS
       "ghostty" # terminal emulator
