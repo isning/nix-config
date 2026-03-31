@@ -177,7 +177,7 @@ in
       "qq"
       "qqmusic"
       # "discord" # update too frequently, use the web version instead
-      "microsoft-remote-desktop"
+      # "windows-app"
       # "moonlight" # remote desktop client
       # "rustdesk" # meeting
       # "tencent-meeting"
