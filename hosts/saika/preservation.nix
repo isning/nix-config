@@ -325,10 +325,6 @@ in
         # Feishu
         ".config/LarkShell"
 
-        # Netease Cloud Music GTK
-        ".local/share/netease-cloud-music-gtk4"
-        ".config/netease-cloud-music-gtk4"
-
         # LibreOffice
         ".config/libreoffice"
 
