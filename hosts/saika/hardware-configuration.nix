@@ -176,9 +176,11 @@
   fileSystems."/boot" = {
     device = "/dev/disk/by-uuid/3A07-2A06";
     fsType = "vfat";
+
     options = [
-      "fmask=0077"
-      "dmask=0077"
+      "fmask=0177" # File mask: 777-177=600 (Owner: rw-, Group/Others: ---)
+      "dmask=0077" # Directory mask: 777-077=700 (Owner: rwx, Group/Others: ---)
+      "noexec,nosuid,nodev" # Security: Block execution, ignore setuid, and disable device nodes
     ];
   };
 
