@@ -3,11 +3,12 @@
   config,
   pkgs,
   wallpapers,
+  noctalia,
   ...
 }:
 
 let
-  package = pkgs.noctalia-shell;
+  package = noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
 in
 {
 
