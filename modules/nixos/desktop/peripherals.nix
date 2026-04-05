@@ -106,6 +106,7 @@
   };
 
   #================================= Misc =================================
+  hardware.i2c.enable = true; # for ddcutil etc.
 
   services = {
     printing.enable = true; # Enable CUPS to print documents.
