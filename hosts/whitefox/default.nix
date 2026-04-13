@@ -91,6 +91,7 @@ in
     ./graphics.nix
     ./preservation.nix
     ./secureboot.nix
+    ./dns.nix
     ./tailscale.nix
     coreModule
     k3sModule
