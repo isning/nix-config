@@ -7,6 +7,7 @@
   attrs = import ./attrs.nix { inherit lib; };
 
   genK3sServerModule = import ./genK3sServerModule.nix;
+  genFluxImageFiles = import ./genFluxImageFiles.nix;
   genK3sAgentModule = import ./genK3sAgentModule.nix;
   genKubeVirtHostModule = import ./genKubeVirtHostModule.nix;
   genKubeVirtGuestModule = import ./genKubeVirtGuestModule.nix;

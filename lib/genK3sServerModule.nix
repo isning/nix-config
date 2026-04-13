@@ -1,5 +1,6 @@
 {
   pkgs,
+  inputs ? null,
   kubeconfigFile,
   tokenFile,
   # Initialize HA cluster using an embedded etcd datastore.
@@ -16,6 +17,11 @@
   nodeLabels ? [ ],
   nodeTaints ? [ ],
   disableFlannel ? true,
+  # Derivations that provide container image archives.
+  # These are wired to services.k3s.images and linked/imported by the k3s module.
+  extraImageFiles ? [ ],
+  # Target image directory for k3s import tarballs.
+  k3sImageDir ? "/var/lib/rancher/k3s/agent/images",
   ...
 }:
 let
@@ -54,6 +60,7 @@ in
     enable = true;
     inherit package tokenFile clusterInit;
     serverAddr = if clusterInit then "" else "https://${masterHost}:6443";
+    images = extraImageFiles;
 
     role = "server";
     # https://docs.k3s.io/cli/server
@@ -90,11 +97,15 @@ in
   # such as multus, calico, etc.
   # https://www.freedesktop.org/software/systemd/man/latest/tmpfiles.d.html#Type
   systemd.tmpfiles.rules = [
+    "d ${k3sImageDir} 0755 root root - -"
     # https://docs.k3s.io/networking/multus-ipams
     "L+ /opt/cni/bin - - - - /var/lib/rancher/k3s/data/cni/"
     # If you have disabled flannel, you will have to create the directory via a tmpfiles rule
     "d /var/lib/rancher/k3s/agent/etc/cni/net.d 0751 root root - -"
     # Link the CNI config directory
     "L+ /etc/cni/net.d - - - - /var/lib/rancher/k3s/agent/etc/cni/net.d"
+    # Enable conditional image imports for faster restart in supported k3s versions.
+    # https://docs.k3s.io/installation/airgap?airgap-load-images=Manually+Deploy+Images
+    "f ${k3sImageDir}/.cache.json 0644 root root - -"
   ];
 }

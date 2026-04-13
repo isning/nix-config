@@ -1286,6 +1286,22 @@
         "type": "github"
       }
     },
+    "k8s-gitops": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1776062156,
+        "narHash": "sha256-0oePnkifDB9U3Nk4iaX46u23GJFElfdkjrSVEJ/FIgI=",
+        "owner": "isning",
+        "repo": "k8s-gitops",
+        "rev": "26aafbe6c607bf00140ed2f3109b2253d383dde9",
+        "type": "github"
+      },
+      "original": {
+        "owner": "isning",
+        "repo": "k8s-gitops",
+        "type": "github"
+      }
+    },
     "lanzaboote": {
       "inputs": {
         "crane": "crane",
@@ -2178,6 +2194,7 @@
         "haumea": "haumea",
         "helix": "helix",
         "home-manager": "home-manager_3",
+        "k8s-gitops": "k8s-gitops",
         "lanzaboote": "lanzaboote",
         "llm-agents": "llm-agents",
         "mysecrets": "mysecrets",

@@ -169,6 +169,12 @@
       # inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    # Kubernetes GitOps manifests and image lock generation inputs.
+    k8s-gitops = {
+      url = "github:isning/k8s-gitops";
+      flake = false;
+    };
+
     ########################  Some non-flake repositories  #########################################
 
     nu_scripts = {

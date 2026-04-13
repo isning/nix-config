@@ -5,6 +5,7 @@
   mylib,
   myvars,
   disko,
+  k8s-gitops,
   ...
 }:
 #############################################################
@@ -14,6 +15,29 @@
 #############################################################
 let
   hostName = "whitefox"; # Define your hostname.
+  fluxImageFiles = mylib.genFluxImageFiles {
+    inherit pkgs;
+    fluxSource = k8s-gitops;
+    fluxPath = "clusters/kubevirt-lab-1";
+    compressAsZstd = true;
+    zstdLevel = 10;
+    # Only include images whose source chain contains flux-system/infra-controllers
+    customFilter =
+      entry:
+      let
+        sourceChains = entry.sourceChains or [ ];
+        includeInfraControllers = builtins.any (
+          chain:
+          builtins.any (
+            source:
+            source.kind == "Kustomization"
+            && source.namespace == "flux-system"
+            && source.name == "infra-controllers"
+          ) chain
+        ) sourceChains;
+      in
+      includeInfraControllers;
+  };
 
   coreModule = mylib.genKubeVirtHostModule {
     inherit pkgs hostName;
@@ -21,6 +45,13 @@ let
   };
   k3sModule = mylib.genK3sServerModule {
     inherit pkgs;
+    extraImageFiles = [
+      config.services.k3s.package.airgap-images
+      # Example:
+      # /persist/k3s/images/my-app.tar
+    ]
+    ++ fluxImageFiles;
+
     kubeconfigFile = "/home/${myvars.username}/.kube/config";
     tokenFile = config.age.secrets."kubevirt-k3s-token".path;
     # the first node in the cluster should be the one to initialize the cluster
