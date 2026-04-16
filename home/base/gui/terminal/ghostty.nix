@@ -13,7 +13,7 @@
     enable = true;
     package =
       if pkgs.stdenv.isDarwin then
-        pkgs.hello # pkgs.ghostty is currently broken on darwin
+        null # pkgs.ghostty is currently broken on darwin
       else
         pkgs.ghostty; # the stable version
     # package = ghostty.packages.${pkgs.stdenv.hostPlatform.system}.default; # the latest version

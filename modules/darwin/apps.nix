@@ -68,11 +68,9 @@ in
     neovim
     git
     nushell # my custom shell
+    google-chrome
     gnugrep # replacee macos's grep
     gnutar # replacee macos's tar
-
-    # darwin only apps
-    utm # virtual machine
   ];
   environment.variables = {
     # Fix https://github.com/LnL7/nix-darwin/wiki/Terminfo-issues
@@ -147,7 +145,7 @@ in
 
       # misc that nix do not have cache for.
       "git-trim"
-      "terraform"
+      "hashicorp/tap/terraform"
       "terraformer"
     ];
 
@@ -155,33 +153,29 @@ in
     casks = [
       "squirrel-app" # input method for Chinese, rime-squirrel
       "firefox"
-      "google-chrome"
 
       # code editor
       "visual-studio-code"
 
-      "aerospace" # an i3-like tiling window manager for macOS
+      "nikitabobko/tap/aerospace" # an i3-like tiling window manager for macOS
       "ghostty" # terminal emulator
 
       # https://joplinapp.org/help/
       "joplin" # note taking app
 
       "tailscale-app" # tailscale macos app (with gui)
-      "netbirdio/tap/netbird-ui" # netbird gui app
-
-      # AI
-      "lm-studio"
+      # "netbirdio/tap/netbird-ui" # netbird gui app
 
       # IM & audio & remote desktop & meeting
       "telegram"
       "qq"
-      "qqmusic"
+      # "qqmusic"
       # "discord" # update too frequently, use the web version instead
       # "windows-app"
       # "moonlight" # remote desktop client
       # "rustdesk" # meeting
       # "tencent-meeting"
-      "zoom" # meeting
+      # "zoom" # meeting
 
       # Misc
       # "shadowsocksx-ng" # proxy tool
@@ -194,7 +188,6 @@ in
       # "sonic-pi" # music programming
       # "tencent-lemon" # macOS cleaner
       "neteasemusic" # music
-      "blender@lts" # 3D creation suite
       "clash-verge-rev" # the same as mihomo-party
 
       # Development

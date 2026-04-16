@@ -1,6 +1,6 @@
 { config, ... }:
 let
-  hostName = "fern";
+  hostName = "amiya";
 in
 {
   imports = [ ../../darwin ];

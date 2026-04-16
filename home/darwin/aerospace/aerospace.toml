@@ -292,10 +292,6 @@ run = ['layout floating', 'move-node-to-workspace 9File']
 if.app-id = 'org.wireshark.Wireshark'
 run = ['layout floating', 'move-node-to-workspace 0Other']
 
-[[on-window-detected]]
-if.app-id = 'ai.elementlabs.lmstudio'
-run = ['layout floating', 'move-node-to-workspace 0Other']
-
 # Clash Verge - has problem with floating
 [[on-window-detected]]
 if.app-id = 'io.github.clash-verge-rev.clash-verge-rev'
