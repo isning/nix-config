@@ -14,31 +14,20 @@
   home.sessionVariables = {
     "QT_QPA_PLATFORM" = "wayland;xcb";
     "QT_AUTO_SCREEN_SCALE_FACTOR" = "1";
+    "GSETTINGS_SCHEMA_DIR" =
+      "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
   };
 
   home.packages = [
     nur-isning.packages.${pkgs.stdenv.hostPlatform.system}.qt6ct
     pkgs.app2unit
+    pkgs.glib
+    pkgs.gsettings-desktop-schemas
+    pkgs.ddcutil
   ]
   ++ (lib.optionals pkgs.stdenv.isx86_64 [
     pkgs.gpu-screen-recorder
   ]);
-
-  # Wrap noctalia so ddcutil is in PATH only for noctalia, not globally
-  programs.noctalia.package =
-    let
-      orig = noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
-    in
-    pkgs.symlinkJoin {
-      name = "${orig.name}-wrapped";
-      paths = [ orig ];
-      nativeBuildInputs = [ pkgs.makeWrapper ];
-      postBuild = ''
-        wrapProgram $out/bin/noctalia \
-          --prefix PATH : ${pkgs.ddcutil}/bin
-      '';
-      meta.mainProgram = "noctalia";
-    };
 
   home.file."Pictures/Wallpapers".source = wallpapers;
 
