@@ -1,10 +1,16 @@
 {
+  config,
   lib,
   pkgs-master,
   ...
 }:
 
 {
+  catppuccin.vscode.profiles.default.enable = lib.mkForce false;
+
+  xdg.configFile."Code/User/settings.json".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/home/linux/gui/base/vscode/conf/settings.json";
+
   programs.vscode = {
     enable = true;
     package = pkgs-master.vscode.override {
