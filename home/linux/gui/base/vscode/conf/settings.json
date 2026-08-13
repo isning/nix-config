@@ -4,5 +4,8 @@
   "terminal.integrated.minimumContrastRatio": 1,
   "window.titleBarStyle": "custom",
   "workbench.colorTheme": "Catppuccin Mocha",
-  "workbench.iconTheme": "catppuccin-mocha"
+  "workbench.iconTheme": "catppuccin-mocha",
+  "editor.unicodeHighlight.allowedLocales": {
+    "zh-hans": true
+  }
 }
