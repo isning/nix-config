@@ -46,8 +46,6 @@
   # https://github.com/NixOS/nixos-hardware/tree/master/common/gpu/nvidia
   # ===============================================================================================
 
-  hardware.nvidia.primeBatterySaverSpecialisation = true;
-
   # Video acceleration has already been configured by nixos-hardware module
 
   hardware.nvidia = {
