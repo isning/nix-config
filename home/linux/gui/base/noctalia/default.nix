@@ -60,6 +60,14 @@
         mode = "auto";
         source = "wallpaper";
         wallpaper_scheme = "m3-tonal-spot";
+
+        templates = {
+          builtin_ids = [
+            "gtk3"
+            "gtk4"
+            "qt"
+          ];
+        };
       };
 
       # ── Shell ──────────────────────────────────────────────
@@ -82,8 +90,10 @@
 
         panel = {
           transparency_mode = "glass";
-          launcher_placement = "centered";
-          clipboard_placement = "centered";
+          launcher_placement = "floating";
+          launcher_position = "center";
+          clipboard_placement = "floating";
+          clipboard_position = "center";
           control_center_placement = "attached";
           open_near_click_control_center = true;
           session_placement = "attached";
@@ -93,7 +103,6 @@
           categories = true;
           show_icons = true;
           sort_by_usage = true;
-          session_search = true;
           compact = false;
           app_grid = false;
         };
@@ -174,7 +183,6 @@
         };
         workspaces = {
           display = "id";
-          minimal = false;
           labels_only_when_occupied = true;
           focused_color = "primary";
           occupied_color = "secondary";
@@ -219,11 +227,17 @@
           show_label = true;
         };
         volume = {
-          scroll_step = 1;
+          actions = {
+            scroll_up = "volume-up 1%";
+            scroll_down = "volume-down 1%";
+          };
           show_label = false;
         };
         brightness = {
-          scroll_step = 3;
+          actions = {
+            scroll_up = "brightness-up 3%";
+            scroll_down = "brightness-down 3%";
+          };
           show_label = false;
         };
         tray = {
@@ -244,7 +258,6 @@
         position = "bottom";
         auto_hide = true;
         reserve_space = false;
-        dock_type = "floating";
         background_opacity = 0.5;
         radius = 16;
         margin_ends = 0;
@@ -260,19 +273,13 @@
         magnification_scale = 1.35;
       };
 
-      # ── Launcher ───────────────────────────────────────────
-      launcher = {
-        show_categories = true;
-        show_icons = true;
-        pinned_apps = [ ];
-        position = "center";
-        sort_by_usage = true;
-      };
-
       # ── Control Center ─────────────────────────────────────
       control_center = {
         width = 820;
-        disk_path = "/persistent";
+        calendar = {
+          show_events_card = true;
+          show_week_numbers = false;
+        };
         shortcuts = {
           left = [
             "wifi"
@@ -343,6 +350,7 @@
 
       # ── Desktop Widgets ────────────────────────────────────
       desktop_widgets = {
+        enabled = false;
         grid = {
           cell_size = 16;
           major_interval = 4;
@@ -388,14 +396,6 @@
         enabled = true;
         blur_intensity = 0.4;
         tint_intensity = 0.6;
-      };
-
-      # ── Desktop Widgets ────────────────────────────────────
-      # v4 had widgets enabled but disabled via noctaliaPerformance.disableDesktopWidgets
-      desktop = {
-        widgets = {
-          enabled = false;
-        };
       };
 
       # ── Notifications ──────────────────────────────────────
@@ -447,7 +447,6 @@
       # Port of v4 OSD
       osd = {
         position = "top_right";
-        auto_hide_ms = 2000;
         background_opacity = 1.0;
         offset_x = 20;
         offset_y = 8;
@@ -457,7 +456,7 @@
           wifi = true;
           bluetooth = true;
           power_profile = true;
-          night_light = true;
+          nightlight = true;
           dnd = true;
           lock_keys = true;
           keyboard_layout = true;
@@ -468,11 +467,10 @@
       # ── Location ───────────────────────────────────────────
       location = {
         address = "Beijing, China";
-        first_day_of_week = 1;
-        use_12hour_format = false;
-        weather_enabled = true;
         auto_locate = false;
       };
+
+      weather.enabled = true;
 
       # ── Night Light ────────────────────────────────────────
       nightlight = {
@@ -492,11 +490,6 @@
       brightness = {
         enable_ddcutil = true;
         minimum_brightness = 0.0;
-      };
-
-      # ── Services: Battery ──────────────────────────────────
-      battery = {
-        show_power_profiles = true;
       };
 
       # ── Services: Idle ─────────────────────────────────────
@@ -543,8 +536,8 @@
           cpu_temp_critical_threshold = 90;
           ram_pct_activity_threshold = 60;
           ram_pct_critical_threshold = 90;
-          disk_pct_activity_threshold = 80;
-          disk_pct_critical_threshold = 90;
+          disk_used_pct_activity_threshold = 80;
+          disk_used_pct_critical_threshold = 90;
         };
       };
 
@@ -554,35 +547,9 @@
         theme_mode_changed = ''sh -c 'if [ "$NOCTALIA_THEME_MODE" = "dark" ]; then s="kvantum-dark"; else s="kvantum"; fi; sed -i "/^\[Appearance\]/,/^\[/ s/^style=.*/style=$s/" /home/isning/.config/qt6ct/qt6ct.conf' '';
       };
 
-      # ── Templates (App Theming) ────────────────────────────
-      # Port of v4 templates: qt, niri, gtk, steam
-      templates = {
-        active = [
-          "qt"
-          "niri"
-          "gtk"
-          "steam"
-        ];
-        user_theming = false;
-      };
-
       # ── Plugins ────────────────────────────────────────────
-      plugin = {
+      plugins = {
         auto_update = false;
-        notify_updates = true;
-      };
-
-      # ── Calendar ───────────────────────────────────────────
-      calendar = {
-        show_events = true;
-        show_weather = true;
-        show_week_numbers = false;
-      };
-
-      # ── Network ────────────────────────────────────────────
-      network = {
-        bluetooth_auto_connect = true;
-        wifi_panel_view = "wifi";
       };
     };
   };
