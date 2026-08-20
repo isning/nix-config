@@ -1697,6 +1697,7 @@
         "open-design": "open-design",
         "pre-commit-hooks": "pre-commit-hooks_2",
         "preservation": "preservation",
+        "rust-overlay": "rust-overlay_5",
         "wallpapers": "wallpapers"
       }
     },
@@ -1778,6 +1779,26 @@
         "owner": "oxalica",
         "repo": "rust-overlay",
         "rev": "13139aefa973f3d96c60c0fbab801de058ae25ca",
+        "type": "github"
+      },
+      "original": {
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "type": "github"
+      }
+    },
+    "rust-overlay_5": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1787194935,
+        "narHash": "sha256-Gt6JpppReMxPGkbPcQhz+1qp+NUUf4oIwzRy+ptJgTk=",
+        "owner": "oxalica",
+        "repo": "rust-overlay",
+        "rev": "cb98e96d632d0010a7e56c098c51729cb179cc75",
         "type": "github"
       },
       "original": {

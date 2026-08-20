@@ -1,9 +1,24 @@
 {
+  config,
   pkgs,
   pkgs-master,
   ...
 }:
+let
+  rustToolchain = pkgs.rust-bin.stable.latest.default.override {
+    extensions = [
+      "rust-analyzer"
+      "rustfmt"
+      "clippy"
+    ];
+  };
+  rustSrc = pkgs.rust-bin.stable.latest.rust-src;
+in
 {
+  home.file.".local/share/rust-src".source = "${rustSrc}/lib/rustlib/src/rust";
+
+  home.sessionVariables.RUST_SRC_PATH = "${config.home.homeDirectory}/.local/share/rust-src";
+
   home.packages =
     with pkgs;
     (
@@ -88,12 +103,7 @@
           ))
 
           #-- rust
-          # we'd better use the rust-overlays for rust development
-          pkgs-master.rustc
-          pkgs-master.rust-analyzer
-          pkgs-master.cargo # rust package manager
-          pkgs-master.rustfmt
-          pkgs-master.clippy # rust linter
+          rustToolchain
 
           #-- golang
           go
