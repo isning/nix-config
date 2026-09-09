@@ -101,4 +101,9 @@ in
   ];
 
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
+
+  # Reduce Go heap headroom modestly on this single-node control plane.
+  # Keep this service-scoped: Coder builds must retain their own GC settings.
+  # This is not an RSS cap; monitor API latency and CPU after the CI rollout.
+  systemd.services.k3s.environment.GOGC = "75";
 }
