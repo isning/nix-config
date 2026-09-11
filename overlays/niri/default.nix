@@ -5,6 +5,8 @@ lib.optionalAttrs (prev ? niri) {
   niri = prev.niri.overrideAttrs (
     old:
     let
+      # FIXME(nixpkgs): Drop these patches once PR #3910 and its follow-up are
+      # included in the niri version packaged by nixpkgs.
       src = prev.applyPatches {
         name = "niri-${old.version}-with-vram-fix";
         src = old.src;
