@@ -2,6 +2,16 @@
 # 参考 https://github.com/NixOS/nixpkgs/blob/e4246ae1e7f78b7087dce9c9da10d28d3725025f/pkgs/tools/inputmethods/fcitx5/fcitx5-rime.nix
 _:
 (self: super: {
+  # FIXME(nixpkgs): Drop this patch once librime resolves
+  # https://github.com/rime/librime/issues/1017 upstream and nixpkgs includes it.
+  librime = super.librime.overrideAttrs (
+    old:
+    self.lib.optionalAttrs self.stdenv.hostPlatform.isLinux {
+      patches = (old.patches or [ ]) ++ [ ./caps-lock-sync.patch ];
+      doCheck = true;
+    }
+  );
+
   rime-data = super.buildEnv {
     name = "rime-data";
     paths = [

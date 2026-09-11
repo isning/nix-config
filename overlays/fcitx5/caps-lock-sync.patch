@@ -1,0 +1,79 @@
+diff --git a/src/rime/gear/ascii_composer.cc b/src/rime/gear/ascii_composer.cc
+--- a/src/rime/gear/ascii_composer.cc
++++ b/src/rime/gear/ascii_composer.cc
+@@ -162,6 +162,14 @@ ProcessResult AsciiComposer::ProcessCapsLock(const KeyEvent& key_event) {
+       return kRejected;
+     }
+   }
++  // Caps Lock may be turned off while another input method or window has
++  // focus. The retained session then misses the Caps_Lock event, so reconcile
++  // only ASCII mode entered through Caps Lock with the current modifier mask.
++  if (good_old_caps_lock_ && toggle_with_caps_ && !key_event.caps()) {
++    toggle_with_caps_ = false;
++    SwitchAsciiMode(false, caps_lock_switch_style_);
++  }
++
+   if (key_event.caps()) {
+     if (!good_old_caps_lock_ && !key_event.release() && !key_event.ctrl() &&
+         !key_event.alt() && !key_event.super() && isascii(ch) && isalpha(ch)) {
+diff --git a/test/caps_lock_sync_test.cc b/test/caps_lock_sync_test.cc
+new file mode 100644
+--- /dev/null
++++ b/test/caps_lock_sync_test.cc
+@@ -0,0 +1,56 @@
++#include <gtest/gtest.h>
++#include <rime/config.h>
++#include <rime/context.h>
++#include <rime/engine.h>
++#include <rime/key_event.h>
++#include <rime/processor.h>
++#include <rime/schema.h>
++
++using namespace rime;
++
++class CapsLockSyncTest : public ::testing::Test {
++ protected:
++  void SetUp() override {
++    engine.reset(Engine::Create());
++    auto* config = engine->schema()->config();
++    config->SetBool("ascii_composer/good_old_caps_lock", true);
++    config->SetString("ascii_composer/switch_key/Caps_Lock", "commit_code");
++    config->SetString("ascii_composer/switch_key/Shift_L", "commit_text");
++    auto* component = Processor::Require("ascii_composer");
++    ASSERT_NE(nullptr, component);
++    composer.reset(component->Create(engine.get()));
++    engine->context()->set_option("ascii_mode", false);
++  }
++
++  void PressCapsLock() {
++    composer->ProcessKeyEvent(KeyEvent(XK_Caps_Lock, 0));
++    composer->ProcessKeyEvent(KeyEvent(XK_Caps_Lock, kLockMask | kReleaseMask));
++    ASSERT_TRUE(engine->context()->get_option("ascii_mode"));
++  }
++
++  the<Engine> engine;
++  the<Processor> composer;
++};
++
++TEST_F(CapsLockSyncTest, LockDisabledOutsideSession) {
++  PressCapsLock();
++  // Another window handles Caps Lock off. This session sees only the next key.
++  composer->ProcessKeyEvent(KeyEvent('a', 0));
++  EXPECT_FALSE(engine->context()->get_option("ascii_mode"));
++}
++
++TEST_F(CapsLockSyncTest, UppercaseStillPassesThrough) {
++  PressCapsLock();
++  EXPECT_EQ(kRejected, composer->ProcessKeyEvent(KeyEvent('A', kLockMask)));
++  EXPECT_TRUE(engine->context()->get_option("ascii_mode"));
++  composer->ProcessKeyEvent(KeyEvent(XK_Caps_Lock, kLockMask));
++  EXPECT_FALSE(engine->context()->get_option("ascii_mode"));
++}
++
++TEST_F(CapsLockSyncTest, ShiftSelectedEnglishIsPreserved) {
++  composer->ProcessKeyEvent(KeyEvent(XK_Shift_L, kShiftMask));
++  composer->ProcessKeyEvent(KeyEvent(XK_Shift_L, kReleaseMask));
++  ASSERT_TRUE(engine->context()->get_option("ascii_mode"));
++  composer->ProcessKeyEvent(KeyEvent('a', 0));
++  EXPECT_TRUE(engine->context()->get_option("ascii_mode"));
++}
