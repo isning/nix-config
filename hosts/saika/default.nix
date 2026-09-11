@@ -59,11 +59,10 @@ in
     #   instances."internal-spk" = {
     #     enable = true;
     #     nodeTarget = "alsa_output.pci-0000_00_1f.3-platform-skl_hda_dsp_generic.HiFi__Speaker__sink";
+    #     description = "Speaker";
     #     splAtZeroDbVolume = 74.0;
     #     # standard = "ISO226-2023";
-    #     standard = "Flat";
-
-    #     hardClip = false;
+    #     # hardClip = false;
     #     # hardClipRange = 3.5;
     #     # description = "Integrated Speaker w/ Tuning";
     #   };
@@ -78,6 +77,12 @@ in
       };
     };
   };
+
+  services.pipewire.wireplumber.package = pkgs.wireplumber-bluez-fix;
+
+  # PipeWire 1.6.8 with the upstream LHDC v5 codec series. Existing BlueZ
+  # codecs (SBC, AAC, aptX, LDAC, LC3 and Opus) remain enabled.
+  services.pipewire.package = pkgs.pipewire-lhdc;
 
   boot.extraModprobeConfig = ''
     options snd_sof ipc_type=1
