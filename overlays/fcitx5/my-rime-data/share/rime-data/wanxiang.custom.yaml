@@ -1,0 +1,4 @@
+patch:
+  # In Chinese mode, commit a Chinese comma even after a number. Treating it
+  # as a numeric separator otherwise leaves an ASCII comma in the composition.
+  punctuator/digit_separators: ".:"
