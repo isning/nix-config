@@ -26,6 +26,26 @@ If rules conflict, follow the higher-priority source and state the conflict brie
   - Examples: `--force`, `rm -rf`, `git reset --hard`, `gh repo delete`, `terraform destroy`
 - MUST NOT expose or commit secrets (tokens, keys, kubeconfig credentials, passwords).
 
+### Repository-scoped Podman cleanup exception
+
+The destructive-operation boundary does not prohibit the exact project task runner commands
+`just podman-legacy-clean`, `just podman-sweep`, and `just podman-clean` when all of the following
+are true:
+
+- the command runs from the root of the currently approved workspace;
+- project-local policy explicitly designates that command as a supported cleanup entrypoint and
+  documents its ownership selectors;
+- the agent first inspects the resolved recipe and verifies that it selects resources by an exact
+  workspace label or an exact Compose working-directory label for that repository;
+- before `just podman-clean`, the agent verifies that no repository test, verification, or Compose
+  workflow is running; and
+- the command is run exactly as listed, without additional arguments or a substituted direct Podman
+  deletion command.
+
+This exception does not permit global prune commands, unfiltered image, container, volume, or
+network cleanup, deletion of resources attributed only by generic Testcontainers labels, or cleanup
+in any other repository unless that repository independently satisfies the conditions above.
+
 ## 3) Security and Secrets Handling
 
 - Never write secret literals into tracked files.
