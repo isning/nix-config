@@ -4,21 +4,25 @@
   nodeTarget,
   description,
 
-  splAtZeroDbVolume,
+  splAtZeroDbVolume ? null,
+  splAtReferenceVolume ? null,
+  referenceVolumePercent ? (if splAtZeroDbVolume == null then 95.0 else 100.0),
   standard ? "ISO226-2023",
   mode ? "FFT",
   fftSize ? 4096,
   iirQuality ? "Normal",
   hardClip ? false,
   hardClipRange ? 6.0,
-  loopbackNodeName ? null,
   tunedNodeName ? null,
-  loopbackPriority ? null,
   tunedPriority ? null,
   hidePhysicalNode ? true,
   enforcePhysicalVolume ? true,
+  crossfadeDurationMs ? 35,
 }:
 
+assert splAtReferenceVolume != null || splAtZeroDbVolume != null;
+assert referenceVolumePercent > 0.0 && referenceVolumePercent <= 100.0;
+assert crossfadeDurationMs > 0;
 let
   mkPackage = import ./template.nix;
   common = import ./common.nix;
@@ -50,50 +54,20 @@ let
     "Best" = 4;
   };
 
-  eqNodeName = "${name}_loudness_eq";
-  # Precomputed linear gain values for integer dB offsets to avoid runtime math pitfalls.
-  outputGainLinearTable = {
-    "-12" = 0.2511886432;
-    "-11" = 0.2818382931;
-    "-10" = 0.3162277660;
-    "-9" = 0.3548133892;
-    "-8" = 0.3981071706;
-    "-7" = 0.4466835922;
-    "-6" = 0.5011872336;
-    "-5" = 0.5623413252;
-    "-4" = 0.6309573445;
-    "-3" = 0.7079457844;
-    "-2" = 0.7943282347;
-    "-1" = 0.8912509381;
-    "0" = 1.0;
-    "1" = 1.1220184543;
-    "2" = 1.2589254118;
-    "3" = 1.4125375446;
-    "4" = 1.5848931925;
-    "5" = 1.7782794100;
-    "6" = 1.9952623150;
-    "7" = 2.2387211386;
-    "8" = 2.5118864315;
-    "9" = 2.8183829313;
-    "10" = 3.1622776602;
-    "11" = 3.5481338923;
-    "12" = 3.9810717055;
-  };
-  outputGainDb = 83 - splAtZeroDbVolume;
-  outputGainDbInt = builtins.toString (builtins.floor (outputGainDb + 0.5));
-  outputGainLinear = outputGainLinearTable.${outputGainDbInt} or 1.0;
+  # LSP's loudness-compensator uses 83 phon as its flat reference.  The legacy
+  # zero-dB calibration is an SPL measurement at 100% virtual volume.  It must
+  # therefore not inherit the new option's 95% default reference point.
+  legacyCalibration = splAtReferenceVolume == null;
+  calibrationSpl = if legacyCalibration then splAtZeroDbVolume else splAtReferenceVolume;
+  effectiveReferenceVolumePercent = if legacyCalibration then 100.0 else referenceVolumePercent;
   eqCaptureNodeName = common.mkVirtualNodeName nodeTarget "tuned" tunedNodeName;
-  directCaptureNodeName = common.mkVirtualNodeName nodeTarget "loopback" loopbackNodeName;
   tunedPriorityFieldLua =
     if tunedPriority == null then "" else '',"priority.session": ${toString tunedPriority}'';
-  loopbackPriorityFieldLua =
-    if loopbackPriority == null then "" else '',"priority.session": ${toString loopbackPriority}'';
   hidePhysicalNodeField = common.mkHidePhysicalNodeField "Audio/Sink/Internal" hidePhysicalNode;
   enforcePhysicalVolumeField = common.mkEnforcePhysicalVolumeField "sink" enforcePhysicalVolume;
   luaScriptName = "${name}-logic.lua";
   componentName = "custom.${name}-logic";
-  # Convert Nix null to Lua nil for the script logic
-  descriptionVal = if description == null then "nil" else ''"${description}"'';
+  descriptionVal = if description == null then "nil" else builtins.toJSON description;
 in
 mkPackage {
   inherit pkgs luaScriptName;
@@ -126,11 +100,10 @@ mkPackage {
       name = ${builtins.toJSON name},
       log_prefix = ${builtins.toJSON "[audio:${name}:speaker] "},
       override_desc = ${descriptionVal},
-      output_gain_db = ${toString outputGainDb},
-      output_gain_linear = ${toString outputGainLinear},
-      eq_node_name = ${builtins.toJSON eqNodeName},
+      reference_spl = ${toString calibrationSpl},
+      reference_volume_linear = ${toString (effectiveReferenceVolumePercent / 100.0)},
+      crossfade_duration_ms = ${toString crossfadeDurationMs},
       eq_capture_node_name = ${builtins.toJSON eqCaptureNodeName},
-      direct_capture_node_name = ${builtins.toJSON directCaptureNodeName},
       node_target = ${builtins.toJSON nodeTarget},
       std = ${toString stdMap.${standard}},
       mode = ${toString modeMap.${mode}},
@@ -139,7 +112,6 @@ mkPackage {
       hclip = ${if hardClip then "1" else "0"},
       hcrange = ${toString hardClipRange},
       tuned_priority_field = [=[${tunedPriorityFieldLua}]=],
-      loopback_priority_field = [=[${loopbackPriorityFieldLua}]=],
       enforce_physical_volume = ${if enforcePhysicalVolume then "true" else "false"},
     }
 

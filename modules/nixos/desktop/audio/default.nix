@@ -15,10 +15,12 @@ let
     name: opts:
     pkgs.callPackage ./config-packages/speaker-tuning.nix {
       inherit name;
-      inherit (opts) splAtZeroDbVolume;
       inherit (opts)
         nodeTarget
         description
+        splAtZeroDbVolume
+        splAtReferenceVolume
+        referenceVolumePercent
         standard
         mode
         fftSize
@@ -26,9 +28,9 @@ let
         hardClip
         hardClipRange
         tunedPriority
-        loopbackPriority
         hidePhysicalNode
         enforcePhysicalVolume
+        crossfadeDurationMs
         ;
     };
 
@@ -68,9 +70,20 @@ in
                   default = null;
                   description = "Display name in sound settings. If null, auto-generated from hardware name.";
                 };
-                splAtZeroDbVolume = mkOption {
+                splAtReferenceVolume = mkOption {
+                  type = types.nullOr types.float;
+                  default = null;
+                  description = "Measured dB SPL at the listening position when the virtual speaker sink is set to referenceVolumePercent. The loudness curve is calibrated from this physical reference.";
+                };
+                referenceVolumePercent = mkOption {
                   type = types.float;
-                  description = "Measured dB SPL at listening position when playing -14 LUFS pink noise with plugin volume at 0.0 dB; used to compute post-EQ output gain (83 - splAtZeroDbVolume).";
+                  default = 95.0;
+                  description = "Virtual speaker volume (in percent) at which splAtReferenceVolume was measured.";
+                };
+                splAtZeroDbVolume = mkOption {
+                  type = types.nullOr types.float;
+                  default = null;
+                  description = "Compatibility calibration for a measurement at 100% volume. Prefer splAtReferenceVolume with referenceVolumePercent for new configurations.";
                 };
                 standard = mkOption {
                   type = types.enum [
@@ -125,11 +138,6 @@ in
                   default = null;
                   description = "Optional priority.session for tuned virtual sink. null uses PipeWire/WirePlumber default.";
                 };
-                loopbackPriority = mkOption {
-                  type = types.nullOr types.int;
-                  default = null;
-                  description = "Optional priority.session for loopback virtual sink. null uses PipeWire/WirePlumber default.";
-                };
                 hidePhysicalNode = mkOption {
                   type = types.bool;
                   default = true;
@@ -139,6 +147,11 @@ in
                   type = types.bool;
                   default = true;
                   description = "Force physical sink volume to 100% and keep it there.";
+                };
+                crossfadeDurationMs = mkOption {
+                  type = types.ints.positive;
+                  default = 35;
+                  description = "Duration of each PipeWire graph crossfade. Curve changes are prepared only on the muted pair.";
                 };
               };
             }
