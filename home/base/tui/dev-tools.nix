@@ -31,7 +31,8 @@
 
     # ai related
     python313Packages.huggingface-hub # huggingface-cli
-    python313Packages.modelscope
+    # Disabled until CVE-2026-84202 is fixed.
+    # python313Packages.modelscope
 
     # misc
     devbox

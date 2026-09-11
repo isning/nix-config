@@ -151,7 +151,7 @@ in
       #   racket-minimal
       #   fnlfmt # fennel
       #   (
-      #     if pkgs.stdenv.isLinux && pkgs.stdenv.isx86
+      #     if pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.isx86
       #     then pkgs-master.akkuPackages.scheme-langserver
       #     else pkgs.emptyDirectory
       #   )

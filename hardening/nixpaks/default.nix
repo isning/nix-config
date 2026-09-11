@@ -22,7 +22,7 @@ in
   nixpkgs.overlays = [
     (_: super: {
       nixpaks = {
-        qq = wrapper super ./qq.nix;
+        qq = super.callPackage ./qq.nix (callArgs // { qq = pkgs-master.qq; });
         telegram-desktop = wrapper super ./telegram-desktop.nix;
         firefox = wrapper super ./firefox.nix;
       };

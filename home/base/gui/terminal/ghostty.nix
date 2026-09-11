@@ -11,7 +11,7 @@
   programs.ghostty = {
     enable = true;
     package =
-      if pkgs.stdenv.isDarwin then
+      if pkgs.stdenv.hostPlatform.isDarwin then
         null # pkgs.ghostty is currently broken on darwin
       else
         pkgs.ghostty; # the stable version

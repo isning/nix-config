@@ -12,6 +12,7 @@
   catppuccin = {
     # The default `enable` value for all available programs.
     enable = true;
+    autoEnable = true;
     sources = catppuccin.packages.${pkgs.stdenv.hostPlatform.system}.overrideScope (
       _final: _prev: {
         whiskers = pkgs.catppuccin-whiskers;

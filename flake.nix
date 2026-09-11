@@ -45,7 +45,7 @@
     # Find git commit hash with build status here(3 jobs per day):
     # https://hydra.nixos.org/jobset/nixpkgs/unstable
     # update via nix flake update nixpkgs --override-input nixpkgs github:NixOS/nixpkgs/<commit-hash>
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-26.05";
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -69,7 +69,7 @@
 
     # home-manager, used for managing user configuration
     home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
+      url = "github:nix-community/home-manager";
       # url = "github:nix-community/home-manager/release-25.11";
 
       # The `follows` keyword in inputs is used for inheritance.
@@ -80,13 +80,14 @@
 
     # https://github.com/catppuccin/nix
     catppuccin = {
-      url = "github:catppuccin/nix/release-26.05";
+      url = "github:catppuccin/nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote";
       inputs.nixpkgs.follows = "nixpkgs";
+      inputs.rust-overlay.follows = "rust-overlay";
     };
 
     preservation = {
@@ -170,13 +171,14 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     aagl = {
-      url = "github:ezKEa/aagl-gtk-on-nix/release-26.05";
-      # inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:ezKEa/aagl-gtk-on-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Kubernetes GitOps manifests and image lock generation inputs.
     k8s-gitops = {
       url = "github:isning/k8s-gitops";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     ########################  Some non-flake repositories  #########################################
