@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 {
   # all fonts are linked to /nix/var/nix/profiles/system/sw/share/X11/fonts
   fonts = {
@@ -55,22 +55,14 @@
     # It supports a richer feature set than the standard linux console VT,
     # including full unicode support, and when the video card supports drm should be much faster.
     enable = true;
-    fonts = with pkgs; [
-      {
-        name = "Maple Mono NF CN";
-        package = maple-mono.NF-CN-unhinted;
-      }
-      {
-        name = "JetBrainsMono Nerd Font";
-        package = nerd-fonts.jetbrains-mono;
-      }
-    ];
     extraOptions = "--term xterm-256color";
-    extraConfig = ''
-      backend=fbdev
-      font-size=14
-    '';
+    config = {
+      backend = "fbdev";
+      font-size = 14;
+      # Font packages are installed by modules/base/fonts.nix.
+      font-name = "Maple Mono NF CN,JetBrainsMono Nerd Font";
+    };
     # Whether to use 3D hardware acceleration to render the console.
-    hwRender = false;
+    config.hwaccel = false;
   };
 }
