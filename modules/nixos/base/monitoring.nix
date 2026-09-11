@@ -1,4 +1,58 @@
 {
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  amdGpuEnabled =
+    lib.attrByPath [ "hardware" "amdgpu" "initrd" "enable" ] false config
+    || lib.attrByPath [ "hardware" "amdgpu" "opencl" "enable" ] false config;
+  intelGpuEnabled = lib.attrByPath [ "hardware" "intelgpu" "driver" ] null config != null;
+  nvidiaGpuEnabled = lib.attrByPath [ "hardware" "nvidia" "enabled" ] false config;
+
+  enabledGpuTypes =
+    lib.optional amdGpuEnabled "amd"
+    ++ lib.optional intelGpuEnabled "intel"
+    ++ lib.optional nvidiaGpuEnabled "nvidia";
+
+  nvtopPackage =
+    if enabledGpuTypes == [ ] then
+      null
+    else if builtins.length enabledGpuTypes == 1 then
+      pkgs.nvtopPackages.${builtins.head enabledGpuTypes}
+    else
+      pkgs.nvtopPackages.full;
+in
+{
+  # btop enables GPU collectors at compile time, but NVIDIA and AMD also need
+  # their driver libraries added to its runtime search path.
+  nixpkgs.overlays = lib.optional (amdGpuEnabled || nvidiaGpuEnabled) (
+    _: prev: {
+      btop = prev.btop.override {
+        cudaSupport = nvidiaGpuEnabled;
+        rocmSupport = amdGpuEnabled;
+      };
+    }
+  );
+
+  security.wrappers = lib.mkIf intelGpuEnabled {
+    btop = {
+      source = lib.getExe pkgs.btop;
+      owner = "root";
+      group = "root";
+      capabilities = "cap_perfmon,cap_dac_read_search+ep";
+    };
+    nvtop = {
+      source = lib.getExe nvtopPackage;
+      owner = "root";
+      group = "root";
+      capabilities = "cap_perfmon+ep";
+    };
+  };
+
+  environment.systemPackages = lib.optional (nvtopPackage != null) nvtopPackage;
+
   # enable the node exporter on all nixos hosts
   # https://github.com/NixOS/nixpkgs/blob/nixos-25.11/nixos/modules/services/monitoring/prometheus/exporters/node.nix
   services.prometheus.exporters.node = {
