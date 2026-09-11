@@ -1,7 +1,16 @@
 {
   nu_scripts,
+  pkgs,
   ...
 }:
+let
+  nuScripts = pkgs.runCommand "nu-scripts-compatible" { } ''
+    cp -r ${nu_scripts}/. "$out"
+    chmod u+w "$out/modules/kubernetes/"{env,utils}.nu
+    substituteInPlace "$out/modules/kubernetes/"{env,utils}.nu \
+      --replace-fail 'str downcase' 'str lowercase'
+  '';
+in
 {
   programs.nushell = {
     # load the alias file for work
@@ -40,7 +49,7 @@
 
       # Directories in this constant are searched by the
       # `use` and `source` commands.
-      const NU_LIB_DIRS = $NU_LIB_DIRS ++ ['${nu_scripts}']
+      const NU_LIB_DIRS = $NU_LIB_DIRS ++ ['${nuScripts}']
 
       # -*- completion -*-
       use custom-completions/cargo/cargo-completions.nu *
@@ -65,7 +74,8 @@
 
       # -*- modules -*-
       # argx & lg is required by the kubernetes module
-      use modules/argx *
+      # Keep argx.parse namespaced so fzf can use the built-in parse command.
+      use modules/argx
       use modules/lg *
       # k8s/helm aliases, completions, 
       use modules/kubernetes *

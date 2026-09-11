@@ -1,4 +1,9 @@
-{ pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   home.packages = with pkgs; [
     # nix related
@@ -44,7 +49,12 @@
   };
 
   # A command-line fuzzy finder
-  programs.fzf.enable = true;
+  programs.fzf = {
+    enable = true;
+    # Atuin owns Ctrl-R in these shells.
+    historyWidget.bash.command = "";
+    historyWidget.nushell.command = "";
+  };
 
   # very fast version of tldr in Rust
   programs.tealdeer = {
@@ -94,6 +104,25 @@
     enable = true;
     enableBashIntegration = true;
     enableZshIntegration = true;
-    enableNushellIntegration = true;
+    # Use the patched initialization below until upstream gives bindings unique names.
+    enableNushellIntegration = false;
   };
+
+  programs.nushell.extraConfig = lib.mkOrder 2000 ''
+    source ${
+      pkgs.runCommand "atuin-nushell-config.nu"
+        {
+          nativeBuildInputs = [ pkgs.writableTmpDirAsHomeHook ];
+        }
+        ''
+          ${lib.getExe config.programs.atuin.package} init nu ${lib.escapeShellArgs config.programs.atuin.flags} > "$out"
+          # Include the modifier in the name to distinguish Ctrl-R from Up.
+          sed -i '/name: atuin$/ {
+            N
+            s/name: atuin\n\([[:space:]]*\)modifier: control/name: atuin_ctrl_r\n\1modifier: control/
+            s/name: atuin\n\([[:space:]]*\)modifier: none/name: atuin_up\n\1modifier: none/
+          }' "$out"
+        ''
+    }
+  '';
 }
