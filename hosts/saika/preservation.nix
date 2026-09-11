@@ -158,6 +158,7 @@ in
         ".config/opencode"
         ".local/share/opencode"
         ".local/state/opencode"
+        ".lark-cli"
         ".context7" # up-to-date docs and code examples for for LLMs & agents
 
         # nvim
@@ -247,6 +248,8 @@ in
         ".local/share/Steam"
 
         ".local/share/lutris"
+
+        ".local/share/lark-cli" # lark-cli
 
         # Kazumi - anime tracker/player
         ".local/share/io.github.Predidit.Kazumi"
