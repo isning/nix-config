@@ -86,7 +86,7 @@ appimageTools.wrapAppImage {
     "--bind \${WECHAT_FILES_DIR} \${WECHAT_FILES_DIR}"
     "--chdir \${HOME}"
     # wechat-universal only supports xcb
-    "--setenv QT_QPA_PLATFORM xcb"
+    "--setenv QT_QPA_PLATFORM wayland"
     "--setenv QT_AUTO_SCREEN_SCALE_FACTOR 1"
     # use fcitx as IME
     "--setenv QT_IM_MODULE fcitx"
