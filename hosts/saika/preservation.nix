@@ -142,6 +142,7 @@ in
 
         # vscode
         ".vscode"
+        ".vscode-shared"
         ".config/Code"
 
         # cursor ai editor / cli
