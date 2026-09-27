@@ -864,11 +864,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1786476883,
-        "narHash": "sha256-RhId/kQxDoQRESNPjZhFrxa+AWGCzVWDGSEdnCA7mbM=",
+        "lastModified": 1788950096,
+        "narHash": "sha256-+uBv3BDQ6i1lgay5mXPmhnyM2qidrJSLujYMMwsOwIY=",
         "owner": "isning",
         "repo": "k8s-gitops",
-        "rev": "d0316ebca08e2a7b2c3393b1d7f0153482012380",
+        "rev": "43d46c8bd0f9138ee832f7c0deb96e260317213b",
         "type": "github"
       },
       "original": {
