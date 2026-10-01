@@ -165,7 +165,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri-spicy-smithay = {
-      url = "github:losnoco/smithay/a6a4be6d4bc00222e2bc3adbc49dc932b229ff6b";
+      url = "github:losnoco/smithay/a75110d271bb6d93c3a6577f24e91791c6d78e48";
       flake = false;
     };
 

@@ -318,26 +318,6 @@
         "type": "github"
       }
     },
-    "figma-linux-next": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1788869810,
-        "narHash": "sha256-2Cv6qoB94HG3AKw5/83+ROa8AElAyLjw2dUHcBYsYe8=",
-        "owner": "arximus88",
-        "repo": "figma-linux-next",
-        "rev": "fee72221d95700d0b920fffce11c56b3fed9eb0d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arximus88",
-        "repo": "figma-linux-next",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -965,17 +945,17 @@
     "niri-spicy-smithay": {
       "flake": false,
       "locked": {
-        "lastModified": 1790242689,
-        "narHash": "sha256-Fi0zSyR53xLFmBd5R+Dw4oAiIXBenNXk4WLB65RfRtg=",
+        "lastModified": 1783630533,
+        "narHash": "sha256-sYvo5fPPrf6y2vFI8TbgTfTfNxeVEmzTB+BrqGS7l8o=",
         "owner": "losnoco",
         "repo": "smithay",
-        "rev": "a6a4be6d4bc00222e2bc3adbc49dc932b229ff6b",
+        "rev": "a75110d271bb6d93c3a6577f24e91791c6d78e48",
         "type": "github"
       },
       "original": {
         "owner": "losnoco",
         "repo": "smithay",
-        "rev": "a6a4be6d4bc00222e2bc3adbc49dc932b229ff6b",
+        "rev": "a75110d271bb6d93c3a6577f24e91791c6d78e48",
         "type": "github"
       }
     },
@@ -1699,7 +1679,6 @@
         "catppuccin": "catppuccin",
         "colmena": "colmena",
         "disko": "disko",
-        "figma-linux-next": "figma-linux-next",
         "haumea": "haumea",
         "home-manager": "home-manager_2",
         "k8s-gitops": "k8s-gitops",
