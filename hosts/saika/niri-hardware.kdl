@@ -37,6 +37,9 @@ output "HKC OVERSEAS LIMITED G27M7Pro 0000000000001" {
     mode "3840x2160@120.000"
     position x=-2560 y=0 // on the left of eDP-1
     variable-refresh-rate on-demand=true
+    hdr mode="on" {
+        reference-luminance 203
+    }
     focus-at-startup
 }
 
