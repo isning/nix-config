@@ -159,6 +159,16 @@
       # https://docs.noctalia.dev/v5/getting-started/nixos/#binary-cache
     };
 
+    # Experimental compositor with HDR and explicit sync support.
+    niri-spicy = {
+      url = "github:losnoco/niri/d9131c336ed291ad235a6b46f9af960a45f2bad4";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+    niri-spicy-smithay = {
+      url = "github:losnoco/smithay/a6a4be6d4bc00222e2bc3adbc49dc932b229ff6b";
+      flake = false;
+    };
+
     bluevein = {
       url = "github:meowrch/BlueVein";
       inputs.nixpkgs.follows = "nixpkgs";
