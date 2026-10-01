@@ -318,26 +318,6 @@
         "type": "github"
       }
     },
-    "figma-linux-next": {
-      "inputs": {
-        "nixpkgs": [
-          "nixpkgs"
-        ]
-      },
-      "locked": {
-        "lastModified": 1788869810,
-        "narHash": "sha256-2Cv6qoB94HG3AKw5/83+ROa8AElAyLjw2dUHcBYsYe8=",
-        "owner": "arximus88",
-        "repo": "figma-linux-next",
-        "rev": "fee72221d95700d0b920fffce11c56b3fed9eb0d",
-        "type": "github"
-      },
-      "original": {
-        "owner": "arximus88",
-        "repo": "figma-linux-next",
-        "type": "github"
-      }
-    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -948,17 +928,17 @@
         ]
       },
       "locked": {
-        "lastModified": 1790248538,
-        "narHash": "sha256-J+eiNxa92PuRmMhyy57izB/FcCd8KGZKT4bXa0nQzW8=",
+        "lastModified": 1790089481,
+        "narHash": "sha256-3nX7BEcI3swElm9J5GycBkyglLYWumtKcIz9eMuo+Ug=",
         "owner": "losnoco",
         "repo": "niri",
-        "rev": "d9131c336ed291ad235a6b46f9af960a45f2bad4",
+        "rev": "5f4469b6a992492cf7221b269e9379f42e737649",
         "type": "github"
       },
       "original": {
         "owner": "losnoco",
         "repo": "niri",
-        "rev": "d9131c336ed291ad235a6b46f9af960a45f2bad4",
+        "rev": "5f4469b6a992492cf7221b269e9379f42e737649",
         "type": "github"
       }
     },
@@ -1699,7 +1679,6 @@
         "catppuccin": "catppuccin",
         "colmena": "colmena",
         "disko": "disko",
-        "figma-linux-next": "figma-linux-next",
         "haumea": "haumea",
         "home-manager": "home-manager_2",
         "k8s-gitops": "k8s-gitops",

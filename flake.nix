@@ -161,7 +161,7 @@
 
     # Experimental compositor with HDR and explicit sync support.
     niri-spicy = {
-      url = "github:losnoco/niri/d9131c336ed291ad235a6b46f9af960a45f2bad4";
+      url = "github:losnoco/niri/5f4469b6a992492cf7221b269e9379f42e737649";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri-spicy-smithay = {
