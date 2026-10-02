@@ -12,6 +12,72 @@ Related:
 
 1. Install DCGM-Exporter on `ai` to monitor the GPU status.
 
+## Codex official Remote Control
+
+`codex-remote-control.service` runs the `llm-agents.nix` Codex app-server directly under the user
+systemd manager, starts at boot, and survives logout. Official Remote Control is enabled;
+credentials and state stay in the preserved `~/.codex`. The service uses a local Unix socket for
+pairing and opens no TCP listener.
+
+The CLI wrapper disables `daemon_auto_start`, following nixpkgs#567051. Ordinary CLI sessions run
+in-process. The service does not bootstrap a separate daemon package or start an updater; its
+version changes only through Nix deployments. Avoid `codex remote-control start` and
+`codex app-server daemon bootstrap`, which use the upstream managed-install path instead of this
+service.
+
+Apply with `just niri`. Sign in with `codex login` if needed, then check and pair:
+
+```bash
+systemctl --user restart codex-remote-control.service
+systemctl --user status codex-remote-control.service
+codex remote-control pair
+```
+
+Enter the short-lived pairing code in the official client. Pairing codes are secrets; keep them out
+of repository files and shared logs. Availability depends on the account and workspace's Remote
+Control policy. Use `systemctl --user stop codex-remote-control.service` to stop access.
+
+The internal app-server flags `--remote-control` and `--managed-daemon` were checked against Codex
+0.159.2. The latter saves loaded threads on graceful shutdown; it does not install a daemon. Recheck
+these flags when upgrading. See the official
+[developer commands documentation](https://learn.chatgpt.com/docs/developer-commands#codex-remote-control).
+
+## T3 Code LAN service
+
+T3 Code runs as the user's `t3code.service` on `0.0.0.0:3773`, starts at boot, and survives logout
+through lingering. The desktop package is not installed. State, worktrees, and authentication
+secrets are preserved in `~/.t3` with mode `0700`; the service creates files with umask `0077` and
+disables core dumps. Provider CLIs are available through the user profile.
+
+Apply with `just niri`, then check:
+
+```bash
+systemctl --user status t3code.service
+journalctl --user -u t3code.service -n 50
+```
+
+The service uses `start --mode desktop --no-browser` to avoid printing startup pairing secrets into
+the journal. A non-loopback listener still requires T3's one-time pairing authentication. Generate a
+five-minute link locally, replacing `<lan-ip>` with this host's reachable LAN address, and open it
+on the client:
+
+```bash
+t3 auth pairing create --ttl 5m --base-url http://<lan-ip>:3773
+```
+
+Each device needs its own link. Links are secrets; do not share them in logs. Inspect or revoke a
+paired device's session with:
+
+```bash
+t3 auth session list
+t3 auth session revoke <session-id>
+```
+
+LAN access uses HTTP, so authentication does not encrypt traffic. Use this only on a trusted LAN and
+do not forward port 3773 to the internet. For encrypted remote access, use Tailscale or an HTTPS
+reverse proxy. See the upstream
+[remote access documentation](https://github.com/pingdotgg/t3code/blob/v0.0.44/docs/user/remote-access.md).
+
 ## Info
 
 Current disk status and mountpoints (example; after migration layout is on nvme1n1):

@@ -159,6 +159,10 @@ in
         ".config/opencode"
         ".local/share/opencode"
         ".local/state/opencode"
+        {
+          directory = ".t3"; # T3 Code sessions, settings, worktrees, and auth secrets
+          mode = "0700";
+        }
         ".lark-cli"
         ".context7" # up-to-date docs and code examples for for LLMs & agents
 

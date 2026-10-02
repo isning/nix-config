@@ -30,6 +30,9 @@ in
 
   services.sunshine.enable = lib.mkForce true;
 
+  # Start the Codex and T3 Code user services at boot and keep them running after logout.
+  users.users.${myvars.username}.linger = true;
+
   networking = {
     inherit hostName;
 
@@ -37,6 +40,8 @@ in
 
     networkmanager.enable = true;
     networkmanager.wifi.backend = "iwd";
+
+    firewall.allowedTCPPorts = [ 3773 ]; # T3 Code LAN access requires pairing
   };
 
   # Enable CUPS to print documents.
