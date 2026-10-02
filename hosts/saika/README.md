@@ -1,7 +1,7 @@
-# Host - AI
+# Host - Saika
 
 Desktop (NixOS + preservation, LUKS + btrfs on nvme). Disk layout is declarative via
-[disko](./disko-fs.nix) (target device: **nvme1n1**).
+[disko](./disko-fs.nix) (see the disk ID in that file).
 
 Related:
 
@@ -10,7 +10,7 @@ Related:
 
 ## TODOs
 
-1. Install DCGM-Exporter on `ai` to monitor the GPU status.
+1. Install DCGM-Exporter on `saika` to monitor the GPU status.
 
 ## Codex official Remote Control
 

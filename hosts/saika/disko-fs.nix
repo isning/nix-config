@@ -1,4 +1,4 @@
-# Disko layout for idols-ai on nvme1n1 (target disk after migration).
+# Disko layout for Saika on nvme1n1 (target disk after migration).
 # Same structure as current nvme0n1: ESP + LUKS + btrfs with ephemeral root (tmpfs).
 #
 # Format & mount (from installer or live system):

@@ -21,7 +21,6 @@ High-level layout:
 ├── outputs/
 │   ├── default.nix
 │   ├── x86_64-linux/
-│   ├── aarch64-linux/
 │   └── aarch64-darwin/
 ├── modules/                     # NixOS + darwin modules
 ├── home/                        # Home Manager modules
@@ -96,9 +95,6 @@ just niri debug             # debug mode
 
 ```bash
 just col <tag>              # deploy nodes matching tag
-just lab                    # deploy all kubevirt nodes
-just k3s-prod               # deploy k3s production nodes
-just k3s-test               # deploy k3s test nodes
 ```
 
 ### Useful direct commands
@@ -114,8 +110,10 @@ nixos-rebuild switch --flake .#<hostname>
 Eval tests live under:
 
 - `outputs/x86_64-linux/tests/`
-- `outputs/aarch64-linux/tests/`
 - `outputs/aarch64-darwin/tests/`
+
+When changing active hosts, update hostname expectations and Home Manager host expectations
+together.
 
 Typical test pair:
 
