@@ -48,6 +48,7 @@ let
   };
   k3sModule = mylib.genK3sServerModule {
     inherit pkgs;
+    enableGvisor = true;
     extraImageFiles = [
       config.services.k3s.package.airgap-images
       # Example:

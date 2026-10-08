@@ -17,6 +17,8 @@
   nodeLabels ? [ ],
   nodeTaints ? [ ],
   disableFlannel ? true,
+  # Install an opt-in gVisor runtime for sandbox workloads on this node.
+  enableGvisor ? false,
   # Derivations that provide container image archives.
   # These are wired to services.k3s.images and linked/imported by the k3s module.
   extraImageFiles ? [ ],
@@ -27,22 +29,37 @@
 let
   lib = pkgs.lib;
   package = pkgs.k3s_1_36;
+  runscConfig = (pkgs.formats.toml { }).generate "runsc.toml" {
+    binary_name = "${pkgs.gvisor}/bin/runsc";
+    runsc_config = {
+      platform = "systrap";
+      systemd-cgroup = "true";
+    };
+  };
 in
 {
-  environment.systemPackages = with pkgs; [
-    package
-    k9s
-    kubectl
-    istioctl
-    kubernetes-helm
-    cilium-cli
-    fluxcd
-    clusterctl # for kubernetes cluster-api
+  environment.systemPackages =
+    with pkgs;
+    [
+      package
+      k9s
+      kubectl
+      istioctl
+      kubernetes-helm
+      cilium-cli
+      fluxcd
+      clusterctl # for kubernetes cluster-api
 
-    skopeo # copy/sync images between registries and local storage
-    go-containerregistry # provides `crane` & `gcrane`, it's similar to skopeo
-    dive # explore docker layers
-  ];
+      skopeo # copy/sync images between registries and local storage
+      go-containerregistry # provides `crane` & `gcrane`, it's similar to skopeo
+      dive # explore docker layers
+    ]
+    ++ lib.optional enableGvisor pkgs.gvisor;
+
+  systemd.services.k3s = lib.mkIf enableGvisor {
+    path = [ pkgs.gvisor ];
+    restartTriggers = [ runscConfig ];
+  };
 
   # Kernel modules required by cilium
   boot.kernelModules = [
@@ -63,6 +80,25 @@ in
     images = extraImageFiles;
 
     role = "server";
+    # The native k3s option uses the v2 template, supported by containerd 2.x.
+    containerdConfigTemplate = lib.mkIf enableGvisor ''
+      {{ template "base" . }}
+
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.gvisor]
+        runtime_type = "io.containerd.runsc.v1"
+      [plugins."io.containerd.grpc.v1.cri".containerd.runtimes.gvisor.options]
+        TypeUrl = "io.containerd.runsc.v1.options"
+        ConfigPath = "${runscConfig}"
+    '';
+    manifests.gvisor-runtimeclass = lib.mkIf enableGvisor {
+      content = {
+        apiVersion = "node.k8s.io/v1";
+        kind = "RuntimeClass";
+        metadata.name = "gvisor";
+        handler = "gvisor";
+        scheduling.nodeSelector.sandbox-runtime = "gvisor";
+      };
+    };
     # https://docs.k3s.io/cli/server
     extraFlags =
       let
@@ -83,7 +119,9 @@ in
           "--disable-network-policy"
           "--tls-san=${masterHost}"
         ]
-        ++ (map (label: "--node-label=${label}") nodeLabels)
+        ++ (map (label: "--node-label=${label}") (
+          nodeLabels ++ lib.optional enableGvisor "sandbox-runtime=gvisor"
+        ))
         ++ (map (taint: "--node-taint=${taint}") nodeTaints)
         ++ (map (arg: "--kube-apiserver-arg=${arg}") kubeApiServerExtraArgs)
         ++ (map (arg: "--kubelet-arg=${arg}") kubeletExtraArgs)
