@@ -1,0 +1,498 @@
+--- a/src/cargo.rs
++++ b/src/cargo.rs
+@@ -89,6 +89,70 @@
+             .map(|path| absolute_path(PathBuf::from(path), cwd))
+             .or_else(|| config_file_target_dir(cwd)),
+     )
++}
++
++/// Ask Cargo to expand its build-dir templates. Only enroll directories inside
++/// the explicitly managed root: project overrides must never widen GC's scope.
++pub fn invocation_build_dir(
++    cargo: &Path,
++    args: &[OsString],
++    cwd: &Path,
++    workspace: &Path,
++) -> Option<PathBuf> {
++    let root = PathBuf::from(std::env::var_os("CARGO_OVERSTAY_BUILD_ROOT")?);
++    if !root.is_absolute() {
++        return None;
++    }
++    let mut command = command(cargo).ok()?;
++    if let Some(toolchain) = args
++        .first()
++        .filter(|arg| arg.to_string_lossy().starts_with('+'))
++    {
++        command.arg(toolchain);
++    }
++    command
++        .args([
++            "metadata",
++            "--offline",
++            "--no-deps",
++            "--format-version=1",
++            "--manifest-path",
++        ])
++        .arg(workspace.join("Cargo.toml"));
++    for value in option_values(args, "--config") {
++        command.arg("--config").arg(value);
++    }
++    let output = command
++        .current_dir(cwd)
++        .stdin(std::process::Stdio::null())
++        .stderr(std::process::Stdio::null())
++        .output()
++        .ok()?;
++    if !output.status.success() {
++        return None;
++    }
++    let metadata: serde_json::Value = serde_json::from_slice(&output.stdout).ok()?;
++    owned_build_dir(
++        Path::new(metadata.get("build_directory")?.as_str()?),
++        &root,
++        workspace,
++    )
++}
++
++fn owned_build_dir(path: &Path, root: &Path, workspace: &Path) -> Option<PathBuf> {
++    let root = root.canonicalize().ok()?;
++    let path = path.canonicalize().ok()?;
++    let workspace = workspace.canonicalize().ok()?;
++    if path == root
++        || !path.starts_with(&root)
++        || workspace.starts_with(&path)
++        || !path.is_dir()
++        || path.join("Cargo.toml").exists()
++        || path.join(".git").exists()
++    {
++        return None;
++    }
++    Some(path)
+ }
+ 
+ fn invocation_target_dir_from(
+@@ -293,6 +357,30 @@
+     }
+ 
+     #[test]
++    fn only_enrolls_build_directories_strictly_inside_the_managed_root() {
++        let dir = std::env::temp_dir().join(format!("overstay_owned_build_{}", std::process::id()));
++        let root = dir.join("cache");
++        let workspace = dir.join("workspace");
++        let build = root.join("aa/hash");
++        std::fs::create_dir_all(&build).unwrap();
++        std::fs::create_dir_all(&workspace).unwrap();
++        assert_eq!(
++            owned_build_dir(&build, &root, &workspace),
++            Some(build.canonicalize().unwrap())
++        );
++        assert_eq!(owned_build_dir(&root, &root, &workspace), None);
++        assert_eq!(owned_build_dir(&workspace, &root, &workspace), None);
++        std::os::unix::fs::symlink(&workspace, root.join("escape")).unwrap();
++        assert_eq!(
++            owned_build_dir(&root.join("escape"), &root, &workspace),
++            None
++        );
++        std::fs::write(build.join("Cargo.toml"), "").unwrap();
++        assert_eq!(owned_build_dir(&build, &root, &workspace), None);
++        std::fs::remove_dir_all(dir).unwrap();
++    }
++
++    #[test]
+     fn target_dir_arg_ignores_args_after_double_dash() {
+         assert_eq!(
+             target_dir_arg(&[
+--- a/src/shim.rs
++++ b/src/shim.rs
+@@ -142,14 +142,36 @@
+         crate::size::now_unix(),
+     );
+ 
++    let resolve_build_dir =
++        || crate::cargo::invocation_build_dir(&cargo, args, cwd.as_deref()?, workspace.as_deref()?);
++    let record_build_dir = |build_dir: Option<&Path>| {
++        if build_dir != target_dir.as_deref() && build_dir.is_some() {
++            record_usage_and_validate_config(
++                workspace.as_deref(),
++                build_dir,
++                crate::size::now_unix(),
++            );
++        }
++    };
++    let mut build_dir = resolve_build_dir();
++    record_build_dir(build_dir.as_deref());
++
+     // Run the real cargo and remember its exit code.
+     let code = forward(&cargo, args);
++
++    // A first build may create the directory or download metadata needed by the
++    // offline probe. Never fetch dependencies just to discover a cleanup path.
++    if build_dir.is_none() {
++        build_dir = resolve_build_dir();
++        record_build_dir(build_dir.as_deref());
++    }
+ 
+     // Every configured invocation hands post-build scheduling to a detached
+     // worker. A nonblocking maintenance lock coalesces concurrent workers; the
+     // winner performs cheap throttle checks before any filesystem walk.
+     if cleanup_enabled {
+-        let target_arg = target_dir
++        let target_arg = build_dir
++            .or(target_dir)
+             .map(std::path::PathBuf::into_os_string)
+             .unwrap_or_default();
+         let _ = std::process::Command::new(&self_exe)
+--- a/src/trim.rs
++++ b/src/trim.rs
+@@ -68,11 +68,12 @@
+     for profile in profile_dirs(target) {
+         match try_lock_profile(&profile) {
+             ProfileLock::Busy => continue, // build running -> not ours to touch
+-            ProfileLock::Held(f) => locks.push(f),
++            ProfileLock::Held(mut held) => locks.append(&mut held),
+             ProfileLock::Absent => {}
+         }
+         units.extend(profile_units(&profile, now));
+         units.extend(incremental_units(&profile.join("incremental"), now));
++        units.extend(kache_incremental_units(&profile, now, &mut locks));
+     }
+ 
+     // Orphans are dead weight cargo can never reuse — shed them before any
+@@ -134,7 +135,7 @@
+     for profile in profile_dirs(target) {
+         match try_lock_profile(&profile) {
+             ProfileLock::Busy => return None,
+-            ProfileLock::Held(f) => locks.push(f),
++            ProfileLock::Held(mut held) => locks.append(&mut held),
+             ProfileLock::Absent => {}
+         }
+     }
+@@ -143,7 +144,7 @@
+ 
+ enum ProfileLock {
+     /// Lock acquired; held until the `File` drops.
+-    Held(File),
++    Held(Vec<File>),
+     /// No `.cargo-lock` (or flock unsupported) — proceed unguarded.
+     Absent,
+     /// A build holds the lock right now.
+@@ -160,17 +161,24 @@
+ const LOCK_NB: i32 = 4;
+ 
+ fn try_lock_profile(profile: &Path) -> ProfileLock {
+-    let file = match File::open(profile.join(".cargo-lock")) {
+-        Ok(f) => f,
+-        Err(_) => return ProfileLock::Absent,
+-    };
+-    if flock_exclusive_nb(&file) {
+-        ProfileLock::Held(file)
+-    } else if std::io::Error::last_os_error().kind() == std::io::ErrorKind::WouldBlock {
+-        ProfileLock::Busy
++    let mut locks = Vec::new();
++    for name in [".cargo-lock", ".cargo-build-lock", ".cargo-artifact-lock"] {
++        let file = match File::open(profile.join(name)) {
++            Ok(file) => file,
++            Err(error) if error.kind() == std::io::ErrorKind::NotFound => continue,
++            Err(_) => return ProfileLock::Busy,
++        };
++        // Every acquisition is nonblocking, including split build/artifact
++        // locks. Failed or unsupported locking must never permit reclamation.
++        if !flock_exclusive_nb(&file) {
++            return ProfileLock::Busy;
++        }
++        locks.push(file);
++    }
++    if locks.is_empty() {
++        ProfileLock::Absent
+     } else {
+-        // flock unsupported on this filesystem: proceed unguarded.
+-        ProfileLock::Absent
++        ProfileLock::Held(locks)
+     }
+ }
+ 
+@@ -191,7 +199,7 @@
+             Err(_) => continue,
+         };
+         for entry in entries.flatten() {
+-            let meta = match entry.metadata() {
++            let meta = match entry.file_type() {
+                 Ok(m) => m,
+                 Err(_) => continue,
+             };
+@@ -199,7 +207,11 @@
+                 continue;
+             }
+             let path = entry.path();
+-            if path.join(".fingerprint").is_dir() {
++            if path.join(".fingerprint").is_dir()
++                || path.join(".cargo-lock").is_file()
++                || path.join(".cargo-build-lock").is_file()
++                || path.join(".cargo-artifact-lock").is_file()
++            {
+                 found.push(path);
+             } else if depth < 2 {
+                 stack.push((path, depth + 1));
+@@ -355,6 +367,56 @@
+     units
+ }
+ 
++/// Kache's adaptive incremental payloads are siblings of Cargo's incremental
++/// directory. Hold both the Cargo profile lock and Kache's unit lock, keeping
++/// the unit's lock inode and policy metadata in place for the next compile.
++fn kache_incremental_units(profile: &Path, now: i64, locks: &mut Vec<File>) -> Vec<Unit> {
++    let mut units = Vec::new();
++    let auto = profile.join("incremental.kache-auto");
++    let root = profile.join("incremental.kache-auto/v1");
++    if !std::fs::symlink_metadata(&auto).is_ok_and(|m| m.is_dir())
++        || !std::fs::symlink_metadata(&root).is_ok_and(|m| m.is_dir())
++    {
++        return units;
++    }
++    let Ok(entries) = std::fs::read_dir(root) else {
++        return units;
++    };
++    for entry in entries.flatten() {
++        let name = entry.file_name();
++        let name = name.to_string_lossy();
++        if name.len() != 64
++            || !name.bytes().all(|b| b.is_ascii_hexdigit())
++            || !entry.file_type().is_ok_and(|t| t.is_dir())
++        {
++            continue;
++        }
++        let path = entry.path();
++        let payload = path.join("rustc");
++        if !std::fs::symlink_metadata(path.join("state.json")).is_ok_and(|m| m.is_file())
++            || !std::fs::symlink_metadata(path.join("unit.lock")).is_ok_and(|m| m.is_file())
++            || !std::fs::symlink_metadata(&payload).is_ok_and(|m| m.is_dir())
++        {
++            continue;
++        }
++        let Ok(lock) = File::open(path.join("unit.lock")) else {
++            continue;
++        };
++        if lock.try_lock().is_err() {
++            continue;
++        }
++        locks.push(lock);
++        let (_, newest) = dir_stat(&path);
++        units.push(Unit {
++            live: true,
++            last_used: newest.min(now),
++            size: crate::size::dir_size(&payload),
++            paths: vec![payload],
++        });
++    }
++    units
++}
++
+ /// The trailing `-<16 hex chars>` cargo appends to unit names, if present.
+ fn hash_suffix(stem: &str) -> Option<&str> {
+     let (_, hash) = stem.rsplit_once('-')?;
+@@ -591,6 +653,61 @@
+     }
+ 
+     #[test]
++    fn trims_kache_payload_without_unlinking_its_lock_or_state() {
++        let target = temp_target("kache_old");
++        let profile = target.join("debug");
++        fs::create_dir_all(profile.join(".fingerprint")).unwrap();
++        let unit = profile
++            .join("incremental.kache-auto/v1")
++            .join("a".repeat(64));
++        fs::create_dir_all(unit.join("rustc")).unwrap();
++        for (name, bytes) in [
++            ("state.json", 2),
++            ("unit.lock", 0),
++            ("rustc/cache.bin", 8192),
++        ] {
++            fs::write(unit.join(name), vec![0u8; bytes]).unwrap();
++            stamp(&unit.join(name), 2 * DAY);
++        }
++        assert!(trim(&target, 1) >= 8192);
++        assert!(!unit.join("rustc").exists());
++        assert!(unit.join("unit.lock").exists());
++        assert!(unit.join("state.json").exists());
++        fs::remove_dir_all(&target).unwrap();
++    }
++
++    #[test]
++    fn preserves_busy_and_fresh_kache_incremental_payloads() {
++        let target = temp_target("kache_busy");
++        let profile = target.join("debug");
++        fs::create_dir_all(profile.join(".fingerprint")).unwrap();
++        let root = profile.join("incremental.kache-auto/v1");
++        let mut locks = Vec::new();
++        for (key, age) in [('a', 2 * DAY), ('b', 0)] {
++            let unit = root.join(key.to_string().repeat(64));
++            fs::create_dir_all(unit.join("rustc")).unwrap();
++            for (name, bytes) in [
++                ("state.json", 2),
++                ("unit.lock", 0),
++                ("rustc/cache.bin", 8192),
++            ] {
++                fs::write(unit.join(name), vec![0u8; bytes]).unwrap();
++                stamp(&unit.join(name), age);
++            }
++            if key == 'a' {
++                let lock = File::open(unit.join("unit.lock")).unwrap();
++                lock.lock().unwrap();
++                locks.push(lock);
++            }
++        }
++        assert_eq!(trim(&target, 1), 0);
++        assert!(root.join("a".repeat(64)).join("rustc/cache.bin").exists());
++        assert!(root.join("b".repeat(64)).join("rustc/cache.bin").exists());
++        drop(locks);
++        fs::remove_dir_all(&target).unwrap();
++    }
++
++    #[test]
+     fn foreign_dirs_under_incremental_survive() {
+         let target = temp_target("incrforeign");
+         let profile = target.join("debug");
+@@ -688,4 +805,22 @@
+         assert!(lock_target(&target).is_some());
+         fs::remove_dir_all(&target).unwrap();
+     }
+-}
++
++    #[test]
++    fn separate_build_and_artifact_locks_protect_both_gc_paths() {
++        for name in [".cargo-build-lock", ".cargo-artifact-lock"] {
++            let target = temp_target(name);
++            let profile = target.join("debug");
++            make_unit(&profile, "busy", "aaaaaaaaaaaaaaaa", 8192, 2 * DAY);
++            fs::write(profile.join(name), b"").unwrap();
++            let lock = File::open(profile.join(name)).unwrap();
++            assert!(flock_exclusive_nb(&lock));
++            assert!(lock_target(&target).is_none());
++            assert_eq!(trim(&target, 1), 0);
++            drop(lock);
++            assert!(lock_target(&target).is_some());
++            assert!(trim(&target, 1) >= 8192);
++            fs::remove_dir_all(&target).unwrap();
++        }
++    }
++}
+--- a/src/scan.rs
++++ b/src/scan.rs
+@@ -276,11 +276,15 @@
+         // Agent worktrees land in temp, not under home, so a home-only
+         // default silently misses whole builds.
+         let roots = default_roots();
+-        let home = PathBuf::from(std::env::var("HOME").unwrap())
+-            .canonicalize()
+-            .unwrap();
+-        assert!(roots.contains(&home));
+-        assert!(roots.iter().any(|root| root != &home));
++        // Nix builds deliberately use a nonexistent HOME. The default scanner
++        // filters it out, while retaining the valid temporary directory.
++        let home = PathBuf::from(std::env::var("HOME").unwrap()).canonicalize();
++        if let Ok(home) = home {
++            assert!(roots.contains(&home));
++            assert!(roots.iter().any(|root| root != &home));
++        } else {
++            assert!(!roots.is_empty());
++        }
+     }
+ 
+     #[test]
+--- a/tests/cli.rs
++++ b/tests/cli.rs
+@@ -55,11 +55,9 @@
+             .env("CARGO_OVERSTAY_CONFIG", self.root.join("overstay.toml"))
+             .env(
+                 "PATH",
+-                std::env::join_paths([
+-                    self.root.join("bin"),
+-                    PathBuf::from("/usr/bin"),
+-                    PathBuf::from("/bin"),
+-                ])
++                std::env::join_paths([self.root.join("bin")].into_iter().chain(
++                    std::env::split_paths(&std::env::var_os("PATH").unwrap_or_default()),
++                ))
+                 .unwrap(),
+             )
+             .env("CAPTURE", self.root.join("args"))
+@@ -101,6 +99,36 @@
+         assert!(captured.ends_with(&[target.as_os_str().as_bytes(), &[0]].concat()));
+         assert!(!fixture.root.join("state").exists());
+     }
++}
++
++#[test]
++fn exec_records_the_separate_build_directory_after_a_first_build() {
++    let fixture = Fixture::new();
++    let root = fixture.root.join("build-root");
++    let build = root.join("aa/hash");
++    fs::create_dir_all(&root).unwrap();
++    fixture.script(
++        "cargo",
++        r#"
++if test "$1" = metadata; then
++    printf '{"build_directory":"%s"}\n' "$BUILD_DIR"
++    exit 0
++fi
++mkdir -p "$BUILD_DIR"
++exit 23
++"#,
++    );
++    let output = fixture
++        .command()
++        .args(["exec", "--", "build"])
++        .env("CARGO_OVERSTAY_BUILD_ROOT", &root)
++        .env("BUILD_DIR", &build)
++        .output()
++        .unwrap();
++    assert_eq!(output.status.code(), Some(23));
++    let state = fixture.state();
++    assert!(state.contains(&fixture.root.join("project/target").display().to_string()));
++    assert!(state.contains(&build.display().to_string()));
+ }
+ 
+ #[test]
+@@ -400,12 +428,13 @@
+         .map(PathBuf::from)
+         .unwrap_or_else(|| PathBuf::from(std::env::var_os("HOME").unwrap()).join(".rustup"));
+     let cargo_parent = Path::new(env!("CARGO")).parent().unwrap();
+-    let path = std::env::join_paths([
+-        fixture.root.join("bin"),
+-        cargo_parent.to_path_buf(),
+-        PathBuf::from("/usr/bin"),
+-        PathBuf::from("/bin"),
+-    ])
++    let path = std::env::join_paths(
++        [fixture.root.join("bin"), cargo_parent.to_path_buf()]
++            .into_iter()
++            .chain(std::env::split_paths(
++                &std::env::var_os("PATH").unwrap_or_default(),
++            )),
++    )
+     .unwrap();
+     let output = fixture
+         .command()
+@@ -445,12 +474,16 @@
+     let rustup_home = std::env::var_os("RUSTUP_HOME")
+         .map(PathBuf::from)
+         .unwrap_or_else(|| PathBuf::from(std::env::var_os("HOME").unwrap()).join(".rustup"));
+-    let path = std::env::join_paths([
+-        fixture.root.join("bin"),
+-        Path::new(env!("CARGO")).parent().unwrap().to_path_buf(),
+-        PathBuf::from("/usr/bin"),
+-        PathBuf::from("/bin"),
+-    ])
++    let path = std::env::join_paths(
++        [
++            fixture.root.join("bin"),
++            Path::new(env!("CARGO")).parent().unwrap().to_path_buf(),
++        ]
++        .into_iter()
++        .chain(std::env::split_paths(
++            &std::env::var_os("PATH").unwrap_or_default(),
++        )),
++    )
+     .unwrap();
+     for (environment, explicit, expected) in [
+         ("CARGO_TARGET_DIR", false, "env-target"),

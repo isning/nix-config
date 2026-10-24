@@ -141,6 +141,13 @@
                       "compress-force=zstd:1"
                     ];
                   };
+                  "@rust-cache" = {
+                    mountpoint = "/var/cache/rust";
+                    mountOptions = [
+                      "compress-force=zstd:1"
+                      "relatime"
+                    ];
+                  };
                   # Swap subvolume read-only; disko creates swapfile and adds swapDevices
                   "@swap" = {
                     mountpoint = "/swap";

@@ -6,5 +6,6 @@
     ./language-tooling
     ./shell
     ./zellij
+    ./rust-cache.nix
   ];
 }

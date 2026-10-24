@@ -78,6 +78,69 @@ do not forward port 3773 to the internet. For encrypted remote access, use Tails
 reverse proxy. See the upstream
 [remote access documentation](https://github.com/pingdotgg/t3code/blob/v0.0.44/docs/user/remote-access.md).
 
+## Rust build cache
+
+Rust intermediates and the shared compiler cache live on the dedicated Btrfs subvolume
+`@rust-cache`, mounted at `/var/cache/rust`. Each user has a private directory; each workspace or
+worktree gets its own Cargo path-hash directory:
+
+```text
+/var/cache/rust/<user>/build/<workspace-path-hash>/
+/var/cache/rust/<user>/kache/
+```
+
+`CARGO_BUILD_BUILD_DIR` sets Cargo's intermediate directory, including dependency artifacts and
+incremental compilation state. Final binaries and documentation remain in each project's normal
+`target/`. Kache reuses eligible compiler outputs across the isolated build directories, and keeps
+adaptive incremental compilation enabled for crates being edited.
+
+The subvolume is a sibling of `@persistent`, so the existing btrbk snapshot policy does not retain
+build-cache blocks. Disko declares its mount with compression and `relatime`; standard
+systemd-tmpfiles rules create the private user directories and set their permissions.
+
+Overstay's Cargo shim records both the final target and the independent build directory. The local
+package patch uses offline Cargo metadata to expand path templates and enrolls build directories
+only under the configured cache root. It also trims Kache's `incremental.kache-auto/v1` payloads
+while keeping their lock files and metadata, and respecting both Cargo and Kache locks.
+
+The initial budgets are 75 GiB across Overstay's tracked directories, 20 GiB per directory, and 50
+GiB for Kache. These are soft budgets: active builds and shared reflink blocks can temporarily keep
+usage above them. Overstay owns directory eviction; Kache's overlapping automatic directory cleaners
+are disabled. Its own compiler-cache GC remains enabled. Overstay's registry persists separately
+under `~/.local/share/cargo-overstay`, so resetting the cache subvolume does not erase it.
+
+For an existing installation, create the subvolume once if it does not already exist before
+switching. New installations create it through disko.
+
+```bash
+sudo btrfs subvolume create /btr_pool/@rust-cache
+sudo chmod 0755 /btr_pool/@rust-cache
+just niri
+```
+
+Then open a new login session and check:
+
+```bash
+findmnt /var/cache/rust
+just rust-cache-doctor
+just rust-cache-status
+systemctl --user status kache.service
+```
+
+Check `command -v cargo` inside IDE terminals and dev shells too: it should resolve to
+`~/.cargo-overstay/bin/cargo`. A dev shell that prepends another Cargo can bypass the shim;
+`cargo overstay exec -- build` is an explicit tracking entry point. Existing project artifacts are
+not migrated or scanned across the home directory; new builds use the centralized directory and
+register their paths.
+
+`just test-rust-cache` exercises real isolated Cargo builds, worktree separation, cache reuse,
+adaptive incremental state, stale-directory GC, and Cargo locks.
+
+Before manually resetting the subvolume, stop its Kache user service and finish all builds and
+tests. Keep the mount, user directory permissions, and the `build/` and `kache/` directories intact
+before building again. A subvolume is an isolation boundary, not a hard quota or automatic
+disk-space reservation.
+
 ## Info
 
 Current disk status and mountpoints (example; after migration layout is on nvme1n1):

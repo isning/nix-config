@@ -21,6 +21,7 @@ in
     ./saika
 
     ./preservation.nix
+    ./rust-cache.nix
     ./secureboot.nix
     ./boot.nix
     ./bitlk-decrypt.nix

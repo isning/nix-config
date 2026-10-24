@@ -23,6 +23,27 @@ default:
 test:
   nix eval .#evalTests --show-trace --print-build-logs --verbose
 
+# Inspect the tracked Rust build directories and compiler cache.
+[linux]
+[group('rust')]
+rust-cache-status:
+  cargo overstay ls
+  cargo overstay status
+  kache stats
+
+# Verify Cargo shim resolution, cache configuration, and daemon access.
+[linux]
+[group('rust')]
+rust-cache-doctor:
+  cargo overstay doctor
+  cd $env.CARGO_OVERSTAY_BUILD_ROOT; kache doctor
+
+# Exercise isolated Cargo builds and garbage collection without touching user caches.
+[linux]
+[group('rust')]
+test-rust-cache:
+  nix build --impure --no-link -L --expr 'let f = builtins.getFlake ("path:" + toString ./.); in import ./packages/rust-cache/check.nix { pkgs = f.nixosConfigurations.saika-niri.pkgs; }'
+
 # Update all the flake inputs
 [group('nix')]
 up:
