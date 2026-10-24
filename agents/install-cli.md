@@ -40,8 +40,8 @@ auto-syncs on file changes — no need to re-run manually.
 opendesign    # launch the on-demand design CLI daemon
 ```
 
-Open Design (`github:nexu-io/open-design`) provides an on-demand design workflow CLI.
-Wrapped as `opendesign` shell script that forwards to the daemon binary.
+Open Design (`github:nexu-io/open-design`) provides an on-demand design workflow CLI. Wrapped as
+`opendesign` shell script that forwards to the daemon binary.
 
 ## Optional tooling
 

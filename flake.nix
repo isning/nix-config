@@ -62,6 +62,16 @@
     # for macos
     # nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-25.11-darwin";
     nixpkgs-darwin.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    brew-nix = {
+      url = "github:BatteredBunny/brew-nix";
+      inputs.nixpkgs.follows = "nixpkgs-darwin";
+      inputs.nix-darwin.follows = "nix-darwin";
+      inputs.brew-api.follows = "brew-api";
+    };
+    brew-api = {
+      url = "github:BatteredBunny/brew-api";
+      flake = false;
+    };
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs-darwin";
@@ -94,11 +104,6 @@
       url = "github:nix-community/preservation";
     };
 
-    # generate iso/qcow2/docker/... image from nixos configuration
-    nixos-generators = {
-      url = "github:nix-community/nixos-generators";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     # secrets management
     agenix = {
       # lock with git commit at May 18, 2025
@@ -149,7 +154,8 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
 
     open-design = {
-      url = "github:nexu-io/open-design";
+      # Upstream retired its Nix flake; retain the last revision before its removal.
+      url = "github:nexu-io/open-design/db9ebb7ba84d81dffdd21de248cbcd992c791836";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 

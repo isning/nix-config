@@ -10,23 +10,25 @@
     # https://developer.hashicorp.com/terraform/cli/config/config-file
     home.file.".terraformrc".source = ./terraformrc;
 
-    home.packages = with pkgs; [
-      # infrastructure as code
-      # pulumi
-      # pulumictl
-      # tf2pulumi
-      # crd2pulumi
-      # pulumiPackages.pulumi-random
-      # pulumiPackages.pulumi-command
-      # pulumiPackages.pulumi-aws-native
-      # pulumiPackages.pulumi-language-go
-      # pulumiPackages.pulumi-language-python
-      # pulumiPackages.pulumi-language-nodejs
+    home.packages =
+      with pkgs;
+      [
+        # infrastructure as code
+        # pulumi
+        # pulumictl
+        # tf2pulumi
+        # crd2pulumi
+        # pulumiPackages.pulumi-random
+        # pulumiPackages.pulumi-command
+        # pulumiPackages.pulumi-aws-native
+        # pulumiPackages.pulumi-language-go
+        # pulumiPackages.pulumi-language-python
+        # pulumiPackages.pulumi-language-nodejs
 
-      # cloud tools that nix do not have cache for.
-      terraform
-      terraformer # generate terraform configs from existing cloud resources
-      packer # machine image builder
-    ];
+        # cloud tools that nix do not have cache for.
+        terraform
+        terraformer # generate terraform configs from existing cloud resources
+      ]
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isLinux [ pkgs.packer ];
   };
 }

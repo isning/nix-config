@@ -6,10 +6,14 @@
   services.avahi = {
     enable = true;
     nssmdns4 = true;
-    publish = {
-      enable = true;
-      domain = true;
-      userServices = true;
+    # Sunshine still defaults these legacy options to true; use settings below instead.
+    publish.enable = null;
+    publish.userServices = null;
+    settings.publish = {
+      disable-publishing = false;
+      publish-domain = true;
+      disable-user-service-publishing = false;
+      publish-addresses = true;
     };
   };
 }

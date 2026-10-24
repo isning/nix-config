@@ -1,5 +1,6 @@
 {
   config,
+  lib,
   pkgs,
   pkgs-master,
   ...
@@ -37,7 +38,6 @@ in
         #-- json like
         # terraform  # install via brew on macOS
         terraform-ls
-        jsonnet
         jsonnet-language-server
         taplo # TOML language server / formatter / validator
         yaml-language-server
@@ -69,7 +69,6 @@ in
           checkmake
           # c/c++ compiler, required by nvim-treesitter!
           gcc
-          gdb
           # c/c++ tools with clang-tools, the unwrapped version won't
           # add alias like `cc` and `c++`, so that it won't conflict with gcc
           # llvmPackages.clang-unwrapped
@@ -121,9 +120,6 @@ in
           spring-boot-cli
           jdt-language-server
 
-          #-- zig
-          zls
-
           #-- lua
           stylua
           lua-language-server
@@ -171,6 +167,11 @@ in
         fzf
         gdu # disk usage analyzer, required by AstroNvim
         (ripgrep.override { withPCRE2 = true; }) # recursively searches directories for a regex pattern
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isLinux [
+        jsonnet
+        gdb
+        zls
       ]
     );
 }

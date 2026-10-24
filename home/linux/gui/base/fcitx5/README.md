@@ -12,9 +12,7 @@ Apply with the desktop's usual deployment command (`just niri` on saika-niri), t
 in to load the new input method packages. If Wanxiang's compiled configuration remains old, use
 Rime's **Deploy** action in the tray.
 
-## Available Configurations
+## Input method configuration
 
-- `profile` → Symlink will be created at: `~/.config/fcitx5/profile`
-- `config1.db` (Mozc config) → Symlink will be created at: `~/.config/mozc/config1.db`
-  - Main changes from the defaults: use half-width for all alphabets, numbers, and punctuation.
-  - https://github.com/google/mozc/blob/2.30.5544.102/docs/configurations.md
+The Fcitx5 profile is generated from `settings.inputMethod` in `default.nix` and includes Rime and
+US keyboard layouts.

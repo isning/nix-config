@@ -25,6 +25,7 @@ in
   # NOTE: nushell will be launched in bash, so it can inherit all the eenvironment variables.
   programs.nushell = {
     enable = true;
+    loadSessionVariables = false;
     configFile.source = ./config.nu;
     inherit shellAliases;
   };

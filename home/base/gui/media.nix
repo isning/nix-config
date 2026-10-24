@@ -9,7 +9,7 @@
   config = lib.mkIf config.features.media.enable {
 
     home.packages = with pkgs; [
-      ffmpeg-full
+      (if stdenv.hostPlatform.isLinux then ffmpeg-full else ffmpeg)
 
       # images
       viu # Terminal image viewer with native support for iTerm and Kitty

@@ -78,9 +78,9 @@ in
     };
   };
 
-  services.pipewire.wireplumber.package = pkgs.wireplumber-bluez-fix;
+  services.pipewire.wireplumber.package = pkgs.wireplumber-lhdc;
 
-  # PipeWire 1.6.8 with the upstream LHDC v5 codec series. Existing BlueZ
+  # PipeWire with the upstream LHDC v5 codec series. Existing BlueZ
   # codecs (SBC, AAC, aptX, LDAC, LC3 and Opus) remain enabled.
   services.pipewire.package = pkgs.pipewire-lhdc;
 

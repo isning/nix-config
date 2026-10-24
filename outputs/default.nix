@@ -132,7 +132,11 @@ in
 
   checks = forAllSystems (system: {
     # eval-tests per system
-    eval-tests = allSystems.${system}.evalTests == { };
+    eval-tests =
+      assert allSystems.${system}.evalTests == { };
+      nixpkgs.legacyPackages.${system}.runCommand "eval-tests" { } ''
+        mkdir -p "$out"
+      '';
 
     pre-commit-check = pre-commit-hooks.lib.${system}.run {
       src = mylib.relativeToRoot ".";

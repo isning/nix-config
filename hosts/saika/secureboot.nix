@@ -32,9 +32,9 @@
     enable = true;
     pkiBundle = "/var/lib/sbctl";
 
-    # If Measured Boot is enabled, you cannot store more than 8 generations on the ESP.
+    # If Measured Boot is enabled, you cannot store more than 4 generations on the ESP.
     # This is a strict limit required and enforced by systemd-pcrlock.
-    configurationLimit = 8;
+    configurationLimit = 4;
 
     # TODO: Seems currently there's no easy way adding
     # extra entries(in case windows here) for lanzaboote

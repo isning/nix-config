@@ -1,10 +1,5 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
-  xdg.configFile = {
-    "mozc/config1.db".source =
-      config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/home/linux/gui/base/fcitx5/mozc-config1.db";
-  };
-
   i18n.inputMethod = {
     enable = true;
     type = "fcitx5";
@@ -18,11 +13,6 @@
         # Chinese
         fcitx5-rime # for flypy chinese input method
         # fcitx5-chinese-addons # we use rime instead
-
-        # Japanese
-        # ctrl-i / F7 - convert to takakana
-        # ctrl-u / F6 - convert to hiragana
-        fcitx5-mozc-ut # Moze with UT dictionary
       ];
       settings.inputMethod = {
         "Groups/0" = {
@@ -59,11 +49,6 @@
 
         "Groups/1/Items/1" = {
           "Name" = "rime";
-          "Layout" = "";
-        };
-
-        "Groups/1/Items/2" = {
-          "Name" = "mozc";
           "Layout" = "";
         };
 

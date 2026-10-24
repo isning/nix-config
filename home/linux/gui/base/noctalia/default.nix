@@ -9,8 +9,6 @@
 }:
 
 {
-  imports = [ noctalia.homeModules.default ];
-
   home.sessionVariables = {
     "QT_QPA_PLATFORM" = "wayland;xcb";
     "QT_AUTO_SCREEN_SCALE_FACTOR" = "1";
@@ -25,7 +23,7 @@
     pkgs.gsettings-desktop-schemas
     pkgs.ddcutil
   ]
-  ++ (lib.optionals pkgs.stdenv.isx86_64 [
+  ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
     pkgs.gpu-screen-recorder
   ]);
 
@@ -40,6 +38,7 @@
 
   programs.noctalia = {
     enable = true;
+    package = noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default;
 
     settings = {
       # ── Theme ──────────────────────────────────────────────
@@ -533,7 +532,8 @@
       # ── Hooks ──────────────────────────────────────────────
       # Port of v4 dark mode hook for Kvantum theme switching
       hooks = {
-        theme_mode_changed = ''sh -c 'if [ "$NOCTALIA_THEME_MODE" = "dark" ]; then s="kvantum-dark"; else s="kvantum"; fi; sed -i "/^\[Appearance\]/,/^\[/ s/^style=.*/style=$s/" /home/isning/.config/qt6ct/qt6ct.conf' '';
+        # Preserve the out-of-store link so later activations do not back it up.
+        theme_mode_changed = ''sh -c 'if [ "$NOCTALIA_THEME_MODE" = "dark" ]; then s="kvantum-dark"; else s="kvantum"; fi; sed --follow-symlinks -i "/^\[Appearance\]/,/^\[/ s/^style=.*/style=$s/" /home/isning/.config/qt6ct/qt6ct.conf' '';
       };
 
       # ── Plugins ────────────────────────────────────────────

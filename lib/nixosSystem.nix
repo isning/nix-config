@@ -10,14 +10,19 @@
   ...
 }:
 let
-  inherit (inputs) nixpkgs home-manager nixos-generators;
+  inherit (inputs) nixpkgs home-manager;
 in
 nixpkgs.lib.nixosSystem {
   inherit system specialArgs;
   modules =
     nixos-modules
     ++ [
-      nixos-generators.nixosModules.all-formats
+      {
+        image.modules.iso.isoImage = {
+          makeEfiBootable = true;
+          makeUsbBootable = true;
+        };
+      }
     ]
     ++ (lib.optionals ((lib.lists.length home-modules) > 0) [
       home-manager.nixosModules.home-manager

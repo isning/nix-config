@@ -1,6 +1,7 @@
 { outputs, myvars, ... }:
 let
-  home = outputs.nixosConfigurations.saika-niri.config.home-manager.users.${myvars.username};
+  system = outputs.nixosConfigurations.saika-niri.config;
+  home = system.home-manager.users.${myvars.username};
   overridden =
     (outputs.nixosConfigurations.saika-niri.extendModules {
       modules = [
@@ -14,6 +15,7 @@ let
     }).config.home-manager.users.${myvars.username};
 in
 {
+  warnings = system.warnings ++ home.warnings;
   role = home.roles.development-workstation.enable;
   featureOverrides = !overridden.programs.k9s.enable && !overridden.programs.kitty.enable;
   ghostty = home.programs.ghostty.enable;

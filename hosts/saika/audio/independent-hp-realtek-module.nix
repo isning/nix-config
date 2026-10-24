@@ -1,4 +1,5 @@
 {
+  lib,
   kernel,
   stdenv,
 }:
@@ -8,6 +9,8 @@ stdenv.mkDerivation {
   src = kernel.src;
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
+  # Module certificates are generated during modules_install; preserve the signed bytes.
+  dontStrip = true;
 
   postUnpack = ''
     moduleRoot="$PWD/module-source"
@@ -26,14 +29,16 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    make -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M="$PWD" modules
+    make ${lib.escapeShellArgs kernel.commonMakeFlags} \
+      -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M="$PWD" modules
     runHook postBuild
   '';
 
   installPhase = ''
     runHook preInstall
-    install -Dm444 snd-hda-codec-alc269.ko \
-      "$out/lib/modules/${kernel.modDirVersion}/extra/snd-hda-codec-alc269.ko"
+    make ${lib.escapeShellArgs kernel.commonMakeFlags} \
+      -C ${kernel.dev}/lib/modules/${kernel.modDirVersion}/build M="$PWD" \
+      INSTALL_MOD_PATH="$out" INSTALL_MOD_DIR=extra DEPMOD=true modules_install
     runHook postInstall
   '';
 }

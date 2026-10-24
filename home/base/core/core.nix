@@ -53,6 +53,7 @@
     enable = true;
     # Atuin owns Ctrl-R in these shells.
     historyWidget.bash.command = "";
+    historyWidget.zsh.command = "";
     historyWidget.nushell.command = "";
   };
 

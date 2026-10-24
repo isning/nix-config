@@ -1,4 +1,5 @@
 {
+  warnings = [ ];
   role = true;
   featureOverrides = true;
   ghostty = true;

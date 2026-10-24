@@ -45,5 +45,5 @@ in
   colmena.${name} = mylib.colmenaSystem (systemArgs // { inherit tags ssh-user; });
 
   # generate iso image for installation
-  packages.${name} = inputs.self.nixosConfigurations.${name}.config.formats.iso;
+  packages.${name} = inputs.self.nixosConfigurations.${name}.config.system.build.images.iso;
 }

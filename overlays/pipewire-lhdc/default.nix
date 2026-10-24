@@ -4,21 +4,8 @@ final: prev:
 lib.optionalAttrs prev.stdenv.hostPlatform.isLinux {
   liblhdcv5 = final.callPackage ./liblhdcv5.nix { };
 
-  # FIXME(nixpkgs): Drop this package after WirePlumber includes
-  # https://github.com/PipeWire/wireplumber/commit/7c3bf214b7026ff7bb32e94d7489dcadbc4580b5
-  # in a stable nixpkgs release (expected after 0.5.17).
-  wireplumber-bluez-fix =
-    (prev.wireplumber.override { pipewire = final.pipewire-lhdc; }).overrideAttrs
-      (old: {
-        patches =
-          (old.patches or [ ])
-          ++ lib.optionals (lib.versionOlder old.version "0.5.18") [
-            (prev.fetchpatch {
-              url = "https://github.com/PipeWire/wireplumber/commit/7c3bf214b7026ff7bb32e94d7489dcadbc4580b5.patch";
-              hash = "sha256-Jcwx3ZCO1ri/2NmVmnsJRkgzTU57PtHp1pF0f8u2uXw=";
-            })
-          ];
-      });
+  # Use the same LHDC-enabled PipeWire as the system audio service.
+  wireplumber-lhdc = prev.wireplumber.override { pipewire = final.pipewire-lhdc; };
 
   # FIXME(nixpkgs): Replace this override with nixpkgs' PipeWire package once
   # it enables LHDC and packages liblhdcv5. Track package availability with:

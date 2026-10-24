@@ -7,7 +7,8 @@
       # joplin # joplin-cli
       # joplin-desktop
       siyuan # Self-hosted note-taking app, similar to logseq and obsidian
-      zotero # reference management software
+      # Zotero embeds EOL Firefox ESR 140; restore after upstream migrates its runtime.
+      # zotero # reference management software
       rnote # hand-writing note-taking app like goodnotes, uses dconf, no extra preservation needed
     ]);
 }
