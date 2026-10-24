@@ -1,4 +1,8 @@
-{ pkgs, ... }:
+{
+  lib,
+  pkgs,
+  ...
+}:
 {
   home.packages =
     with pkgs;
@@ -9,9 +13,6 @@
       # IDEs
       # jetbrains.idea-community
 
-      # AI cli tools
-      k8sgpt
-      kubectl-ai # an ai helper opensourced by google
     ]
     ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
       insomnia # REST client

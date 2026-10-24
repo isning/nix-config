@@ -1,16 +1,20 @@
 {
+  lib,
   pkgs,
   config,
   ...
 }:
 # processing audio/video
 {
-  home.packages = with pkgs; [
-    ffmpeg-full
+  config = lib.mkIf config.features.media.enable {
 
-    # images
-    viu # Terminal image viewer with native support for iTerm and Kitty
-    imagemagick
-    graphviz
-  ];
+    home.packages = with pkgs; [
+      ffmpeg-full
+
+      # images
+      viu # Terminal image viewer with native support for iTerm and Kitty
+      imagemagick
+      graphviz
+    ];
+  };
 }

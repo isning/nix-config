@@ -1,4 +1,10 @@
-# Editor-related language servers and heavy tooling — kept out of `core/editors`.
 {
-  imports = [ ./packages.nix ];
+  config,
+  lib,
+  pkgs,
+  pkgs-master,
+  ...
+}@args:
+{
+  config = lib.mkIf config.features.editors.enable (import ./packages.nix args);
 }

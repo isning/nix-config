@@ -5,7 +5,11 @@
     ../base/gui
     ../base/home.nix
 
+    ../.
+
     ./base
     ./gui
   ];
+
+  roles.development-workstation.enable = true;
 }
