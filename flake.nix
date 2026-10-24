@@ -107,7 +107,7 @@
     # secrets management
     agenix = {
       # lock with git commit at May 18, 2025
-      url = "github:ryantm/agenix/4835b1dc898959d8547a871ef484930675cb47f1";
+      url = "github:ryantm/agenix/5e5b88a0c8e56f291a108c2fe9934054d9745b2e";
       # replaced with a type-safe reimplementation to get a better error message and less bugs.
       # url = "github:ryan4yin/ragenix";
       inputs.nixpkgs.follows = "nixpkgs";
