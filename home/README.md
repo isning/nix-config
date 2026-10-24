@@ -29,14 +29,16 @@ features.kubernetes.enable = true;
 
 Feature options default to disabled. Role selections use `mkDefault`, so a host
 can override a feature with an ordinary assignment. Packages, aliases, and
-settings are conditional on the same option with `mkIf`.
+settings are conditional on the same option with `mkIf` at the feature/group level.
+Application files such as `jetbrains-toolbox.nix` are plain configuration fragments;
+the group combines them with `mkMerge` and owns the enable condition.
 
 Available `features.<name>.enable` options:
 
 - `agents`, `agent-utilities`
 - `containers`, `kubernetes`, `kubernetes-ai`
 - `terminal`, `additional-terminals`
-- `development-tools`, `credentials`, `desktop-tools`
+- `dev-tools`, `cloud`, `editors`, `media`, `credentials`
 
 The Linux terminal-only entry point selects features directly. Shared SSH client
 and basic shell configuration remain in the base layer. Darwin/Linux platform

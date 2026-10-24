@@ -1,5 +1,6 @@
 {
   role = true;
+  groupOverrides = true;
   featureOverrides = true;
   ssh = true;
   ghostty = true;

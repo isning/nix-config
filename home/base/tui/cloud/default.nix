@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.features.development-tools.enable {
+  config = lib.mkIf config.features.cloud.enable {
 
     # https://developer.hashicorp.com/terraform/cli/config/config-file
     home.file.".terraformrc".source = ./terraformrc;

@@ -14,6 +14,8 @@ let
           home-manager.users.${myvars.username}.features = {
             agents.enable = false;
             kubernetes.enable = true;
+            dev-tools.enable = false;
+            media.enable = false;
           };
         }
       ];
@@ -22,6 +24,11 @@ let
 in
 {
   role = home.roles.remote-workstation.enable;
+  groupOverrides =
+    !overridden.features.dev-tools.enable
+    && overridden.features.cloud.enable
+    && overridden.features.editors.enable
+    && !(builtins.any (p: lib.hasPrefix "jetbrains-toolbox" p.name) overridden.home.packages);
   featureOverrides =
     !overridden.features.agents.enable
     && overridden.programs.k9s.enable

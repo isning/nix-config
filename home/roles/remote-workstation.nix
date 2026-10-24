@@ -6,9 +6,11 @@
     features = {
       terminal.enable = lib.mkDefault true;
       agents.enable = lib.mkDefault true;
-      development-tools.enable = lib.mkDefault true;
+      dev-tools.enable = lib.mkDefault true;
+      cloud.enable = lib.mkDefault true;
+      editors.enable = lib.mkDefault true;
       credentials.enable = lib.mkDefault true;
-      desktop-tools.enable = lib.mkDefault true;
+      media.enable = lib.mkDefault true;
     };
   };
 }

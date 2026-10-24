@@ -6,7 +6,7 @@
 }:
 # processing audio/video
 {
-  config = lib.mkIf config.features.desktop-tools.enable {
+  config = lib.mkIf config.features.media.enable {
 
     home.packages = with pkgs; [
       ffmpeg-full

@@ -6,7 +6,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.features.development-tools.enable {
+  config = lib.mkIf config.features.dev-tools.enable {
 
     #############################################################
     #

@@ -9,7 +9,9 @@
   ];
 
   features = {
-    development-tools.enable = true;
+    dev-tools.enable = true;
+    cloud.enable = true;
+    editors.enable = true;
     credentials.enable = true;
     containers.enable = true;
     kubernetes.enable = true;
