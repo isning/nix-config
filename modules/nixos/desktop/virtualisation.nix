@@ -66,7 +66,20 @@
     # Keep the user's Podman socket available for rootless docker-compatible tools.
     linger = true;
     # NixOS allocates a non-overlapping 65536-id subordinate uid/gid range.
-    autoSubUidGidRange = true;
+    autoSubUidGidRange = false;
+
+    subUidRanges = [
+      {
+        startUid = 100000;
+        count = 1048576;
+      }
+    ];
+    subGidRanges = [
+      {
+        startGid = 100000;
+        count = 1048576;
+      }
+    ];
   };
 
   environment.systemPackages = with pkgs; [
