@@ -8,6 +8,8 @@ let
   hostname = "amiya";
 in
 {
+  roles.remote-workstation.enable = true;
+
   networking.hostName = hostname;
   networking.computerName = hostname;
   system.defaults.smb.NetBIOSName = hostname;

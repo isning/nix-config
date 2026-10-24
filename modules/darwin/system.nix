@@ -40,11 +40,13 @@
         expose-group-apps = true; # Group windows by application
 
         # customize Hot Corners(触发角, 鼠标移动到屏幕角落时触发的动作)
-        wvous-tl-corner = 2; # top-left - Mission Control
-        wvous-tr-corner = 4; # top-right - Desktop
-        wvous-bl-corner = 3; # bottom-left - Application Windows
-        wvous-br-corner = 13; # bottom-right - Lock Screen
+        wvous-tl-corner = 1; # disabled
+        wvous-tr-corner = 1; # disabled
+        wvous-bl-corner = 1; # disabled
+        wvous-br-corner = 1; # disabled
       };
+
+      WindowManager.EnableStandardClickToShowDesktop = true;
 
       # customize finder
       finder = {
@@ -71,7 +73,7 @@
         "com.apple.sound.beep.feedback" = 0; # disable beep sound when pressing volume up/down key
 
         # Appearance
-        AppleInterfaceStyle = "Dark"; # dark mode
+        AppleInterfaceStyleSwitchesAutomatically = true;
 
         AppleKeyboardUIMode = 3; # Mode 3 enables full keyboard control.
         ApplePressAndHoldEnabled = true; # enable press and hold
@@ -126,7 +128,6 @@
           "spans-displays" = true;
         };
         "com.apple.WindowManager" = {
-          EnableStandardClickToShowDesktop = 0; # Click wallpaper to reveal desktop
           StandardHideDesktopIcons = 0; # Show items on desktop
           HideDesktop = 0; # Do not hide items on desktop & stage manager
           StageManagerHideWidgets = 0;
@@ -150,7 +151,7 @@
 
       loginwindow = {
         GuestEnabled = false; # disable guest user
-        SHOWFULLNAME = true; # show full name in login window
+        SHOWFULLNAME = false; # Show the user list in the login window.
       };
     };
 
@@ -161,7 +162,7 @@
       enableKeyMapping = true; # enable key mapping so that we can use `option` as `control`
 
       # NOTE: do NOT support remap capslock to both control and escape at the same time
-      remapCapsLockToControl = false; # remap caps lock to control, useful for emac users
+      remapCapsLockToControl = false; # remap caps lock to control, useful for emacs users
       remapCapsLockToEscape = true; # remap caps lock to escape, useful for vim users
 
       # swap left command and left alt
