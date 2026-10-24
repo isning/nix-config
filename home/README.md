@@ -4,7 +4,9 @@ This directory contains all Home Manager configurations organized by platform an
 
 ## Workstation Roles and Feature Options
 
-Modules are registered once in `home/default.nix`. Hosts select roles through
+Role and feature definitions are registered once in `home/default.nix`. Platform
+entry points keep explicit imports of `base/core`, `base/tui`, `base/gui` (GUI
+hosts), and `base/home.nix`. Hosts select roles through
 options; roles set feature defaults without importing feature modules.
 
 ```nix

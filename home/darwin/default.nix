@@ -5,6 +5,11 @@
 {
   home.homeDirectory = "/Users/${myvars.username}";
   imports = [
+    ../base/core
+    ../base/tui
+    ../base/gui
+    ../base/home.nix
+
     ../.
     ./linearmouse.nix
     ./proxy
