@@ -38,8 +38,8 @@
         IdentitiesOnly = true;
       };
 
-      "router.319.ccsn.dev" = {
-        HostName = "router.319.ccsn.dev";
+      "snc-jumpbox" = {
+        HostName = "router4.319.ccsn.dev";
         Port = 22;
         User = "tunnel";
       };
@@ -48,28 +48,28 @@
         HostName = "192.168.1.98";
         Port = 22;
         User = "root";
-        ProxyJump = "router.319.ccsn.dev";
+        ProxyJump = "snc-jumpbox";
       };
 
       "kubevirt-dl160" = {
         HostName = "192.168.1.161";
         Port = 22;
         User = "snc";
-        ProxyJump = "router.319.ccsn.dev";
+        ProxyJump = "snc-jumpbox";
       };
 
       "kubevirt-t410" = {
         HostName = "192.168.1.162";
         Port = 22;
         User = "snc";
-        ProxyJump = "router.319.ccsn.dev";
+        ProxyJump = "snc-jumpbox";
       };
 
       "kubevirt-dl380" = {
         HostName = "192.168.1.163";
         Port = 22;
         User = "root";
-        ProxyJump = "router.319.ccsn.dev";
+        ProxyJump = "snc-jumpbox";
       };
 
       # "192.168.*" = {
