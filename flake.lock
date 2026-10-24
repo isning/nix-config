@@ -551,6 +551,22 @@
         "type": "github"
       }
     },
+    "flclash-tap": {
+      "flake": false,
+      "locked": {
+        "lastModified": 1792822717,
+        "narHash": "sha256-jbXAEUigIFtsP0SUO54j4EBUdGK2f2W5vMj1tijs4gQ=",
+        "owner": "chen08209",
+        "repo": "homebrew-tap",
+        "rev": "16c4ac4632445fc4db534bf932dd6767878962e4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "chen08209",
+        "repo": "homebrew-tap",
+        "type": "github"
+      }
+    },
     "git-hooks": {
       "inputs": {
         "flake-compat": [
@@ -1427,6 +1443,7 @@
         "colmena": "colmena",
         "disko": "disko",
         "figma-linux-next": "figma-linux-next",
+        "flclash-tap": "flclash-tap",
         "haumea": "haumea",
         "home-manager": "home-manager_2",
         "k8s-gitops": "k8s-gitops",

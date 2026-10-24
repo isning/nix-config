@@ -3,11 +3,11 @@
   lib,
   pkgs,
   myvars,
-  brew-nix,
+  flclash-tap,
   ...
 }:
 let
-  flclash = pkgs.callPackage ./packages/flclash { inherit brew-nix; };
+  flclash = pkgs.callPackage ./packages/flclash { inherit flclash-tap; };
   bundleRoot = "/Library/Application Support/nix-config/flclash";
   versionDir = "${bundleRoot}/${builtins.baseNameOf (toString flclash)}";
   bundle = "${versionDir}/FlClash.app";

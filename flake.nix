@@ -72,6 +72,10 @@
       url = "github:BatteredBunny/brew-api";
       flake = false;
     };
+    flclash-tap = {
+      url = "github:chen08209/homebrew-tap";
+      flake = false;
+    };
     nix-darwin = {
       url = "github:lnl7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs-darwin";

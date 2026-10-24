@@ -34,9 +34,10 @@ Install WeChat and Tailscale manually from the Mac App Store. Tailscale's App St
 different service and CLI capabilities from its standalone variant; use the system SSH client for
 Tailscale SSH connections. Approve its VPN configuration after installation.
 
-FlClash replaces Clash Verge Rev on macOS. Its author's tap is not in the brew-nix index, so
-`modules/darwin/packages/flclash/cask.json` pins the official release URLs and checksums; update
-that file separately when upgrading FlClash. It is still packaged through brew-nix.
+FlClash replaces Clash Verge Rev on macOS. Its small Nix package reads the version and checksums
+from the author's tap, pinned by the `flclash-tap` input. `just up` updates it along with the other
+inputs; use `just upp flclash-tap` to update only FlClash, then `just local` on amiya. No Homebrew
+or Ruby is needed.
 
 For TUN support, nix-darwin copies FlClash's signed bundle to a root-owned versioned directory under
 `/Library/Application Support/nix-config/flclash` and links it at `/Applications/FlClash.app`. Only
