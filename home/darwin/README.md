@@ -30,6 +30,9 @@ rather than their built-in updaters.
 BetterDisplay and Ice preferences are configured manually in their GUIs; only their installation is
 managed by Nix.
 
+ChatGPT's official desktop app uses nixpkgs on both macOS and Linux, managed in the shared
+`home/base/gui/chatgpt.nix` module. Sign in through the app after installation.
+
 WeCom, WeChat, Feishu, and Tencent Meeting use brew-nix and update through `brew-api` along with the
 other desktop applications. Grant microphone, camera, and screen recording permissions in macOS when
 requested.
