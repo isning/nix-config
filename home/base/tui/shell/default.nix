@@ -72,15 +72,6 @@ in
       use aliases/bat/bat-aliases.nu *
       use ${./aliases/gcloud.nu} *
 
-      # -*- modules -*-
-      # argx & lg is required by the kubernetes module
-      # Keep argx.parse namespaced so fzf can use the built-in parse command.
-      use modules/argx
-      use modules/lg *
-      # k8s/helm aliases, completions, 
-      use modules/kubernetes *
-      # a wrapper around the jc cli tool, convert cli outputs to nushell tables
-      # use modules/jc
     '';
   };
 }

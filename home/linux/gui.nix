@@ -1,9 +1,6 @@
 {
   imports = [
-    ../base/core
-    ../base/tui
-    ../base/gui
-    ../base/home.nix
+    ../roles/development-workstation.nix
 
     ./base
     ./gui
