@@ -20,10 +20,12 @@ features.agents.enable = false;
 features.kubernetes.enable = true;
 ```
 
-- `roles.remote-workstation.enable`: Ghostty, main agent clients, development, credential, and
-  desktop tools. Used by amiya.
-- `roles.development-workstation.enable`: Remote-workstation defaults plus container/Kubernetes
-  tools, AI utilities, and additional terminals. Used by Linux GUI hosts including saika.
+- `roles.remote-workstation.enable`: Ghostty, JetBrains Toolbox, and the shared SSH, Git, and shell
+  tools for remote access. Used by amiya; local language toolchains and development feature groups
+  stay disabled.
+- `roles.development-workstation.enable`: Remote-workstation defaults plus local language tooling,
+  development, cloud, credentials, media, agents, container/Kubernetes tools, AI utilities, and
+  additional terminals. Used by Linux GUI hosts including saika.
 
 Feature options default to disabled. Role selections use `mkDefault`, so a host can override a
 feature with an ordinary assignment. Packages, aliases, and settings are conditional on the same
@@ -35,7 +37,15 @@ Available `features.<name>.enable` options:
 - `agents`, `agent-utilities`
 - `containers`, `kubernetes`, `kubernetes-ai`
 - `terminal`, `additional-terminals`
-- `dev-tools`, `cloud`, `editors`, `media`, `credentials`
+- `dev-tools`, `ide-clients`, `cloud`, `language-tooling`, `media`, `credentials`
+
+Editor configuration lives in `base/core/editors`. `ide-clients` selects IDE applications, while
+`language-tooling` selects local language runtimes, compilers, build tools, language servers, and
+formatters. It does not control whether Helix, Neovim, or VS Code is installed.
+
+`features.media.recording.enable` controls OBS independently of the CLI media tools. Both
+workstation roles enable recording, with shared configuration selecting the appropriate platform
+package and Linux plugins.
 
 The Linux terminal-only entry point selects features directly. Shared SSH client and basic shell
 configuration remain in the base layer. Darwin/Linux platform modules load the registry once; no
@@ -59,7 +69,7 @@ home/
 │   │   ├── terminal/  # Terminal emulators (Kitty, Alacritty, etc.)
 │   │   └── ...
 │   ├── tui/           # Terminal/TUI applications
-│   │   ├── editors/   # Heavy editor/tooling pkgs only (`packages.nix`; core editors live under `core/editors`)
+│   │   ├── language-tooling/ # Local runtimes, compilers, language servers, and formatters
 │   │   ├── encryption/ # GPG, password-store, etc.
 │   │   └── ...
 │   └── home.nix       # Main home manager entry point

@@ -9,6 +9,7 @@ let
           home-manager.users.${myvars.username}.features = {
             kubernetes.enable = false;
             additional-terminals.enable = false;
+            media.recording.enable = false;
           };
         }
       ];
@@ -17,7 +18,12 @@ in
 {
   warnings = system.warnings ++ home.warnings;
   role = home.roles.development-workstation.enable;
-  featureOverrides = !overridden.programs.k9s.enable && !overridden.programs.kitty.enable;
+  languageTooling = home.features.language-tooling.enable;
+  recording = home.features.media.recording.enable && home.programs.obs-studio.enable;
+  featureOverrides =
+    !overridden.programs.k9s.enable
+    && !overridden.programs.kitty.enable
+    && !overridden.programs.obs-studio.enable;
   ghostty = home.programs.ghostty.enable;
   kitty = home.programs.kitty.enable;
   alacritty = home.programs.alacritty.enable;

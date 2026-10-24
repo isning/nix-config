@@ -37,7 +37,7 @@ systems.
   - **cloud/**: Cloud development tools (Terraform, etc.)
   - **container.nix**: Container tools (Docker, Podman)
   - **dev-tools.nix**: Terminal-based development tools
-  - **editors/**: Extra terminal editor Nix (see `core/editors/` for docs and baseline enables)
+  - **language-tooling/**: Local runtimes, compilers, language servers, and formatters
   - **encryption/**: Encryption and security tools
   - **gpg/**: GPG key management
   - **password-store/**: Password management with pass

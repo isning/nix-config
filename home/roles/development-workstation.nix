@@ -5,6 +5,12 @@
   config = lib.mkIf config.roles.development-workstation.enable {
     roles.remote-workstation.enable = lib.mkDefault true;
     features = {
+      agents.enable = lib.mkDefault true;
+      dev-tools.enable = lib.mkDefault true;
+      cloud.enable = lib.mkDefault true;
+      language-tooling.enable = lib.mkDefault true;
+      credentials.enable = lib.mkDefault true;
+      media.enable = lib.mkDefault true;
       containers.enable = lib.mkDefault true;
       kubernetes.enable = lib.mkDefault true;
       kubernetes-ai.enable = lib.mkDefault true;

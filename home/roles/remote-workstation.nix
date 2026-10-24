@@ -5,12 +5,8 @@
   config = lib.mkIf config.roles.remote-workstation.enable {
     features = {
       terminal.enable = lib.mkDefault true;
-      agents.enable = lib.mkDefault true;
-      dev-tools.enable = lib.mkDefault true;
-      cloud.enable = lib.mkDefault true;
-      editors.enable = lib.mkDefault true;
-      credentials.enable = lib.mkDefault true;
-      media.enable = lib.mkDefault true;
+      ide-clients.enable = lib.mkDefault true;
+      media.recording.enable = lib.mkDefault true;
     };
   };
 }

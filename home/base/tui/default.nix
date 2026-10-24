@@ -3,7 +3,7 @@
     ./ssh.nix
     ./dev-tools.nix
     ./cloud
-    ./editors
+    ./language-tooling
     ./shell
     ./zellij
   ];

@@ -11,7 +11,7 @@
   features = {
     dev-tools.enable = true;
     cloud.enable = true;
-    editors.enable = true;
+    language-tooling.enable = true;
     credentials.enable = true;
     containers.enable = true;
     kubernetes.enable = true;
