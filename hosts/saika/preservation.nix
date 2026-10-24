@@ -145,6 +145,10 @@ in
         ".vscode-shared"
         ".config/Code"
 
+        # figma
+        ".config/figma-linux-next"
+        ".local/state/figma-console-mcp"
+
         # cursor ai editor / cli
         ".cursor"
         ".config/cursor"
@@ -262,6 +266,7 @@ in
         # ======================================
         # Meeting / Remote Desktop / Recording
         # ======================================
+        ".local/share/wemeetapp"
         ".config/obs-studio"
         ".config/sunshine"
         ".config/freerdp"

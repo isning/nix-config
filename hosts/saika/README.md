@@ -78,6 +78,44 @@ do not forward port 3773 to the internet. For encrypted remote access, use Tails
 reverse proxy. See the upstream
 [remote access documentation](https://github.com/pingdotgg/t3code/blob/v0.0.44/docs/user/remote-access.md).
 
+## Measured Boot Recovery
+
+If Lanzaboote installation fails with `Failed to submit AuthorizeNV policy: Remote address changed`,
+the local `/var/lib/systemd/pcrlock.json` can be stale or incompatible with the TPM NV policy. The
+error is misleading; `systemd-pcrlock` may also be absent from `PATH` even though it is in the
+active system profile.
+
+Keep a working manual LUKS passphrase before changing the TPM enrollment. On `saika`, the recovery
+sequence was:
+
+```bash
+# 1. Confirm that the manual recovery path works.
+sudo cryptsetup open --test-passphrase /dev/disk/by-partlabel/disk-s790-4t-root
+
+# 2. Back up the current policy.
+sudo cp -a /var/lib/systemd/pcrlock.json /var/lib/systemd/pcrlock.json.bak
+
+# 3. Remove the stale policy from the TPM NV index.
+sudo /run/current-system/systemd/lib/systemd/systemd-pcrlock remove-policy
+
+# 4. Recreate /var/lib/systemd/pcrlock.json from the current measurements.
+sudo systemctl restart systemd-pcrlock-make-policy.service
+
+# 5. Wipe only the old TPM2 LUKS slot and enroll it against the new pcrlock policy.
+sudo /run/current-system/systemd/bin/systemd-cryptenroll \
+  --wipe-slot=tpm2 \
+  --tpm2-device=auto \
+  --tpm2-pcrlock=/var/lib/systemd/pcrlock.json \
+  /dev/disk/by-partlabel/disk-s790-4t-root
+
+# 6. Verify the policy service and LUKS2 token metadata.
+sudo systemctl --no-pager --full status systemd-pcrlock-make-policy.service
+sudo cryptsetup luksDump /dev/disk/by-partlabel/disk-s790-4t-root
+```
+
+Do not use `tpm2_clear`: it clears the whole TPM and is unnecessary for this recovery. Keep the
+manual passphrase available until a reboot has confirmed TPM2 unlocking.
+
 ## Rust build cache
 
 Rust intermediates and the shared compiler cache live on the dedicated Btrfs subvolume
