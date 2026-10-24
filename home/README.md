@@ -37,8 +37,8 @@ configuration selection:
 Add optional feature modules to a role rather than importing everything and
 disabling modules per host. Platform modules provide operating-system settings.
 The legacy `linux/tui.nix` entry point retains its existing selection.
-Existing `base/` entry points forward to extracted features where necessary for
-compatibility; roles import the features directly.
+Removed feature paths have no compatibility forwarding modules; callers import
+the feature modules directly.
 
 System-level roles are separate from Home Manager. Amiya imports
 `../modules/roles/darwin-remote-workstation.nix` from its system host module; it
