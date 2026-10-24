@@ -266,6 +266,26 @@
         "type": "github"
       }
     },
+    "figma-linux-next": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1791980583,
+        "narHash": "sha256-noXWtRnKWzpWeSD1+gIJ/7P8/29XaoN05IlCrdXELFw=",
+        "owner": "arximus88",
+        "repo": "figma-linux-next",
+        "rev": "13c501d6af237c849a45dde6ae6f11eec1252050",
+        "type": "github"
+      },
+      "original": {
+        "owner": "arximus88",
+        "repo": "figma-linux-next",
+        "type": "github"
+      }
+    },
     "flake-compat": {
       "flake": false,
       "locked": {
@@ -1406,6 +1426,7 @@
         "catppuccin": "catppuccin",
         "colmena": "colmena",
         "disko": "disko",
+        "figma-linux-next": "figma-linux-next",
         "haumea": "haumea",
         "home-manager": "home-manager_2",
         "k8s-gitops": "k8s-gitops",

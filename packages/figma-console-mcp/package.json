@@ -1,0 +1,8 @@
+{
+  "name": "figma-console-mcp-nix",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "figma-console-mcp": "1.40.0"
+  }
+}

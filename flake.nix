@@ -180,6 +180,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    figma-linux-next = {
+      url = "github:arximus88/figma-linux-next";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # -------------- Gaming ---------------------
 
     nix-gaming = {
