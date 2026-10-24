@@ -8,6 +8,8 @@ let
   hostname = "amiya";
 in
 {
+  imports = [ ../../modules/roles/darwin-remote-workstation.nix ];
+
   networking.hostName = hostname;
   networking.computerName = hostname;
   system.defaults.smb.NetBIOSName = hostname;

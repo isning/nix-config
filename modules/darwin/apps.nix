@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  brew-nix,
   ...
 }:
 ##########################################################################
@@ -22,6 +23,8 @@
 #
 ##########################################################################
 let
+  casks = brew-nix.packages.${pkgs.stdenv.hostPlatform.system};
+
   # Homebrew Mirror
   # NOTE: is only useful when you run `brew install` manually! (not via nix-darwin)
   homebrew_mirror_env = {
@@ -61,13 +64,31 @@ in
   # Install packages from nix's official package repository.
   #
   # The packages installed here are available to all users, and are reproducible across machines, and are rollbackable.
-  # But on macOS, it's less stable than homebrew.
-  #
-  # Related Discussion: https://discourse.nixos.org/t/darwin-again/29331
   environment.systemPackages = with pkgs; [
     neovim
     git
     nushell # my custom shell
+    # Vendor binaries packaged by Nix, without running Homebrew.
+    casks.betterdisplay
+    casks.jordanbaird-ice
+    casks.linearmouse
+    casks.firefox
+    casks.ghostty
+    casks.siyuan
+    casks.telegram
+    casks.qq
+    casks.moonlight
+    casks.iina
+    casks.stats
+    casks.neteasemusic
+    casks.insomnia
+    vscode # Includes the code CLI.
+    wget
+    aria2
+    wireguard-tools
+    m-cli
+    proxychains-ng
+    gnused
     google-chrome
     gnugrep # replacee macos's grep
     gnutar # replacee macos's tar
@@ -104,7 +125,8 @@ in
       autoUpdate = true; # Fetch the newest stable branch of Homebrew's git repo
       upgrade = true; # Upgrade outdated casks, formulae, and App Store apps
       # 'zap': uninstalls all formulae(and related files) not listed in the generated Brewfile
-      cleanup = "zap";
+      # Preserve existing apps and preferences while migrating casks to Nix.
+      cleanup = "none";
     };
 
     # Applications to install from Mac App Store using mas.
@@ -114,92 +136,16 @@ in
     masApps = {
       # Xcode = 497799835;
       Wechat = 836500024;
+      Tailscale = 1475387142;
     };
 
-    taps = [
-      "hashicorp/tap"
-      "nikitabobko/tap" # aerospace - an i3-like tiling window manager for macOS
-      "FelixKratz/formulae" # janky borders - highlight active window borders
-    ];
-
-    brews = [
-      # `brew install`
-      "wget" # download tool
-      "curl" # no not install curl via nixpkgs, it's not working well on macOS!
-      "aria2" # download tool
-      "wireguard-tools" # wireguard
-
-      # Usage:
-      #  https://github.com/tailscale/tailscale/wiki/Tailscaled-on-macOS#run-the-tailscaled-daemon
-      # 1. `sudo tailscaled install-system-daemon`
-      # 2. `tailscale up --accept-routes`
-      # "tailscale" # tailscale cli version
-
-      # https://github.com/rgcr/m-cli
-      "m-cli" #  Swiss Army Knife for macOS
-      "proxychains-ng"
-
-      # commands like `gsed` `gtar` are required by some tools
-      "gnu-sed"
-      "gnu-tar"
-
-      # misc that nix do not have cache for.
-      "git-trim"
-      "hashicorp/tap/terraform"
-      "terraformer"
-    ];
-
-    # `brew install --cask`
+    # These require installer or service integration beyond copying an app bundle.
     casks = [
-      "squirrel-app" # input method for Chinese, rime-squirrel
-      "firefox"
-
-      # code editor
-      "visual-studio-code"
-
-      "nikitabobko/tap/aerospace" # an i3-like tiling window manager for macOS
-      "ghostty" # terminal emulator
-
-      "siyuan" # note taking app
-      # https://joplinapp.org/help/
-      # "joplin" # note taking app
-
-      "tailscale-app" # tailscale macos app (with gui)
-
-      # IM & audio & remote desktop & meeting
-      "telegram"
-      "qq"
-      # "qqmusic"
-      # "discord" # update too frequently, use the web version instead
-      # "windows-app"
-      "moonlight" # remote desktop client
-      # "rustdesk" # meeting
-      # "tencent-meeting"
-      # "zoom" # meeting
-
-      # Misc
-      # "shadowsocksx-ng" # proxy tool
-      "iina" # video player
-      # "raycast" # (HotKey: alt/option + space)search, calculate and run scripts(with many plugins)
-      "stats" # beautiful system status monitor in menu bar
-      "jordanbaird-ice" # Powerful menu bar manager for macOS
-
-      # "reaper"  # audio editor
-      # "sonic-pi" # music programming
-      # "tencent-lemon" # macOS cleaner
-      "neteasemusic" # music
-      "clash-verge-rev" # the same as mihomo-party
-
-      # Development
-      "mitmproxy" # HTTP/HTTPS traffic inspector
-      "insomnia" # REST client
-      "wireshark-app" # network analyzer
-      # "jdk-mission-control" # Java Mission Control
-      # "google-cloud-sdk" # Google Cloud SDK
-      "miniforge" # Miniconda's community-driven distribution
-
-      # Setup macfuse: https://github.com/macfuse/macfuse/wiki/Getting-Started
-      "macfuse" # for rclone to mount a fuse filesystem
+      "squirrel-app"
+      "clash-verge-rev"
+      "wireshark-app"
+      "miniforge"
+      "macfuse"
     ];
   };
 }
