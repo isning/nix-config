@@ -30,9 +30,13 @@ rather than their built-in updaters.
 BetterDisplay and Ice preferences are configured manually in their GUIs; only their installation is
 managed by Nix.
 
-Install WeChat and Tailscale manually from the Mac App Store. Tailscale's App Store variant has
-different service and CLI capabilities from its standalone variant; use the system SSH client for
-Tailscale SSH connections. Approve its VPN configuration after installation.
+WeCom, WeChat, Feishu, and Tencent Meeting use brew-nix and update through `brew-api` along with the
+other desktop applications. Grant microphone, camera, and screen recording permissions in macOS when
+requested.
+
+Install Tailscale manually from the Mac App Store. Its App Store variant has different service and
+CLI capabilities from its standalone variant; use the system SSH client for Tailscale SSH
+connections. Approve its VPN configuration after installation.
 
 FlClash replaces Clash Verge Rev on macOS. Its small Nix package reads the version and checksums
 from the author's tap, pinned by the `flclash-tap` input. `just up` updates it along with the other

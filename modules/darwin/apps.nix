@@ -48,6 +48,10 @@ in
       casks.siyuan
       casks.telegram
       casks.qq
+      casks.wechatwork
+      casks.wechat
+      casks.feishu
+      casks.tencent-meeting
       casks.moonlight
       casks.iina
       casks.stats
