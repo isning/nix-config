@@ -1,13 +1,14 @@
+{ config, lib, ... }:
 {
-  imports = [
-    ../base/home.nix
-    ../base/core
+  options.roles.remote-workstation.enable = lib.mkEnableOption "remote-workstation";
 
-    ../base/tui/ssh.nix
-    ../features/terminal.nix
-    ../features/agents.nix
-    ../features/development-tools.nix
-    ../features/security.nix
-    ../features/desktop-tools.nix
-  ];
+  config = lib.mkIf config.roles.remote-workstation.enable {
+    features = {
+      terminal.enable = lib.mkDefault true;
+      agents.enable = lib.mkDefault true;
+      development-tools.enable = lib.mkDefault true;
+      security.enable = lib.mkDefault true;
+      desktop-tools.enable = lib.mkDefault true;
+    };
+  };
 }

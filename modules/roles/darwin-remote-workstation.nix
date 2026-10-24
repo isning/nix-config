@@ -1,5 +1,9 @@
+{ config, lib, ... }:
 {
-  imports = [ ../darwin/apps.nix ];
+  options.roles.remote-workstation.enable = lib.mkEnableOption "remote workstation";
 
-  services.openssh.enable = true;
+  config = lib.mkIf config.roles.remote-workstation.enable {
+    features.desktop-apps.enable = lib.mkDefault true;
+    services.openssh.enable = true;
+  };
 }

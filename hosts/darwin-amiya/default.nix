@@ -8,7 +8,7 @@ let
   hostname = "amiya";
 in
 {
-  imports = [ ../../modules/roles/darwin-remote-workstation.nix ];
+  roles.remote-workstation.enable = true;
 
   networking.hostName = hostname;
   networking.computerName = hostname;

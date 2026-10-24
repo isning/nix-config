@@ -61,9 +61,10 @@ Container and Kubernetes tools, their shell aliases, and Kubernetes AI helpers
 are disabled on amiya. Codegraph, RTK, and Open Design are also disabled. The
 main agent clients remain available. Other hosts retain their existing tools.
 
-The host selects `home/roles/remote-workstation.nix` explicitly alongside the
-Darwin platform module. There is no host-specific disabled-module list or AI
-utility switch. Linux GUI hosts select `development-workstation.nix` instead.
+The host sets `roles.remote-workstation.enable = true`. Features are selected by
+`features.<name>.enable` options, with ordinary host assignments overriding role
+defaults. The shared registry loads role and feature definitions once; roles do
+not import features. Linux GUI hosts enable `roles.development-workstation`.
 
 ### Network Configuration
 

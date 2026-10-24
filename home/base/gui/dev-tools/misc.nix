@@ -1,16 +1,24 @@
-{ pkgs, ... }:
 {
-  home.packages =
-    with pkgs;
-    [
-      mitmproxy # http/https proxy tool
-      wireshark # network analyzer
+  lib,
+  config,
+  pkgs,
+  ...
+}:
+{
+  config = lib.mkIf config.features.desktop-tools.enable {
 
-      # IDEs
-      # jetbrains.idea-community
+    home.packages =
+      with pkgs;
+      [
+        mitmproxy # http/https proxy tool
+        wireshark # network analyzer
 
-    ]
-    ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
-      insomnia # REST client
-    ]);
+        # IDEs
+        # jetbrains.idea-community
+
+      ]
+      ++ (lib.optionals pkgs.stdenv.hostPlatform.isx86_64 [
+        insomnia # REST client
+      ]);
+  };
 }

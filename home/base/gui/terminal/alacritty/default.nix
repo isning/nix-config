@@ -1,4 +1,6 @@
 {
+  lib,
+  config,
   pkgs,
   ...
 }:
@@ -23,48 +25,51 @@
 #
 ###########################################################
 {
-  programs.alacritty = {
-    enable = true;
-    # https://alacritty.org/config-alacritty.html
-    settings = {
-      window = {
-        opacity = 0.93;
-        startup_mode = "Maximized"; # Maximized window
-        dynamic_title = true;
-        option_as_alt = "Both"; # Option key acts as Alt on macOS
-        decorations = "None"; # Show neither borders nor title bar
-      };
-      scrolling = {
-        history = 10000;
-      };
-      font = {
-        bold = {
-          family = "Maple Mono NF CN";
+  config = lib.mkIf config.features.additional-terminals.enable {
+
+    programs.alacritty = {
+      enable = true;
+      # https://alacritty.org/config-alacritty.html
+      settings = {
+        window = {
+          opacity = 0.93;
+          startup_mode = "Maximized"; # Maximized window
+          dynamic_title = true;
+          option_as_alt = "Both"; # Option key acts as Alt on macOS
+          decorations = "None"; # Show neither borders nor title bar
         };
-        italic = {
-          family = "Maple Mono NF CN";
+        scrolling = {
+          history = 10000;
         };
-        normal = {
-          family = "Maple Mono NF CN";
+        font = {
+          bold = {
+            family = "Maple Mono NF CN";
+          };
+          italic = {
+            family = "Maple Mono NF CN";
+          };
+          normal = {
+            family = "Maple Mono NF CN";
+          };
+          bold_italic = {
+            family = "Maple Mono NF CN";
+          };
+          size = 13;
         };
-        bold_italic = {
-          family = "Maple Mono NF CN";
+        terminal = {
+          # Spawn a nushell in login mode via `bash`
+          shell = {
+            program = "${pkgs.bash}/bin/bash";
+            args = [
+              "--login"
+              "-c"
+              "nu --login --interactive"
+            ];
+          };
+          # Controls the ability to write to the system clipboard with the OSC 52 escape sequence.
+          # It's used by zellij to copy text to the system clipboard.
+          osc52 = "CopyPaste";
         };
-        size = 13;
-      };
-      terminal = {
-        # Spawn a nushell in login mode via `bash`
-        shell = {
-          program = "${pkgs.bash}/bin/bash";
-          args = [
-            "--login"
-            "-c"
-            "nu --login --interactive"
-          ];
-        };
-        # Controls the ability to write to the system clipboard with the OSC 52 escape sequence.
-        # It's used by zellij to copy text to the system clipboard.
-        osc52 = "CopyPaste";
       };
     };
   };

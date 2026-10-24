@@ -61,91 +61,96 @@ let
   ) "" (homebrew_mirror_env // local_proxy_env);
 in
 {
-  # Install packages from nix's official package repository.
-  #
-  # The packages installed here are available to all users, and are reproducible across machines, and are rollbackable.
-  environment.systemPackages = with pkgs; [
-    neovim
-    git
-    nushell # my custom shell
-    # Vendor binaries packaged by Nix, without running Homebrew.
-    casks.betterdisplay
-    casks.jordanbaird-ice
-    casks.linearmouse
-    casks.firefox
-    casks.ghostty
-    casks.siyuan
-    casks.telegram
-    casks.qq
-    casks.moonlight
-    casks.iina
-    casks.stats
-    casks.neteasemusic
-    casks.insomnia
-    vscode # Includes the code CLI.
-    wget
-    aria2
-    wireguard-tools
-    m-cli
-    proxychains-ng
-    gnused
-    google-chrome
-    gnugrep # replacee macos's grep
-    gnutar # replacee macos's tar
-  ];
-  environment.variables = {
-    # Fix https://github.com/LnL7/nix-darwin/wiki/Terminfo-issues
-    TERMINFO_DIRS = map (path: path + "/share/terminfo") config.environment.profiles ++ [
-      "/usr/share/terminfo"
+  options.features.desktop-apps.enable = lib.mkEnableOption "desktop-apps";
+
+  config = lib.mkIf config.features.desktop-apps.enable {
+
+    # Install packages from nix's official package repository.
+    #
+    # The packages installed here are available to all users, and are reproducible across machines, and are rollbackable.
+    environment.systemPackages = with pkgs; [
+      neovim
+      git
+      nushell # my custom shell
+      # Vendor binaries packaged by Nix, without running Homebrew.
+      casks.betterdisplay
+      casks.jordanbaird-ice
+      casks.linearmouse
+      casks.firefox
+      casks.ghostty
+      casks.siyuan
+      casks.telegram
+      casks.qq
+      casks.moonlight
+      casks.iina
+      casks.stats
+      casks.neteasemusic
+      casks.insomnia
+      vscode # Includes the code CLI.
+      wget
+      aria2
+      wireguard-tools
+      m-cli
+      proxychains-ng
+      gnused
+      google-chrome
+      gnugrep # replacee macos's grep
+      gnutar # replacee macos's tar
     ];
-  }
-  # Set variables for you to manually install homebrew packages.
-  // homebrew_mirror_env;
+    environment.variables = {
+      # Fix https://github.com/LnL7/nix-darwin/wiki/Terminfo-issues
+      TERMINFO_DIRS = map (path: path + "/share/terminfo") config.environment.profiles ++ [
+        "/usr/share/terminfo"
+      ];
+    }
+    # Set variables for you to manually install homebrew packages.
+    // homebrew_mirror_env;
 
-  # Set environment variables for nix-darwin before run `brew bundle`.
-  system.activationScripts.homebrew.text = lib.mkBefore ''
-    echo >&2 '${homebrew_env_script}'
-    ${homebrew_env_script}
-  '';
+    # Set environment variables for nix-darwin before run `brew bundle`.
+    system.activationScripts.homebrew.text = lib.mkBefore ''
+      echo >&2 '${homebrew_env_script}'
+      ${homebrew_env_script}
+    '';
 
-  # Create /etc/zshrc that loads the nix-darwin environment.
-  # this is required if you want to use darwin's default shell - zsh
-  programs.zsh.enable = true;
-  environment.shells = [
-    pkgs.zsh
-    pkgs.nushell # my custom shell
-  ];
-
-  # homebrew need to be installed manually, see https://brew.sh
-  # https://github.com/LnL7/nix-darwin/blob/master/modules/homebrew.nix
-  homebrew = {
-    enable = true; # disable homebrew for fast deploy
-
-    onActivation = {
-      autoUpdate = true; # Fetch the newest stable branch of Homebrew's git repo
-      upgrade = true; # Upgrade outdated casks, formulae, and App Store apps
-      # 'zap': uninstalls all formulae(and related files) not listed in the generated Brewfile
-      # Preserve existing apps and preferences while migrating casks to Nix.
-      cleanup = "none";
-    };
-
-    # Applications to install from Mac App Store using mas.
-    # You need to install all these Apps manually first so that your apple account have records for them.
-    # otherwise Apple Store will refuse to install them.
-    # For details, see https://github.com/mas-cli/mas
-    masApps = {
-      # Xcode = 497799835;
-      Wechat = 836500024;
-      Tailscale = 1475387142;
-    };
-
-    # These require installer or service integration beyond copying an app bundle.
-    casks = [
-      "squirrel-app"
-      "clash-verge-rev"
-      "wireshark-app"
-      "miniforge"
-      "macfuse"
+    # Create /etc/zshrc that loads the nix-darwin environment.
+    # this is required if you want to use darwin's default shell - zsh
+    programs.zsh.enable = true;
+    environment.shells = [
+      pkgs.zsh
+      pkgs.nushell # my custom shell
     ];
+
+    # homebrew need to be installed manually, see https://brew.sh
+    # https://github.com/LnL7/nix-darwin/blob/master/modules/homebrew.nix
+    homebrew = {
+      enable = true; # disable homebrew for fast deploy
+
+      onActivation = {
+        autoUpdate = true; # Fetch the newest stable branch of Homebrew's git repo
+        upgrade = true; # Upgrade outdated casks, formulae, and App Store apps
+        # 'zap': uninstalls all formulae(and related files) not listed in the generated Brewfile
+        # Preserve existing apps and preferences while migrating casks to Nix.
+        cleanup = "none";
+      };
+
+      # Applications to install from Mac App Store using mas.
+      # You need to install all these Apps manually first so that your apple account have records for them.
+      # otherwise Apple Store will refuse to install them.
+      # For details, see https://github.com/mas-cli/mas
+      masApps = {
+        # Xcode = 497799835;
+        Wechat = 836500024;
+        Tailscale = 1475387142;
+      };
+
+      # These require installer or service integration beyond copying an app bundle.
+      casks = [
+        "squirrel-app"
+        "clash-verge-rev"
+        "wireshark-app"
+        "miniforge"
+        "macfuse"
+      ];
+    };
   };
 }

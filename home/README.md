@@ -2,48 +2,48 @@
 
 This directory contains all Home Manager configurations organized by platform and functionality.
 
-## Workstation Roles
+## Workstation Roles and Feature Options
 
-Hosts choose an explicit role alongside their platform module:
+Modules are registered once in `home/default.nix`. Hosts select roles through
+options; roles set feature defaults without importing feature modules.
 
 ```nix
-imports = [
-  ../../darwin
-  ../../roles/remote-workstation.nix
-];
+# amiya
+roles.remote-workstation.enable = true;
+
+# Linux GUI workstation
+roles.development-workstation.enable = true;
+
+# Optional host overrides
+features.agents.enable = false;
+features.kubernetes.enable = true;
 ```
 
-- `roles/remote-workstation.nix`: Shared workstation configuration, Ghostty,
-  Nushell, SSH/Git, and main AI clients. Used by amiya. It preserves the existing
-  editor, cloud, security, and desktop tools; the role does not automatically
-  install container/Kubernetes tools or AI utilities.
-- `roles/development-workstation.nix`: Extends the remote workstation with
-  container/Kubernetes tools, Codegraph/RTK/Open Design, and additional terminals.
-  Used by the Linux GUI entry point, including saika.
+- `roles.remote-workstation.enable`: Ghostty, main agent clients, development,
+  security, and desktop tools. Used by amiya.
+- `roles.development-workstation.enable`: Remote-workstation defaults plus
+  container/Kubernetes tools, AI utilities, and additional terminals. Used by
+  Linux GUI hosts including saika.
 
-Role imports are explicit. Feature modules under `features/` own package and
-configuration selection:
+Feature options default to disabled. Role selections use `mkDefault`, so a host
+can override a feature with an ordinary assignment. Packages, aliases, and
+settings are conditional on the same option with `mkIf`.
 
-- `agents.nix`: Codex, Claude Code, Gemini CLI, and OpenCode.
-- `agent-utilities.nix`: Codegraph, RTK, and Open Design.
-- `containers.nix`: Container image and Compose tools.
-- `kubernetes.nix`: Kubernetes clients, TUI, aliases, and shell integration.
-- `kubernetes-ai.nix`: Kubernetes AI helpers.
-- `terminal.nix`: Ghostty and shared interactive shell configuration.
-- `development-tools.nix`: Development, cloud, and language tooling.
-- `security.nix`: Hardware-key, encryption, GPG, and password-store tools.
-- `desktop-tools.nix`: Shared desktop development and media tools.
+Available `features.<name>.enable` options:
 
-Add optional feature modules to a role rather than importing everything and
-disabling modules per host. Platform modules provide operating-system settings.
-The legacy `linux/tui.nix` entry point retains its existing selection.
-Removed feature paths have no compatibility forwarding modules; callers import
-the feature modules directly.
+- `agents`, `agent-utilities`
+- `containers`, `kubernetes`, `kubernetes-ai`
+- `terminal`, `additional-terminals`
+- `development-tools`, `security`, `desktop-tools`
 
-System-level roles are separate from Home Manager. Amiya imports
-`../modules/roles/darwin-remote-workstation.nix` from its system host module; it
-selects the macOS app installation module and enables the SSH server. Do not
-import system modules into Home Manager roles.
+The Linux terminal-only entry point selects features directly. Shared SSH client
+and basic shell configuration remain in the base layer. Darwin/Linux platform
+modules load the registry once; no compatibility forwarding modules are used.
+
+System-level and Home Manager options are separate. Amiya selects
+`roles.remote-workstation.enable` in both configurations. The Darwin system role
+sets `features.desktop-apps.enable` and enables the SSH server. The app module is
+registered once in the Darwin registry and applies its configuration with `mkIf`.
 
 ## Current Structure
 

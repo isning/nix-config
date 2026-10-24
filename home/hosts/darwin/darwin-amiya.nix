@@ -5,8 +5,9 @@ in
 {
   imports = [
     ../../darwin
-    ../../roles/remote-workstation.nix
   ];
+
+  roles.remote-workstation.enable = true;
 
   programs.ssh.settings."github.com".IdentityFile = "${config.home.homeDirectory}/.ssh/${hostName}";
 }

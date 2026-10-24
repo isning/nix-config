@@ -1,7 +1,4 @@
+{ lib, ... }:
 {
-  imports = [
-    ../base/gui/terminal/ghostty.nix
-    ../base/tui/shell
-    ../base/tui/zellij
-  ];
+  options.features.terminal.enable = lib.mkEnableOption "terminal";
 }

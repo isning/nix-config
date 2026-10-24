@@ -1,7 +1,4 @@
+{ lib, ... }:
 {
-  imports = [
-    ../base/tui/dev-tools.nix
-    ../base/tui/cloud
-    ../base/tui/editors
-  ];
+  options.features.development-tools.enable = lib.mkEnableOption "development-tools";
 }

@@ -5,6 +5,7 @@
 {
   home.homeDirectory = "/Users/${myvars.username}";
   imports = [
+    ../.
     ./linearmouse.nix
     ./proxy
     ./rime-squirrel.nix

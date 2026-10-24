@@ -1,8 +1,4 @@
+{ lib, ... }:
 {
-  imports = [
-    ../base/tui/canokey-tools.nix
-    ../base/tui/encryption
-    ../base/tui/gpg
-    ../base/tui/password-store
-  ];
+  options.features.security.enable = lib.mkEnableOption "security";
 }

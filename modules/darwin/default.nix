@@ -1,5 +1,7 @@
 {
   imports = [
+    ./apps.nix
+    ../roles/darwin-remote-workstation.nix
     ./broken-packages.nix
     ./nix-core.nix
     ./security.nix

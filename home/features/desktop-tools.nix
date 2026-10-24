@@ -1,7 +1,4 @@
+{ lib, ... }:
 {
-  imports = [
-    ../base/gui/media.nix
-    ../base/gui/dev-tools/misc.nix
-    ../base/gui/dev-tools/jetbrains-toolbox.nix
-  ];
+  options.features.desktop-tools.enable = lib.mkEnableOption "desktop-tools";
 }

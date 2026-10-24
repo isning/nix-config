@@ -1,4 +1,5 @@
 {
+  lib,
   config,
   pkgs,
   pkgs-master,
@@ -15,162 +16,165 @@ let
   rustSrc = pkgs.rust-bin.stable.latest.rust-src;
 in
 {
-  home.file.".local/share/rust-src".source = "${rustSrc}/lib/rustlib/src/rust";
+  config = lib.mkIf config.features.development-tools.enable {
 
-  home.sessionVariables.RUST_SRC_PATH = "${config.home.homeDirectory}/.local/share/rust-src";
+    home.file.".local/share/rust-src".source = "${rustSrc}/lib/rustlib/src/rust";
 
-  home.packages =
-    with pkgs;
-    (
-      # -*- Data & Configuration Languages -*-#
-      [
-        #-- nix
-        nil
-        nixd
-        statix # Lints and suggestions for the nix programming language
-        deadnix # Find and remove unused code in .nix source files
-        nixfmt # Nix Code Formatter
+    home.sessionVariables.RUST_SRC_PATH = "${config.home.homeDirectory}/.local/share/rust-src";
 
-        #-- nickel lang
-        nickel
-
-        #-- json like
-        # terraform  # install via brew on macOS
-        terraform-ls
-        jsonnet
-        jsonnet-language-server
-        taplo # TOML language server / formatter / validator
-        yaml-language-server
-        actionlint # GitHub Actions linter
-
-        #-- dockerfile
-        hadolint # Dockerfile linter
-        dockerfile-language-server
-
-        #-- markdown
-        marksman # language server for markdown
-        glow # markdown previewer
-        pandoc # document converter
-        pkgs-master.hugo # static site generator
-
-        #-- sql
-        sqlfluff
-
-        #-- protocol buffer
-        buf # linting and formatting
-      ]
-      ++
-        #-*- General Purpose Languages -*-#
+    home.packages =
+      with pkgs;
+      (
+        # -*- Data & Configuration Languages -*-#
         [
-          #-- c/c++
-          cmake
-          cmake-language-server
-          gnumake
-          checkmake
-          # c/c++ compiler, required by nvim-treesitter!
-          gcc
-          gdb
-          # c/c++ tools with clang-tools, the unwrapped version won't
-          # add alias like `cc` and `c++`, so that it won't conflict with gcc
-          # llvmPackages.clang-unwrapped
-          clang-tools
-          lldb
+          #-- nix
+          nil
+          nixd
+          statix # Lints and suggestions for the nix programming language
+          deadnix # Find and remove unused code in .nix source files
+          nixfmt # Nix Code Formatter
 
-          #-- python
-          uv # python project package manager
-          pipx # Install and Run Python Applications in Isolated Environments
-          (python313.withPackages (
-            ps: with ps; [
-              # python language server
-              pyright
-              ruff
+          #-- nickel lang
+          nickel
 
-              black # python formatter
+          #-- json like
+          # terraform  # install via brew on macOS
+          terraform-ls
+          jsonnet
+          jsonnet-language-server
+          taplo # TOML language server / formatter / validator
+          yaml-language-server
+          actionlint # GitHub Actions linter
 
-              # my commonly used python packages
-              jupyter
-              ipython
-              pandas
-              requests
-              pyquery
-              pyyaml
-              # boto3 # AWS SDK for Python
+          #-- dockerfile
+          hadolint # Dockerfile linter
+          dockerfile-language-server
 
-              # misc
-              protobuf # protocol buffer compiler
-              numpy
-            ]
-          ))
+          #-- markdown
+          marksman # language server for markdown
+          glow # markdown previewer
+          pandoc # document converter
+          pkgs-master.hugo # static site generator
 
-          #-- rust
-          rustToolchain
+          #-- sql
+          sqlfluff
 
-          #-- golang
-          go
-          gomodifytags
-          iferr # generate error handling code for go
-          impl # generate function implementation for go
-          # gotools # contains tools like: godoc, goimports, etc.
-          gopls # go language server
-          delve # go debugger
-
-          # -- java
-          jdk17
-          gradle
-          maven
-          spring-boot-cli
-          jdt-language-server
-
-          #-- zig
-          zls
-
-          #-- lua
-          stylua
-          lua-language-server
-
-          #-- bash
-          bash-language-server
-          shellcheck
-          shfmt
+          #-- protocol buffer
+          buf # linting and formatting
         ]
-      #-*- Web Development -*-#
-      ++ [
-        nodejs_24
-        pnpm
-        typescript
-        typescript-language-server
-        bun
-        # HTML/CSS/JSON/ESLint language servers extracted from vscode
-        vscode-langservers-extracted
-        tailwindcss-language-server
-        emmet-ls
-      ]
-      # -*- Lisp like Languages -*-#
-      # ++ [
-      #   guile
-      #   racket-minimal
-      #   fnlfmt # fennel
-      #   (
-      #     if pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.isx86
-      #     then pkgs-master.akkuPackages.scheme-langserver
-      #     else pkgs.emptyDirectory
-      #   )
-      # ]
-      ++ [
-        proselint # English prose linter
+        ++
+          #-*- General Purpose Languages -*-#
+          [
+            #-- c/c++
+            cmake
+            cmake-language-server
+            gnumake
+            checkmake
+            # c/c++ compiler, required by nvim-treesitter!
+            gcc
+            gdb
+            # c/c++ tools with clang-tools, the unwrapped version won't
+            # add alias like `cc` and `c++`, so that it won't conflict with gcc
+            # llvmPackages.clang-unwrapped
+            clang-tools
+            lldb
 
-        #-- verilog / systemverilog
-        # verible
+            #-- python
+            uv # python project package manager
+            pipx # Install and Run Python Applications in Isolated Environments
+            (python313.withPackages (
+              ps: with ps; [
+                # python language server
+                pyright
+                ruff
 
-        # -- typesetting
-        typst # a modern typesetting system, like LaTeX but easier to use and more powerful
-        tinymist # typst lsp
+                black # python formatter
 
-        #-- Optional Requirements:
-        prettier # common code formatter
-        fzf
-        gdu # disk usage analyzer, required by AstroNvim
-        (ripgrep.override { withPCRE2 = true; }) # recursively searches directories for a regex pattern
-      ]
-    );
+                # my commonly used python packages
+                jupyter
+                ipython
+                pandas
+                requests
+                pyquery
+                pyyaml
+                # boto3 # AWS SDK for Python
+
+                # misc
+                protobuf # protocol buffer compiler
+                numpy
+              ]
+            ))
+
+            #-- rust
+            rustToolchain
+
+            #-- golang
+            go
+            gomodifytags
+            iferr # generate error handling code for go
+            impl # generate function implementation for go
+            # gotools # contains tools like: godoc, goimports, etc.
+            gopls # go language server
+            delve # go debugger
+
+            # -- java
+            jdk17
+            gradle
+            maven
+            spring-boot-cli
+            jdt-language-server
+
+            #-- zig
+            zls
+
+            #-- lua
+            stylua
+            lua-language-server
+
+            #-- bash
+            bash-language-server
+            shellcheck
+            shfmt
+          ]
+        #-*- Web Development -*-#
+        ++ [
+          nodejs_24
+          pnpm
+          typescript
+          typescript-language-server
+          bun
+          # HTML/CSS/JSON/ESLint language servers extracted from vscode
+          vscode-langservers-extracted
+          tailwindcss-language-server
+          emmet-ls
+        ]
+        # -*- Lisp like Languages -*-#
+        # ++ [
+        #   guile
+        #   racket-minimal
+        #   fnlfmt # fennel
+        #   (
+        #     if pkgs.stdenv.hostPlatform.isLinux && pkgs.stdenv.isx86
+        #     then pkgs-master.akkuPackages.scheme-langserver
+        #     else pkgs.emptyDirectory
+        #   )
+        # ]
+        ++ [
+          proselint # English prose linter
+
+          #-- verilog / systemverilog
+          # verible
+
+          # -- typesetting
+          typst # a modern typesetting system, like LaTeX but easier to use and more powerful
+          tinymist # typst lsp
+
+          #-- Optional Requirements:
+          prettier # common code formatter
+          fzf
+          gdu # disk usage analyzer, required by AstroNvim
+          (ripgrep.override { withPCRE2 = true; }) # recursively searches directories for a regex pattern
+        ]
+      );
+  };
 }

@@ -1,4 +1,5 @@
 {
+  config,
   lib,
   pkgs,
   ...
@@ -14,37 +15,40 @@
 #
 ###########################################################
 {
-  programs.kitty = {
-    enable = true;
-    font = {
-      name = "Maple Mono NF CN";
-      # use different font size on macOS
-      size = 13;
+  config = lib.mkIf config.features.additional-terminals.enable {
+
+    programs.kitty = {
+      enable = true;
+      font = {
+        name = "Maple Mono NF CN";
+        # use different font size on macOS
+        size = 13;
+      };
+
+      # consistent with other terminal emulators
+      keybindings = {
+        "ctrl+shift+m" = "toggle_maximized";
+        "ctrl+shift+f" = "show_scrollback"; # search in the current window
+      };
+
+      settings = {
+        # do not show title bar & window title
+        hide_window_decorations = "titlebar-and-corners";
+        macos_show_window_title_in = "none";
+
+        background_opacity = "0.93";
+        macos_option_as_alt = true; # Option key acts as Alt on macOS
+        enable_audio_bell = false;
+        tab_bar_edge = "top"; # tab bar on top
+        #  To resolve issues:
+        #    1. https://github.com/ryan4yin/nix-config/issues/26
+        #    2. https://github.com/ryan4yin/nix-config/issues/8
+        #  Spawn a nushell in login mode via `bash`
+        shell = "${pkgs.bash}/bin/bash --login -c 'nu --login --interactive'";
+      };
+
+      # macOS specific settings
+      darwinLaunchOptions = [ "--start-as=maximized" ];
     };
-
-    # consistent with other terminal emulators
-    keybindings = {
-      "ctrl+shift+m" = "toggle_maximized";
-      "ctrl+shift+f" = "show_scrollback"; # search in the current window
-    };
-
-    settings = {
-      # do not show title bar & window title
-      hide_window_decorations = "titlebar-and-corners";
-      macos_show_window_title_in = "none";
-
-      background_opacity = "0.93";
-      macos_option_as_alt = true; # Option key acts as Alt on macOS
-      enable_audio_bell = false;
-      tab_bar_edge = "top"; # tab bar on top
-      #  To resolve issues:
-      #    1. https://github.com/ryan4yin/nix-config/issues/26
-      #    2. https://github.com/ryan4yin/nix-config/issues/8
-      #  Spawn a nushell in login mode via `bash`
-      shell = "${pkgs.bash}/bin/bash --login -c 'nu --login --interactive'";
-    };
-
-    # macOS specific settings
-    darwinLaunchOptions = [ "--start-as=maximized" ];
   };
 }

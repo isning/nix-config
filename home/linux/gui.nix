@@ -1,8 +1,10 @@
 {
   imports = [
-    ../roles/development-workstation.nix
+    ../.
 
     ./base
     ./gui
   ];
+
+  roles.development-workstation.enable = true;
 }

@@ -1,11 +1,16 @@
 {
+  lib,
+  config,
   pkgs,
   ...
 }:
 {
-  home.packages = with pkgs; [
-    age
-    sops
-    # rclone
-  ];
+  config = lib.mkIf config.features.security.enable {
+
+    home.packages = with pkgs; [
+      age
+      sops
+      # rclone
+    ];
+  };
 }
