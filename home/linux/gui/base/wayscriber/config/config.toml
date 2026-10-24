@@ -148,10 +148,10 @@ show_marker_opacity_section = false
 context_aware_ui = true
 show_preset_toasts = true
 show_tool_preview = false
-top_offset = 0.0
-top_offset_y = 0.0
-side_offset = 0.0
-side_offset_x = 0.0
+top_offset = 585.27734375
+top_offset_y = 32.0390625
+side_offset = 287.671875
+side_offset_x = 2167.671875
 force_inline = false
 
 [ui.toolbar.mode_overrides.simple]
@@ -398,6 +398,8 @@ toggle_toolbar = [
     "F9",
 ]
 toggle_presenter_mode = ["Ctrl+Shift+M"]
+toggle_light_mode = ["Ctrl+Shift+L"]
+toggle_light_mode_drawing = []
 toggle_fill = []
 toggle_radial_menu = []
 toggle_selection_properties = ["Ctrl+Alt+P"]
@@ -464,7 +466,7 @@ exit_after_capture = false
 [tablet]
 enabled = true
 pressure_enabled = true
-min_thickness = 0.0
+min_thickness = 1.0
 max_thickness = 4.0
 auto_eraser_switch = true
 pressure_variation_threshold = 0.1

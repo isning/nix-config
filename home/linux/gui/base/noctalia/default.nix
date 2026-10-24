@@ -11,6 +11,9 @@
 {
   home.sessionVariables = {
     "QT_QPA_PLATFORM" = "wayland;xcb";
+    # Home Manager's generic `qtct` platform theme currently exports `qt5ct`,
+    # but Dolphin and the configured qt6ct package use Qt 6.
+    "QT_QPA_PLATFORMTHEME" = lib.mkForce "qt6ct";
     "QT_AUTO_SCREEN_SCALE_FACTOR" = "1";
     "GSETTINGS_SCHEMA_DIR" =
       "${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
@@ -28,6 +31,10 @@
   ]);
 
   home.file."Pictures/Wallpapers".source = wallpapers;
+  home.file.".local/bin/dolphin" = {
+    source = ./dolphin-qt6ct;
+    executable = true;
+  };
 
   # Symlink runtime override TOML into repo for tracking
   home.file."${config.xdg.stateHome}/noctalia/settings.toml".source =
@@ -35,6 +42,20 @@
 
   xdg.configFile."qt6ct/qt6ct.conf".source =
     config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/home/linux/gui/base/noctalia/qt6ct.conf";
+  xdg.configFile."noctalia/templates/dolphin-soft-selection.colors".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/home/linux/gui/base/noctalia/dolphin-soft-selection.colors";
+  xdg.configFile."noctalia/templates/dolphin-soft-selection.qss".source =
+    config.lib.file.mkOutOfStoreSymlink "${config.home.homeDirectory}/nix-config/home/linux/gui/base/noctalia/dolphin-soft-selection.qss";
+
+  # Dolphin creates KColorSchemeManager at startup. Outside Plasma it otherwise
+  # replaces qt6ct's palette with Breeze Light and brings back the blue highlight.
+  home.activation.dolphinSoftSelection = lib.hm.dag.entryAfter [ "writeBoundary" ] ''
+    $DRY_RUN_CMD ${lib.getExe' pkgs.kdePackages.kconfig "kwriteconfig6"} \
+      --file dolphinrc \
+      --group UiSettings \
+      --key ColorScheme \
+      noctalia-soft-selection
+  '';
 
   programs.noctalia = {
     enable = true;
@@ -53,8 +74,17 @@
           builtin_ids = [
             "gtk3"
             "gtk4"
+            "kcolorscheme"
             "qt"
           ];
+          user."dolphin-soft-selection" = {
+            input_path = "$XDG_CONFIG_HOME/noctalia/templates/dolphin-soft-selection.colors";
+            output_path = "$XDG_DATA_HOME/color-schemes/noctalia-soft-selection.colors";
+          };
+          user."dolphin-soft-selection-qss" = {
+            input_path = "$XDG_CONFIG_HOME/noctalia/templates/dolphin-soft-selection.qss";
+            output_path = "$XDG_CONFIG_HOME/noctalia/dolphin-soft-selection.qss";
+          };
         };
       };
 

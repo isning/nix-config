@@ -1,0 +1,5 @@
+QAbstractItemView,
+QGraphicsView {
+    selection-color: {{ colors.on_surface.default.hex }};
+    selection-background-color: {{ colors.surface_container_high.default.hex }};
+}

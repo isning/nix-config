@@ -19,6 +19,7 @@
 
     # TODO: Try harden this later
     feishu
+    wemeet
 
     # qqmusic
     bwraps.wechat

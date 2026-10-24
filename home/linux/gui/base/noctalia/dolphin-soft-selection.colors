@@ -1,0 +1,20 @@
+[KDE]
+contrast=4
+
+[General]
+ColorScheme=NoctaliaSoftSelection
+Name=noctalia-soft-selection
+
+[Colors:Selection]
+BackgroundAlternate={{ colors.surface_container_low.default.rgb_csv }}
+BackgroundNormal={{ colors.surface_container_high.default.rgb_csv }}
+DecorationFocus={{ colors.surface_container_high.default.rgb_csv }}
+DecorationHover={{ colors.surface_container_high.default.rgb_csv }}
+ForegroundActive={{ colors.on_surface.default.rgb_csv }}
+ForegroundInactive={{ colors.on_surface_variant.default.rgb_csv }}
+ForegroundLink={{ colors.secondary.default.rgb_csv }}
+ForegroundNegative={{ colors.error.default.rgb_csv }}
+ForegroundNeutral={{ colors.tertiary.default.rgb_csv }}
+ForegroundNormal={{ colors.on_surface.default.rgb_csv }}
+ForegroundPositive={{ colors.tertiary.default.rgb_csv }}
+ForegroundVisited={{ colors.on_secondary_container.default.rgb_csv }}

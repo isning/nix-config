@@ -92,6 +92,10 @@ window-rule {
     match app-id="thunar"
     open-on-workspace "6file"
 }
+window-rule {
+    match app-id="org.kde.dolphin"
+    open-on-workspace "6file"
+}
 
 // Other applications - open in workspace 0
 window-rule {

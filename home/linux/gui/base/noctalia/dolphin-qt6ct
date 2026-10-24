@@ -1,0 +1,10 @@
+#!/usr/bin/env sh
+
+# Long-lived terminals can retain qt5ct from the previous generation.
+export QT_QPA_PLATFORMTHEME=qt6ct
+# Dolphin's item view has a native Breeze path that follows KColorScheme.
+export QT_STYLE_OVERRIDE=Breeze
+config_home=${XDG_CONFIG_HOME:-"$HOME/.config"}
+exec /run/current-system/sw/bin/dolphin \
+  -stylesheet "$config_home/noctalia/dolphin-soft-selection.qss" \
+  "$@"

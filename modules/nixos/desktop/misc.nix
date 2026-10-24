@@ -23,6 +23,20 @@
     gnumake
     wl-clipboard
     bitwarden-desktop # password manager
+
+    kdePackages.breeze
+    kdePackages.breeze-icons
+    kdePackages.plasma-integration
+    # File manager
+    kdePackages.dolphin
+    kdePackages.dolphin-plugins
+
+    # Archive support
+    kdePackages.ark
+
+    # Network protocols
+    kdePackages.kio-extras
+    kdePackages.kio-fuse
   ];
 
   services = {
