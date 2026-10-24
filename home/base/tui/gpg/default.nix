@@ -5,7 +5,7 @@
   ...
 }:
 {
-  config = lib.mkIf config.features.security.enable {
+  config = lib.mkIf config.features.credentials.enable {
 
     programs.gpg = {
       enable = true;

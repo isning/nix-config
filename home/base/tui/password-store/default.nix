@@ -8,7 +8,7 @@ let
   passwordStoreDir = "${config.xdg.dataHome}/password-store";
 in
 {
-  config = lib.mkIf config.features.security.enable {
+  config = lib.mkIf config.features.credentials.enable {
 
     programs.password-store = {
       enable = true;

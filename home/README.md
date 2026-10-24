@@ -22,7 +22,7 @@ features.kubernetes.enable = true;
 ```
 
 - `roles.remote-workstation.enable`: Ghostty, main agent clients, development,
-  security, and desktop tools. Used by amiya.
+  credential, and desktop tools. Used by amiya.
 - `roles.development-workstation.enable`: Remote-workstation defaults plus
   container/Kubernetes tools, AI utilities, and additional terminals. Used by
   Linux GUI hosts including saika.
@@ -36,7 +36,7 @@ Available `features.<name>.enable` options:
 - `agents`, `agent-utilities`
 - `containers`, `kubernetes`, `kubernetes-ai`
 - `terminal`, `additional-terminals`
-- `development-tools`, `security`, `desktop-tools`
+- `development-tools`, `credentials`, `desktop-tools`
 
 The Linux terminal-only entry point selects features directly. Shared SSH client
 and basic shell configuration remain in the base layer. Darwin/Linux platform

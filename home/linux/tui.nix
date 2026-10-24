@@ -10,7 +10,7 @@
 
   features = {
     development-tools.enable = true;
-    security.enable = true;
+    credentials.enable = true;
     containers.enable = true;
     kubernetes.enable = true;
   };

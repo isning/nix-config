@@ -7,7 +7,7 @@
       terminal.enable = lib.mkDefault true;
       agents.enable = lib.mkDefault true;
       development-tools.enable = lib.mkDefault true;
-      security.enable = lib.mkDefault true;
+      credentials.enable = lib.mkDefault true;
       desktop-tools.enable = lib.mkDefault true;
     };
   };
