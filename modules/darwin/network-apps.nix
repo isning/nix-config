@@ -39,7 +39,7 @@ let
     fi
 
     if [ ! -L "$app" ] || [ "$(/usr/bin/readlink "$app")" != '${bundle}' ]; then
-      if [ -L "$app" ]; then /usr/bin/unlink "$app"; fi
+      if [ -L "$app" ]; then ${pkgs.coreutils}/bin/unlink "$app"; fi
       /bin/ln -s '${bundle}' "$app"
     fi
   '';
