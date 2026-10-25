@@ -125,7 +125,7 @@
           # Display have separate spaces
           #   true => disable this feature
           #   false => enable this feature
-          "spans-displays" = true;
+          "spans-displays" = false;
         };
         "com.apple.WindowManager" = {
           StandardHideDesktopIcons = 0; # Show items on desktop
