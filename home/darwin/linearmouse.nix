@@ -17,6 +17,17 @@
           speed = 0.4;
         };
       }
+      {
+        "if".device = {
+          category = "mouse";
+          productName = "Razer Basilisk V3 X HyperSpeed";
+        };
+        pointer = {
+          disableAcceleration = true;
+          # With acceleration disabled, LinearMouse uses this as Tracking speed on macOS 14+.
+          acceleration = 1;
+        };
+      }
     ];
   };
 }

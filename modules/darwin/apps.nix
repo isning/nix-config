@@ -42,6 +42,8 @@ in
       casks.betterdisplay
       casks.jordanbaird-ice
       casks.linearmouse
+      casks.pixpin
+      casks.bitwarden
       casks.maccy
       casks.firefox
       casks.ghostty
