@@ -159,7 +159,7 @@
 
     open-design = {
       # Upstream retired its Nix flake; retain the last revision before its removal.
-      url = "github:nexu-io/open-design/db9ebb7ba84d81dffdd21de248cbcd992c791836";
+      url = "github:nexu-io/open-design/12d970eacc8971150e3c76470d2a9afe16dc2ed1";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
