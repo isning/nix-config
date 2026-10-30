@@ -3,6 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "figma-console-mcp": "1.40.0"
+    "figma-console-mcp": "1.46.0"
   }
 }
