@@ -17,9 +17,12 @@
 
   # scx_lavd scheduler for better power and performance
   # In theory, it should help with lower latency at gaming and avoid frequent CPU awake from deep C-states
-  services.scx = {
+  services.scx-loader = {
     enable = true;
-    scheduler = "scx_lavd";
-    extraArgs = [ "--autopower" ];
+    config = {
+      default_sched = "scx_lavd";
+      default_mode = "Auto";
+      scheds.scx_lavd.auto_mode = [ "--autopower" ];
+    };
   };
 }
