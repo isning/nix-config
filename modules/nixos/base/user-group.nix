@@ -35,6 +35,7 @@
       "adbusers" # android debugging
       "libvirtd" # virt-viewer / qemu
       "pipewire"
+      "uinput" # Sunshine virtual gamepad input
     ];
   };
 
