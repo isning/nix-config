@@ -27,7 +27,7 @@ diff --git a/src/backend/tty.rs b/src/backend/tty.rs
  
          // Cannot change properties while the device is inactive, nor while the compositor
          // owns the gamma LUT for the post-blend encode offload. In the latter case the pending
-@@ -3320,6 +3339,58 @@
+@@ -3320,6 +3339,57 @@
  
          None
      }
@@ -59,26 +59,25 @@ diff --git a/src/backend/tty.rs b/src/backend/tty.rs
 +    let reference = (reference_luminance / 10_000.0).clamp(0.0001, 1.0);
 +    let mut converted = vec![0; ramp.len()];
 +
-+    for channel in 0..3 {
-+        let source = &ramp[channel * size..(channel + 1) * size];
-+        let target = &mut converted[channel * size..(channel + 1) * size];
-+        let endpoint_gain = (f64::from(source[size - 1]) / 65535.0).powf(2.2);
-+        for (index, value) in target.iter_mut().enumerate() {
-+            let pq_signal = index as f64 / (size - 1) as f64;
-+            let linear = pq_decode(pq_signal);
-+            let adjusted = if linear <= reference {
-+                let sdr_signal = (linear / reference).powf(1.0 / 2.2);
-+                let position = sdr_signal * (size - 1) as f64;
-+                let lower = position.floor() as usize;
-+                let upper = (lower + 1).min(size - 1);
-+                let fraction = position - lower as f64;
-+                let mapped = f64::from(source[lower]) * (1.0 - fraction)
-+                    + f64::from(source[upper]) * fraction;
-+                (mapped / 65535.0).powf(2.2) * reference
-+            } else {
-+                linear * endpoint_gain
-+            };
-+            *value = (pq_encode(adjusted) * 65535.0).round() as u16;
++    for index in 0..size {
++        let pq_signal = index as f64 / (size - 1) as f64;
++        let linear = pq_decode(pq_signal);
++        let position = (linear / reference).min(1.0).powf(1.0 / 2.2) * (size - 1) as f64;
++        let lower = position.floor() as usize;
++        let upper = (lower + 1).min(size - 1);
++        let fraction = position - lower as f64;
++        let sdr_rgb = std::array::from_fn::<_, 3, _>(|channel| {
++            let source = &ramp[channel * size..(channel + 1) * size];
++            let mapped = f64::from(source[lower]) * (1.0 - fraction)
++                + f64::from(source[upper]) * fraction;
++            (mapped / 65535.0).powf(2.2) * linear.max(reference)
++        });
++
++        // A hardware gamma LUT can only adjust channels independently. Match the SDR
++        // ramp's neutral-axis colors in the BT.2020 container used for HDR scanout.
++        for (channel, row) in blend::BT709_TO_BT2020.chunks_exact(3).enumerate() {
++            let adjusted = row.iter().zip(sdr_rgb).map(|(weight, value)| weight * value).sum();
++            converted[channel * size + index] = (pq_encode(adjusted) * 65535.0).round() as u16;
 +        }
 +    }
 +
@@ -86,7 +85,7 @@ diff --git a/src/backend/tty.rs b/src/backend/tty.rs
  }
  
  impl GammaProps {
-@@ -4318,6 +4389,39 @@
+@@ -4318,6 +4388,39 @@
      use niri_config::output::Modeline;
      use niri_ipc::{HSyncPolarity, VSyncPolarity};
  
@@ -117,12 +116,24 @@ diff --git a/src/backend/tty.rs b/src/backend/tty.rs
 +        let green = f64::from(converted[size + index]);
 +        let blue = f64::from(converted[2 * size + index]);
 +        assert!(red > green && green > blue);
-+        // Multiplying PQ codes directly by 0.651 would give approximately 25 nits;
-+        // the converted ramp gives approximately 79 nits at a 203-nit reference white.
-+        assert!((blue / red - 0.83).abs() < 0.03);
-+        assert!((green / red - 0.916).abs() < 0.01);
++        // Reference white with the SDR ramp applied in BT.709, then mapped to PQ BT.2020.
++        for (actual, expected) in [(red, 36944.), (green, 35108.), (blue, 32248.)] {
++            assert!((actual - expected).abs() < 48., "{actual} != {expected}");
++        }
 +    }
 +
      use smithay::wayland::color::management::ImageDescription;
  
      use crate::backend::tty::{
+diff --git a/src/render_helpers/blend.rs b/src/render_helpers/blend.rs
+--- a/src/render_helpers/blend.rs
++++ b/src/render_helpers/blend.rs
+@@ -252,7 +252,7 @@
+ /// BT.709 -> BT.2020 primaries in linear light (D65), row-major. Matches the shaders'
+ /// `to_bt2020` exactly, so plane color pipelines and gamut uniforms built from it reproduce
+ /// the GLES blend output ([`colorimetry::gamut_matrix`] computes the same values to ~1e-6).
+-const BT709_TO_BT2020: Mat3 = [
++pub(crate) const BT709_TO_BT2020: Mat3 = [
+     0.627404, 0.329283, 0.043313, //
+     0.069097, 0.919540, 0.011362, //
+     0.016391, 0.088013, 0.895595,
