@@ -80,11 +80,10 @@
   ];
 
   services.sunshine = {
-    # Keep NVENC encoding, but use wlr's RAM capture path: the compositor can render on Intel
-    # while NVENC runs on NVIDIA. This Sunshine version cannot import cross-GPU CUDA frames.
-    package = pkgs.sunshine.override { cudaSupport = false; };
+    # Niri and NVENC use NVIDIA: enable CUDA to avoid the GPU -> RAM -> GPU capture path.
+    package = pkgs.sunshine.override { cudaSupport = true; };
     settings = {
-      max_bitrate = 20000; # in Kbps
+      max_bitrate = 0; # Unlimited bitrate
       # NVIDIA NVENC Encoder
       nvenc_preset = 3; # 1(fastest + worst quality) - 7(slowest + best quality)
       nvenc_twopass = "full_res"; # quarter_res / full_res.
