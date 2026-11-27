@@ -99,7 +99,7 @@ window-rule {
 
 // Other applications - open in workspace 0
 window-rule {
-    match app-id="Clash-verge"
+    match app-id=r"^com\.follow\.clash$"
     open-on-workspace "0other"
 }
 window-rule {

@@ -303,9 +303,8 @@ in
         # ======================================
         ".local/share/applications" # For persistence of Chrome PWAs
 
-        # Clash Verge Rev
-        ".local/share/io.github.clash-verge-rev.clash-verge-rev"
-        ".local/share/clash-verge"
+        # FlClash
+        ".local/share/com.follow.clash"
 
         # Audio
         ".config/pulse"

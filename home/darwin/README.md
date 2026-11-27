@@ -41,10 +41,10 @@ Install Tailscale manually from the Mac App Store. Its App Store variant has dif
 CLI capabilities from its standalone variant; use the system SSH client for Tailscale SSH
 connections. Approve its VPN configuration after installation.
 
-FlClash replaces Clash Verge Rev on macOS. Its small Nix package reads the version and checksums
-from the author's tap, pinned by the `flclash-tap` input. `just up` updates it along with the other
-inputs; use `just upp flclash-tap` to update only FlClash, then `just local` on amiya. No Homebrew
-or Ruby is needed.
+FlClash is managed by a small Nix package that reads the version and checksums from the author's
+tap, pinned by the `flclash-tap` input. `just up` updates it along with the other inputs; use
+`just upp flclash-tap` to update only FlClash, then `just local` on amiya. No Homebrew or Ruby is
+needed.
 
 For TUN support, nix-darwin copies FlClash's signed bundle to a root-owned versioned directory under
 `/Library/Application Support/nix-config/flclash` and links it at `/Applications/FlClash.app`. Only

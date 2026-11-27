@@ -276,10 +276,8 @@ nvme0n1           259:0    0  1.8T  0 disk
                                             /home/ryan/.local/share/k9s
                                             /home/ryan/.local/share/jupyter
                                             /home/ryan/.local/share/flatpak
-                                            /home/ryan/.local/share/io.github.clash-verge-rev.clash-verge-rev
                                             /home/ryan/.local/share/feral-interactive
                                             /home/ryan/.local/share/direnv
-                                            /home/ryan/.local/share/clash-verge
                                             /home/ryan/.local/share/containers
                                             /home/ryan/.local/share/atuin
                                             /home/ryan/.local/share/Steam

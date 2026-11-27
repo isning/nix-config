@@ -6,8 +6,6 @@
   xdg.autostart.entries = [
     "${pkgs.foot}/share/applications/foot.desktop"
 
-    "${pkgs.clash-verge-rev}/share/applications/clash-verge.desktop"
-
     "${pkgs.bitwarden-desktop}/share/applications/bitwarden.desktop"
 
     # nixpaks
