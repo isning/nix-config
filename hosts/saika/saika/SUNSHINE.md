@@ -12,10 +12,16 @@ untouched but is not used by this configuration. Pairing credentials remain in t
 state directory.
 
 The preparation command creates the Niri output `sunshine` at the client's requested width, height
-and refresh rate, with scale 1. It then disables the physical outputs that were active. Exiting the
-application restores those outputs and their positions before removing the virtual output. Outputs
-that were already disabled stay disabled. Original modes, scale, transform and VRR configuration are
-not modified.
+and refresh rate. It then disables the physical outputs that were active. Exiting the application
+restores those outputs and their positions before removing the virtual output. Outputs that were
+already disabled stay disabled. Original modes, scale, transform and VRR configuration are not
+modified.
+
+Set `services.sunshine.virtualDisplay.scale = 1.25;` in the host configuration to change the logical
+desktop scale for new sessions. The default is 1, and fractional values from 1 to 10 are supported.
+To adjust the active virtual desktop immediately, run `niri msg output sunshine scale 1.5`. The
+stream's pixel resolution is independent of this scale. To apply a different client resolution or
+refresh rate, quit **Virtual Desktop** and start it again.
 
 Recovery state is checkpointed in `$XDG_RUNTIME_DIR/sunshine-niri/state.json`. Preparation failures
 roll back immediately. A repeated start reuses this state, and Sunshine's `ExecStartPre` and
@@ -37,8 +43,7 @@ virtual output and its state instead of removing the last display.
    app exit.
 
 The current Niri virtual-output patch supports SDR. Sunshine uses `wlr` capture and NVENC encoding.
-CUDA capture is disabled in the package to use the RAM transfer path between an Intel-rendered
-desktop and the NVIDIA encoder; NVENC still performs hardware encoding.
+Saika enables CUDA capture because Niri and NVENC run on the same NVIDIA GPU.
 
 ## Recovery and verification
 

@@ -1,5 +1,6 @@
 """Exercise display handoff and recovery without accessing a real compositor."""
 
+import argparse
 import copy
 import os
 import tempfile
@@ -7,7 +8,7 @@ import unittest
 from pathlib import Path
 from unittest.mock import patch
 
-from sunshine_niri import OUTPUT, Session, active, client_value
+from sunshine_niri import OUTPUT, Session, active, client_value, display_scale
 
 
 def output(name, enabled=True, make="Acme", x=0):
@@ -108,9 +109,11 @@ class DisplayHandoffTests(unittest.TestCase):
         self.session.stop()
 
     def test_retry_changes_resolution_without_overwriting_recovery_state(self):
-        self.session.start(2560, 1600, 120)
-        self.session.start(1920, 1080, 60)
+        self.session.start(2560, 1600, 120, scale=2)
+        self.assertEqual(self.backend.monitors[OUTPUT]["logical"]["scale"], 2)
+        self.session.start(1920, 1080, 60, scale=1.25)
         self.assertEqual(self.backend.monitors[OUTPUT]["modes"][0]["width"], 1920)
+        self.assertEqual(self.backend.monitors[OUTPUT]["logical"]["scale"], 1.25)
         self.session.stop()
         self.assert_local_restored()
 
@@ -194,6 +197,12 @@ class DisplayHandoffTests(unittest.TestCase):
                 self.assertRaises(ValueError),
             ):
                 client_value("WIDTH", 16384)
+
+    def test_invalid_display_scales_are_rejected(self):
+        for value in ["0", "10.1", "nan", "inf", "auto"]:
+            with self.subTest(value=value), self.assertRaises(argparse.ArgumentTypeError):
+                display_scale(value)
+        self.assertEqual(display_scale("1.25"), 1.25)
 
 
 if __name__ == "__main__":

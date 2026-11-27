@@ -3,6 +3,7 @@
 import argparse
 import fcntl
 import json
+import math
 import os
 import signal
 import subprocess
@@ -73,7 +74,7 @@ class Session:
                 raise RuntimeError("Timed out waiting for the Niri output change")
             time.sleep(0.1)
 
-    def start(self, width, height, fps):
+    def start(self, width, height, fps, scale=1):
         outputs = self.backend.outputs()
         state = self.load()
         if state is None:
@@ -107,7 +108,7 @@ class Session:
                 self.backend.command(
                     "output", OUTPUT, "custom-mode", f"{width}x{height}@{fps}"
                 )
-            self.backend.command("output", OUTPUT, "scale", "1")
+            self.backend.command("output", OUTPUT, "scale", str(scale))
             self.backend.command("output", OUTPUT, "position", "set", "0", "0")
 
             def ready(current):
@@ -195,10 +196,23 @@ def client_value(name, maximum):
     return int(raw)
 
 
+def display_scale(raw):
+    try:
+        scale = float(raw)
+    except ValueError:
+        scale = math.nan
+    if not 1 <= scale <= 10:
+        raise argparse.ArgumentTypeError("scale must be a number from 1 to 10")
+    return scale
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("action", choices=["start", "stop", "status"])
+    parser.add_argument("--scale", type=display_scale)
     args = parser.parse_args()
+    if args.scale is not None and args.action != "start":
+        parser.error("--scale requires start")
     dimensions = None
     if args.action == "start":
         dimensions = (
@@ -232,7 +246,7 @@ def main():
             socket = str(sockets[0])
         session = Session(Niri(socket), state_file)
         if args.action == "start":
-            session.start(*dimensions)
+            session.start(*dimensions, scale=args.scale if args.scale is not None else 1)
         elif args.action == "stop":
             session.stop()
         else:
